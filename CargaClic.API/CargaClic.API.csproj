@@ -1,15 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\CargaClic.Data\CargaClic.Data.csproj" />
+    <ProjectReference Include="..\CargaClic.Handlers\CargaClic.Handlers.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
 </Project>

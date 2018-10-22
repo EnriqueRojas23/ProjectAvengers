@@ -1,0 +1,9 @@
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\Common\bin\Debug\netstandard2.0\Common.deps.json
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\Common\bin\Debug\netstandard2.0\Common.dll
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\Common\bin\Debug\netstandard2.0\Common.pdb
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.csprojAssemblyReference.cache
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.csproj.CoreCompileInputs.cache
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.AssemblyInfoInputs.cache
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.AssemblyInfo.cs
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.dll
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.pdb

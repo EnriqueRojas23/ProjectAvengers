@@ -4,20 +4,17 @@ import { NgModule } from '@angular/core';
 // Rutas
 import { APP_ROUTES } from './app.routes';
 
-// Modulos
-import { PagesModule } from './pages/pages.module';
-
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './_services/auth.service';
-// import { NopagefoundComponent } from './shared/nopagefound/nopagefound.component';
-// import { HeaderComponent } from './shared/header/header.component';
-// import { SidebarComponent } from './shared/sidebar/sidebar.component';
-// import { BreadcrumbsComponent } from './shared/breadcrumbs/breadcrumbs.component';
-// import { RightSidebarComponent } from './shared/right-sidebar/right-sidebar.component';
+import { SharedModule } from './shared/shared.module';
+import { PagesComponent } from './pages/pages.component';
+import { ErrorInterceptorProvide } from './_services/error.interceptor';
+import { AlertifyService } from './_services/alertify.service';
 
 
 
@@ -25,21 +22,19 @@ import { AuthService } from './_services/auth.service';
    declarations: [
       AppComponent,
       LoginComponent,
-    //   NopagefoundComponent,
-    //   HeaderComponent,
-    //   SidebarComponent,
-    //   BreadcrumbsComponent,
-    //   RightSidebarComponent,
-   ],
+      PagesComponent
+     ],
    imports: [
       BrowserModule,
       HttpClientModule,
       APP_ROUTES,
       FormsModule,
-      PagesModule
+      SharedModule,
    ],
    providers: [
-        AuthService
+        AuthService,
+        ErrorInterceptorProvide,
+        AlertifyService,
    ],
    bootstrap: [
       AppComponent

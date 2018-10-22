@@ -1,0 +1,12 @@
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\bin\Debug\netstandard2.0\CargaClic.Data.deps.json
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\bin\Debug\netstandard2.0\CargaClic.Data.dll
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\bin\Debug\netstandard2.0\CargaClic.Data.pdb
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\obj\Debug\netstandard2.0\CargaClic.Data.csprojAssemblyReference.cache
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\obj\Debug\netstandard2.0\CargaClic.Data.csproj.CoreCompileInputs.cache
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\obj\Debug\netstandard2.0\CargaClic.Data.AssemblyInfoInputs.cache
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\obj\Debug\netstandard2.0\CargaClic.Data.AssemblyInfo.cs
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\obj\Debug\netstandard2.0\CargaClic.Data.dll
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\obj\Debug\netstandard2.0\CargaClic.Data.pdb
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\bin\Debug\netstandard2.0\Common.dll
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\bin\Debug\netstandard2.0\Common.pdb
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\obj\Debug\netstandard2.0\CargaClic.Data.csproj.CopyComplete

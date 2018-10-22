@@ -1,3 +1,10 @@
+/*!
+ * Beagle v1.5.2
+ * https://foxythemes.net
+ *
+ * Copyright (c) 2018 Foxy Themes
+ */
+
 var App = (function () {
   'use strict';
   
@@ -5,7 +12,6 @@ var App = (function () {
 
     //Counter
     function counter(){
-
       $('[data-toggle="counter"]').each(function(i, e){
         var _el       = $(this);
         var prefix    = '';
@@ -53,7 +59,6 @@ var App = (function () {
 
     //Top tile widgets
     function sparklines(){
-
       var color1 = App.color.primary;
       var color2 = App.color.warning;
       var color3 = App.color.success;
@@ -148,21 +153,14 @@ var App = (function () {
         [9, 30]
       ];
 
-      var plot_statistics = $.plot("#main-chart", 
-        [
-        {
-          data: data, 
-          canvasRender: true
-        },
-        {
-          data: data2, 
-          canvasRender: true
-        },
-        {
-          data: data3, 
-          canvasRender: true
-        }
-        ], {
+      var plot_statistics = $.plot($("#main-chart"), [{
+        data: data, showLabels: true, label: "Purchases", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
+      },{
+        data: data2, showLabels: true, label: "Plans", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
+      },{
+        data: data3, showLabels: true, label: "Services", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
+      }],
+      {
         series: {
           lines: {
             show: true,
@@ -197,6 +195,12 @@ var App = (function () {
           hoverable: true,
           clickable: true
         },
+        tooltip:{
+          show: true,
+          cssClass: "tooltip-chart",
+          content: "<div class='content-chart'> <span> %s </span> <div class='label'> <div class='label-x'> %x.0 </div> - <div class='label-y'> %y.0 </div> </div></div>",
+          defaultTheme: false
+        },
         colors: [color1, color2, color3],
         xaxis: {
           tickFormatter: function(){
@@ -217,11 +221,13 @@ var App = (function () {
         }
       });
 
+      widget_tooltipPosition('main-chart', 60);
+
       //Chart legend color setter
       $('[data-color="main-chart-color1"]').css({'background-color':color1});
       $('[data-color="main-chart-color2"]').css({'background-color':color2});
       $('[data-color="main-chart-color3"]').css({'background-color':color3});
-    }
+    }    
 
     //Top sales chart
     function topSales(){
@@ -349,21 +355,35 @@ var App = (function () {
       });
     }
 
+    //Positioning tooltip
+    function widget_tooltipPosition(id, top){
+      $('#'+id).bind("plothover", function (event, pos, item) {
+        var widthToolTip = $('.tooltip-chart').width();
+        if(item){
+          $(".tooltip-chart")
+            .css({top: item.pageY - top, left: item.pageX - (widthToolTip / 2)})
+            .fadeIn(200);
+        }else{
+          $(".tooltip-chart").hide();
+        }
+      });
+    }
+
     //CounterUp Init
     counter();
 
-    //Loader show
-    toggleLoader();
+    // //Loader show
+     toggleLoader();
 
-    //Row 1
-    sparklines();
+    // //Row 1
+     sparklines();
 
-	  //Row 2
-    mainChart();
+	  // //Row 2
+     mainChart();
 
-	  //Row 4
-    topSales();
-    calendar();
+	  // //Row 4
+     topSales();
+     //calendar();
 
     //Row 5
     map();

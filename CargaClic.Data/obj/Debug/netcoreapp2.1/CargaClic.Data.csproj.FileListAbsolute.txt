@@ -1,0 +1,11 @@
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\bin\Debug\netcoreapp2.1\CargaClic.Data.deps.json
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\bin\Debug\netcoreapp2.1\CargaClic.Data.dll
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\bin\Debug\netcoreapp2.1\CargaClic.Data.pdb
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\obj\Debug\netcoreapp2.1\CargaClic.Data.csproj.CoreCompileInputs.cache
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\obj\Debug\netcoreapp2.1\CargaClic.Data.AssemblyInfoInputs.cache
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\obj\Debug\netcoreapp2.1\CargaClic.Data.AssemblyInfo.cs
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\obj\Debug\netcoreapp2.1\CargaClic.Data.dll
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Data\obj\Debug\netcoreapp2.1\CargaClic.Data.pdb
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.data\obj\Debug\netcoreapp2.1\CargaClic.Data.csprojAssemblyReference.cache
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.Data\bin\Debug\netcoreapp2.1\CargaClic.Data.runtimeconfig.json
+C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\cargaclic.Data\bin\Debug\netcoreapp2.1\CargaClic.Data.runtimeconfig.dev.json

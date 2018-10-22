@@ -4,7 +4,7 @@
           <div class="card card-border-color card-border-color-primary">
             <div class="card-header"><img class="logo-img" src="assets/img/logo-xx.png" alt="logo" width="102" height="27"><span class="splash-description">Please enter your user information.</span></div>
             <div class="card-body">
-              <form #loginForm="ngForm" (ngSubmit)="login()">
+              <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
                 <div class="form-group">
                   <input class="form-control" id="username" type="text" 
                   placeholder="Usuario" autocomplete="off" name="username" required [(ngModel)]="model.username" />
@@ -16,12 +16,11 @@
                 <div class="form-group row login-tools">
                   <div class="col-6 login-remember">
                     <label class="custom-control custom-checkbox">
-                      <input class="custom-control-input" type="checkbox"><span class="custom-control-label">Recuérdame</span>
+                      <input class="custom-control-input" id="recuerdame" type="checkbox" name="recuerdame" [(ngModel)]="model.recuerdame"><span class="custom-control-label">Recuérdame</span>
                     </label>
                   </div>
                   <div class="col-6 login-forgot-password"><a href="pages-forgot-password.html">¿Olvidaste tu contraseña?</a></div>
                 </div>
-                <!-- <a class="btn btn-primary btn-xl" href="index.html" data-dismiss="modal">Sign me in</a></form> -->
                 <div class="form-group login-submit"><button [disabled]="!loginForm.valid" class="btn btn-primary btn-xl" type="submit">Ingresar</button></div>
               </form>
             </div>

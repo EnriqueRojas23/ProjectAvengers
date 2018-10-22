@@ -77,16 +77,19 @@ var App = (function () {
 
   //Core private functions
   function leftSidebarInit(){
-
     var firstAnchor = $(".sidebar-elements > li > a", leftSidebar);
     var anchor = $(".sidebar-elements li a", leftSidebar);
     var lsc = $(".left-sidebar-scroll", leftSidebar);
     var lsToggle = $(".left-sidebar-toggle", leftSidebar);
     var openLeftSidebarOnClick = config.openLeftSidebarOnClick ? true : false;
+    
+    
 
     // Collapsible sidebar toggle functionality
     function toggleSideBar(){
+      
       var button = $(".be-toggle-left-sidebar");
+      
 
       button.on("click", function(){
         if( wrapper.hasClass( config.collapsibleSidebarCollapsedClass ) ) {
@@ -113,6 +116,7 @@ var App = (function () {
 
     // Tooltip sidebar funcionality
     function tooltipSidebar(){
+      
       var menu = $(".sidebar-elements > li > a", leftSidebar);
 
       for(var i = 0; i <= menu.length; i++ ){        
@@ -264,8 +268,8 @@ var App = (function () {
 
       }
     }
-
     // Execute if collapsible sidebar is enabled
+    
     if ( isCollapsible() ){
       /*Create sub menu elements*/
         syncSubMenu();
@@ -372,7 +376,7 @@ var App = (function () {
     } else {
       $("li.active", leftSidebar).parents(".parent").addClass("active open");
     }
-
+    
     /*Scrollbar plugin init when left sidebar is fixed*/
       if( wrapper.hasClass("be-fixed-sidebar") ){
         if( !$.isSm() || wrapper.hasClass( config.offCanvasLeftSidebarClass ) ) {
@@ -407,17 +411,17 @@ var App = (function () {
           $(this).removeAttr('style').toggleClass('open');
         });
       });
-    
+      
     /*Off canvas menu*/
       function leftSidebarOffCanvas() {
-
         /*Open Sidebar with toggle button*/
-        config.toggleLeftSidebarButton.on("click", function(e){
-          if ( openSidebar && body.hasClass( config.openLeftSidebarClass) ) {
-            body.removeClass(config.openLeftSidebarClass);
+        
+        $('.be-toggle-left-sidebar').on("click", function(e){
+          if ( openSidebar && $("body").hasClass('open-left-sidebar') ) {
+            body.removeClass('open-left-sidebar');
             sidebarDelay();
           } else {            
-            body.addClass( config.openLeftSidebarClass + " " + config.transitionClass);
+            body.addClass('open-left-sidebar be-animate');
             openSidebar = true;
           }
           e.preventDefault();
@@ -425,13 +429,14 @@ var App = (function () {
 
         /*Close sidebar on click outside*/
         $( document ).on("mousedown touchstart",function( e ){
-          if ( !$( e.target ).closest( leftSidebar ).length && !$( e.target ).closest( config.toggleLeftSidebarButton ).length && body.hasClass( config.openLeftSidebarClass ) ) {
-            body.removeClass( config.openLeftSidebarClass );
-            sidebarDelay();
+          if ( !$( e.target ).closest(leftSidebar).length &&
+               !$( e.target ).closest($('.be-toggle-left-sidebar')).length && 
+               body.hasClass( config.openLeftSidebarClass ) ) {
+                body.removeClass( config.openLeftSidebarClass );
+              sidebarDelay();
           }
         });
       }
-
       // Left sidebar off-canvas
       if ( wrapper.hasClass( config.offCanvasLeftSidebarClass ) ) {
         leftSidebarOffCanvas();
@@ -677,7 +682,7 @@ var App = (function () {
 
     //Init function
     init: function (options) {
-
+       
       //Get the main elements when document is ready
         body = $("body");
         wrapper = $(".be-wrapper");
@@ -685,11 +690,13 @@ var App = (function () {
         rightSidebar = $(".be-right-sidebar");
         asideDiv = $(".be-scroller-aside");
         notificationsDiv = $(".be-scroller-notifications");
-        openSidebar = false;
+        openSidebar = true;
+
+        
       
       //Extends basic config with options
         $.extend( config, options );
-
+        
       /*FastClick on mobile*/
         FastClick.attach(document.body);
 
@@ -699,12 +706,12 @@ var App = (function () {
         } else {
           wrapper.addClass(config.disabledLeftSidebarClass);
         }
-      
+        
       /*Right Sidebar*/
-        if ( rightSidebar.length ){
-          rightSidebarInit();
-          chatWidget();
-        }
+         if ( rightSidebar.length ){
+           //rightSidebarInit();
+           //chatWidget();
+         }
 
       /*Sidebars Swipe*/
         if( config.enableSwipe ){
@@ -713,7 +720,7 @@ var App = (function () {
 
       /*Scroll Top button*/
         if( config.scrollTop ){
-          scrollTopButton();
+//          scrollTopButton();
         }
 
       /*Page Aside*/
@@ -723,7 +730,7 @@ var App = (function () {
 
       /*Scroller plugin init*/
         if ( notificationsDiv.length ){
-          scrollerInit();
+          //scrollerInit();
         }
 
       /*Get colors*/
