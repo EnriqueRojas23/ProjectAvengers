@@ -1,0 +1,18 @@
+[{
+    "Codigo":"MN001",
+    "CodigoPadre" : "",
+    "Descripcion" : "Menu",
+    "Link" : "",
+    "Nivel" : 0,
+    "Orden" : 0,
+    "Icono" :""
+},
+{
+    "Codigo":"MN002",
+    "CodigoPadre" : "",
+    "Descripcion" : "Dashboard",
+    "Link" : "['/dashboard']",
+    "Nivel" : 1,
+    "Orden" : 0,
+    "Icono" :"Casita"
+}]

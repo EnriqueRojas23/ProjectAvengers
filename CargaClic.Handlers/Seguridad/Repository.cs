@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CargaClic.Common;
 using CargaClic.Data;
-using CargaClic.Data.Seguridad;
+using CargaClic.Data.Domain.Seguridad;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,12 +27,12 @@ namespace CargaClic.Handlers.Seguridad
              _config = config;
 
         }
-         public IDbConnection Connection
-        {
-        get
-        {
-            return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-        }
+        public IDbConnection Connection
+        {   
+            get
+            {
+                return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            }
         }
         public void Add(T entity)
         {
@@ -57,17 +57,17 @@ namespace CargaClic.Handlers.Seguridad
         }
         public async Task<User> GetUser (int id)
         {
-            var parametros = new DynamicParameters();
-            parametros.Add("idtipoproducto", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.idtipoproducto);
-            parametros.Add("idnivelreparacion", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.idnivelreparacion);
-            parametros.Add("idpartner", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.idpartner);
+             var parametros = new DynamicParameters();
+            // parametros.Add("idtipoproducto", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.idtipoproducto);
+            // parametros.Add("idnivelreparacion", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.idnivelreparacion);
+            // parametros.Add("idpartner", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.idpartner);
 
 
             using (IDbConnection conn = Connection)
             {
                 string sQuery = "select id,Username, Nombre, Email, DateOfBirth, Created, LastActive from seguridad.users  where id = @ID";
                 conn.Open();
-                var result = await conn.QueryAsync<User>(sQuery, parametros ,  commandType: CommandType.StoredProcedure );
+                var result = await conn.QueryAsync<User>(sQuery, new { id = id } );
                 //var result2 = await conn.Query<User>("",param ,commandType:CommandType.StoredProcedure);
                 return result.FirstOrDefault();
             }

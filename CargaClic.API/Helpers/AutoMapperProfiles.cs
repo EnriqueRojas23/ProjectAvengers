@@ -1,7 +1,7 @@
 using AutoMapper;
 using CargaClic.API.Dtos;
 using CargaClic.Data;
-using CargaClic.Data.Seguridad;
+using CargaClic.Data.Domain.Seguridad;
 
 namespace CargaClic.API.Helpers
 {

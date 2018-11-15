@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CargaClic.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20181019152937_Initial")]
+    [Migration("20181024195649_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,40 @@ namespace CargaClic.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CargaClic.Data.Seguridad.Pagina", b =>
+            modelBuilder.Entity("CargaClic.Data.Domain.Mantenimiento.Estado", b =>
+                {
+                    b.Property<int>("Id");
+
+                    b.Property<string>("Descripcion")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("NombreEstado")
+                        .IsRequired()
+                        .HasMaxLength(15);
+
+                    b.Property<int?>("TablaId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TablaId");
+
+                    b.ToTable("Estados","Mantenimiento");
+                });
+
+            modelBuilder.Entity("CargaClic.Data.Domain.Mantenimiento.Tabla", b =>
+                {
+                    b.Property<int>("Id");
+
+                    b.Property<string>("NombreTabla")
+                        .IsRequired()
+                        .HasMaxLength(15);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tablas","Mantenimiento");
+                });
+
+            modelBuilder.Entity("CargaClic.Data.Domain.Seguridad.Pagina", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +87,7 @@ namespace CargaClic.Data.Migrations
                     b.ToTable("Paginas","Seguridad");
                 });
 
-            modelBuilder.Entity("CargaClic.Data.Seguridad.Rol", b =>
+            modelBuilder.Entity("CargaClic.Data.Domain.Seguridad.Rol", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,7 +110,7 @@ namespace CargaClic.Data.Migrations
                     b.ToTable("Roles","Seguridad");
                 });
 
-            modelBuilder.Entity("CargaClic.Data.Seguridad.RolPagina", b =>
+            modelBuilder.Entity("CargaClic.Data.Domain.Seguridad.RolPagina", b =>
                 {
                     b.Property<int>("IdRol");
 
@@ -94,7 +127,7 @@ namespace CargaClic.Data.Migrations
                     b.ToTable("RolesPaginas","Seguridad");
                 });
 
-            modelBuilder.Entity("CargaClic.Data.Seguridad.User", b =>
+            modelBuilder.Entity("CargaClic.Data.Domain.Seguridad.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,10 +145,12 @@ namespace CargaClic.Data.Migrations
 
                     b.Property<bool>("EnLinea");
 
+                    b.Property<int>("EstadoId");
+
                     b.Property<DateTime>("LastActive")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("NombreCompleto")
                         .IsRequired()
                         .HasMaxLength(50);
 
@@ -131,19 +166,36 @@ namespace CargaClic.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("EstadoId");
+
+                    b.ToTable("Users","Seguridad");
                 });
 
-            modelBuilder.Entity("CargaClic.Data.Seguridad.RolPagina", b =>
+            modelBuilder.Entity("CargaClic.Data.Domain.Mantenimiento.Estado", b =>
                 {
-                    b.HasOne("CargaClic.Data.Seguridad.Pagina", "Pagina")
+                    b.HasOne("CargaClic.Data.Domain.Mantenimiento.Tabla")
+                        .WithMany("Estados")
+                        .HasForeignKey("TablaId");
+                });
+
+            modelBuilder.Entity("CargaClic.Data.Domain.Seguridad.RolPagina", b =>
+                {
+                    b.HasOne("CargaClic.Data.Domain.Seguridad.Pagina", "Pagina")
                         .WithMany("RolPaginas")
                         .HasForeignKey("IdPagina")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("CargaClic.Data.Seguridad.Rol", "Rol")
+                    b.HasOne("CargaClic.Data.Domain.Seguridad.Rol", "Rol")
                         .WithMany("RolPaginas")
                         .HasForeignKey("IdRol")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CargaClic.Data.Domain.Seguridad.User", b =>
+                {
+                    b.HasOne("CargaClic.Data.Domain.Mantenimiento.Estado")
+                        .WithMany("Users")
+                        .HasForeignKey("EstadoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

@@ -23,7 +23,10 @@ using Microsoft.IdentityModel.Tokens;
 using CargaClic.API.Data;
 using CargaClic.Handlers;
 using CargaClic.Handlers.Seguridad;
-using CargaClic.Data.Seguridad;
+using CargaClic.Data.Domain.Seguridad;
+using CargaClic.Handlers.Query;
+using Common.QueryHandlers;
+using CargaClic.Data.Contracts.Parameters.Seguridad;
 
 namespace CargaClic.API
 {
@@ -38,12 +41,16 @@ namespace CargaClic.API
         public void ConfigureServices(IServiceCollection services)
         {
              services.AddDbContext<DataContext>(x=>x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+             services.AddSingleton(_ => Configuration);
              services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
              services.AddCors();
              services.AddAutoMapper();
              services.AddTransient<Seed>();
+             services.AddTransient<Seed>();
              services.AddScoped<IRepository<User>,Repository<User>>();
              services.AddScoped<IAuthRepository,AuthRepository>();
+             services.AddScoped<IQueryHandler<ListarUsuariosParameters>,ListarUsuarios>();
+             services.AddScoped<IQueryHandler<ListarMenusxRolParameter>,ListarMenusxRolQuery>();
              services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(options => {
                             options.TokenValidationParameters = new TokenValidationParameters
@@ -81,7 +88,12 @@ namespace CargaClic.API
                // app.UseHsts();
             }
             // app.UseHttpsRedirection();
+            
+            //seeder.SeedEstados();
             //seeder.SeedUsers();
+            //seeder.SeedPaginas();
+            //seeder.SeedRoles();
+           // seeder.SeedRolPaginas();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseMvc();

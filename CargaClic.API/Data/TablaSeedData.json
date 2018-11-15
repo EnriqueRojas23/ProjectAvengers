@@ -1,0 +1,19 @@
+[{
+    "Id" : "1",
+    "NombreTabla": "Usuario",
+    "Estados": [{
+        "Id" : "1",
+        "NombreEstado": "Habilitado",
+        "Descripcion": "Puede ingresar al sistema"
+    },
+    {
+        "Id" : "2",
+        "NombreEstado": "Bloqueado",
+        "Descripcion": "No puede ingresar al sistema"
+    },
+    {
+        "Id" : "3",
+        "NombreEstado": "Eliminado",
+        "Descripcion": "Ya no es usuario del sistema"
+    }]
+}]

@@ -18,6 +18,8 @@ import { AlertifyService } from './_services/alertify.service';
 
 
 
+
+
 @NgModule({
    declarations: [
       AppComponent,
@@ -29,7 +31,7 @@ import { AlertifyService } from './_services/alertify.service';
       HttpClientModule,
       APP_ROUTES,
       FormsModule,
-      SharedModule,
+      SharedModule
    ],
    providers: [
         AuthService,

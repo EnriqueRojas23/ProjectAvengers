@@ -1,7 +1,8 @@
+using CargaClic.Data.Domain.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CargaClic.Data.Seguridad
+namespace CargaClic.Data.Mappings.Seguridad
 {
     public class RolConfiguration : IEntityTypeConfiguration<Rol>
     {

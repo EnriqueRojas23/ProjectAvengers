@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CargaClic.Common;
 using CargaClic.Data;
-using CargaClic.Data.Seguridad;
+using CargaClic.Data.Domain.Seguridad;
 
 namespace CargaClic.Handlers.Seguridad
 {

@@ -10,14 +10,13 @@ declare const App: any;
   styleUrls: []
 })
 
-export class PagesComponent implements OnInit {
+export class PagesComponent implements OnInit   {
   title = 'CargaClic-SPA';
   jwtHelper =  new JwtHelperService();
   constructor(private authService: AuthService) {
-  }
-
-  ngOnInit() {
     App.init();
+  }
+  ngOnInit() {
     const token = localStorage.getItem('token');
     if (token) {
       this.authService.decodedToken = this.jwtHelper.decodeToken(token);

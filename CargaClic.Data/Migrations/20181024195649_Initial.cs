@@ -9,27 +9,22 @@ namespace CargaClic.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
+                name: "Mantenimiento");
+
+            migrationBuilder.EnsureSchema(
                 name: "Seguridad");
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Tablas",
+                schema: "Mantenimiento",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Username = table.Column<string>(maxLength: 15, nullable: false),
-                    Nombre = table.Column<string>(maxLength: 50, nullable: false),
-                    Email = table.Column<string>(maxLength: 50, nullable: false),
-                    EnLinea = table.Column<bool>(nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime", nullable: false),
-                    LastActive = table.Column<DateTime>(type: "datetime", nullable: false),
-                    PasswordHash = table.Column<byte[]>(nullable: false),
-                    PasswordSalt = table.Column<byte[]>(nullable: false)
+                    Id = table.Column<int>(nullable: false),
+                    NombreTabla = table.Column<string>(maxLength: 15, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Tablas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,6 +65,28 @@ namespace CargaClic.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Estados",
+                schema: "Mantenimiento",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
+                    NombreEstado = table.Column<string>(maxLength: 15, nullable: false),
+                    Descripcion = table.Column<string>(maxLength: 50, nullable: true),
+                    TablaId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Estados", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Estados_Tablas_TablaId",
+                        column: x => x.TablaId,
+                        principalSchema: "Mantenimiento",
+                        principalTable: "Tablas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RolesPaginas",
                 schema: "Seguridad",
                 columns: table => new
@@ -97,20 +114,63 @@ namespace CargaClic.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Users",
+                schema: "Seguridad",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Username = table.Column<string>(maxLength: 15, nullable: false),
+                    NombreCompleto = table.Column<string>(maxLength: 50, nullable: false),
+                    Email = table.Column<string>(maxLength: 50, nullable: false),
+                    EnLinea = table.Column<bool>(nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime", nullable: false),
+                    LastActive = table.Column<DateTime>(type: "datetime", nullable: false),
+                    PasswordHash = table.Column<byte[]>(nullable: false),
+                    PasswordSalt = table.Column<byte[]>(nullable: false),
+                    EstadoId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Estados_EstadoId",
+                        column: x => x.EstadoId,
+                        principalSchema: "Mantenimiento",
+                        principalTable: "Estados",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Estados_TablaId",
+                schema: "Mantenimiento",
+                table: "Estados",
+                column: "TablaId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_RolesPaginas_IdPagina",
                 schema: "Seguridad",
                 table: "RolesPaginas",
                 column: "IdPagina");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_EstadoId",
+                schema: "Seguridad",
+                table: "Users",
+                column: "EstadoId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "RolesPaginas",
+                schema: "Seguridad");
 
             migrationBuilder.DropTable(
-                name: "RolesPaginas",
+                name: "Users",
                 schema: "Seguridad");
 
             migrationBuilder.DropTable(
@@ -120,6 +180,14 @@ namespace CargaClic.Data.Migrations
             migrationBuilder.DropTable(
                 name: "Roles",
                 schema: "Seguridad");
+
+            migrationBuilder.DropTable(
+                name: "Estados",
+                schema: "Mantenimiento");
+
+            migrationBuilder.DropTable(
+                name: "Tablas",
+                schema: "Mantenimiento");
         }
     }
 }

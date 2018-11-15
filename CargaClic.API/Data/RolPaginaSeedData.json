@@ -1,0 +1,10 @@
+[{
+    "IdRol": 1,
+    "IdPagina" : 1  ,
+    "Permisos" :"AME"
+},
+{
+    "IdRol": 1,
+    "IdPagina" : 2 ,
+    "Permisos" :"AME"
+}]

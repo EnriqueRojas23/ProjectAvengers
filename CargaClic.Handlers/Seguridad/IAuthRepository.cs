@@ -1,6 +1,10 @@
 using System.Threading.Tasks;
 using CargaClic.Data;
-using CargaClic.Data.Seguridad;
+using CargaClic.Data.Domain.Seguridad;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using CargaClic.Data.Contracts.Results.Seguridad;
+using CargaClic.Data.Contracts.Parameters.Seguridad;
 
 namespace CargaClic.Handlers.Seguridad
 {

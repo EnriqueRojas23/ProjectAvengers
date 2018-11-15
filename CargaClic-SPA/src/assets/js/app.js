@@ -1,10 +1,3 @@
-/*!
- * Beagle v1.5.2
- * https://foxythemes.net
- *
- * Copyright (c) 2018 Foxy Themes
- */
-
 var App = (function () {
   'use strict';
 
@@ -93,6 +86,7 @@ var App = (function () {
 
       button.on("click", function(){
         if( wrapper.hasClass( config.collapsibleSidebarCollapsedClass ) ) {
+          
           wrapper.removeClass( config.collapsibleSidebarCollapsedClass );
           $("li.open", leftSidebar).removeClass("open");
           $("li.active", leftSidebar).parents(".parent").addClass("active open");
@@ -148,7 +142,6 @@ var App = (function () {
     // Collapsed sidebar submenu title
     function syncSubMenu( item ){
       var elements;
-
       if( typeof item !== "undefined" ) {
         elements = item;
       } else {
@@ -161,7 +154,6 @@ var App = (function () {
         var subEls = $("> li", ul);
         title = $('<li class="title">' + title + '</li>');
         var subContainer = $('<li class="nav-items"><div class="be-scroller"><div class="content"><ul></ul></div></div></li>');
-        
         if( !ul.find("> li.title").length ){
           ul.prepend( title );
           subEls.appendTo( subContainer.find(".content ul") );
@@ -702,6 +694,7 @@ var App = (function () {
 
       /*Left Sidebar*/
         if ( config.enableLeftSidebar ){
+         
           leftSidebarInit();
         } else {
           wrapper.addClass(config.disabledLeftSidebarClass);

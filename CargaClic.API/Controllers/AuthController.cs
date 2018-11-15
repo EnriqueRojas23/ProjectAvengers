@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CargaClic.API.Data;
 using CargaClic.API.Dtos;
 using CargaClic.Data;
-using CargaClic.Data.Seguridad;
+using CargaClic.Data.Domain.Seguridad;
 using CargaClic.Handlers;
 using CargaClic.Handlers.Seguridad;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +42,7 @@ namespace CargaClic.API.Controllers
             };
 
             var createdUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
+            
 
             return StatusCode(201);
         }

@@ -1,9 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using CargaClic.Data;
-using CargaClic.Data.Seguridad;
+using CargaClic.Data.Contracts.Parameters.Seguridad;
+using CargaClic.Data.Contracts.Results.Seguridad;
+using CargaClic.Data.Domain.Seguridad;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Configuration;
 
 namespace CargaClic.Handlers.Seguridad
 {
@@ -11,12 +17,33 @@ namespace CargaClic.Handlers.Seguridad
     {
 
         private readonly DataContext _context;
+        private readonly IConfiguration _config;
 
-        public AuthRepository(DataContext context)
+        public AuthRepository(DataContext context,IConfiguration config)
         {
             _context = context;
-
+            _config = config;
         }
+        public IDbConnection Connection
+        {   
+            get
+            {
+                var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+                try
+                {
+                     connection.Open();
+                     return connection;
+                }
+                catch (System.Exception)
+                {
+                    connection.Close();
+                    connection.Dispose();
+                    throw;
+                }
+            }
+        }
+
+       
         public async Task<User> Login(string username, string password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x=>x.Username == username);
@@ -48,16 +75,19 @@ namespace CargaClic.Handlers.Seguridad
         {
             byte[] passwordHash, passwordSalt;
 
-            //using(var transaction = new _context.    )
-            CreatePasswordHash(password,out passwordHash, out passwordSalt);
+            using(var transaction = _context.Database.BeginTransaction())
+            {
+                CreatePasswordHash(password,out passwordHash, out passwordSalt);
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-            
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+                
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
 
-            return user;
+                return user;
+            }
+          
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -76,5 +106,9 @@ namespace CargaClic.Handlers.Seguridad
 
             return false;
         }
+
+       
+
+       
     }
 }

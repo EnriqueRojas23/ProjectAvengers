@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import {  MatMenuModule , MatButtonModule, MatIconModule, MatCardModule  } from '@angular/material';
+
 @NgModule({
     declarations: [
         NopagefoundComponent,
@@ -27,7 +29,12 @@ import { RouterModule } from '@angular/router';
     imports: [
         FormsModule,
         CommonModule,
-        RouterModule
+        RouterModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatIconModule,
+        MatCardModule
+
     ]
 })
 

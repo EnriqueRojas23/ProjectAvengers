@@ -1,4 +1,4 @@
-namespace CargaClic.Data.Seguridad
+namespace CargaClic.Data.Domain.Seguridad
 {
     public class RolPagina
     {
@@ -6,6 +6,6 @@ namespace CargaClic.Data.Seguridad
         public Rol Rol { get; set; }
         public Pagina Pagina { get; set; }
         public int IdPagina { get; set; }
-        public string permisos { get; set; }
+        public string permisos { get; set; }    
     }
 }
