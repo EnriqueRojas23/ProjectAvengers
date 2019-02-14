@@ -65,7 +65,7 @@ namespace CargaClic.Handlers.Seguridad
 
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "select id,Username, Nombre, Email, DateOfBirth, Created, LastActive from seguridad.users  where id = @ID";
+                string sQuery = "select id,Username, NombreCompleto, EnLinea, Email, Dni, Created, LastActive , EstadoId from seguridad.users  where id = @ID";
                 conn.Open();
                 var result = await conn.QueryAsync<User>(sQuery, new { id = id } );
                 //var result2 = await conn.Query<User>("",param ,commandType:CommandType.StoredProcedure);

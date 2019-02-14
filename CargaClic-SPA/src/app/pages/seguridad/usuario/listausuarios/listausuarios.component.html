@@ -1,0 +1,142 @@
+
+<div class="page-head">
+    <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2>
+    <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+        <li class="breadcrumb-item active">Listado de Usuarios</li>
+      </ol>
+    </nav>
+  </div>
+
+<div class="main-content container-fluid">
+<div class="col-md-12">
+    <div class="search-div">
+        <!-- <button mat-raised-button>
+          <mat-icon>add</mat-icon>Create
+        </button> -->
+        <div class="input-container">
+        <i class="fa fa-search"></i>
+        <mat-form-field class="search-form-field" >
+          
+      
+          <input matInput [(ngModel)]="searchKey" placeholder="Búsqueda" autocomplete="off" (keyup)="applyFilter()">
+          <!-- <button mat-button matSuffix mat-icon-button aria-label="Clear"*ngIf="searchKey"  (click)="onSearchClear()">
+            <mat-icon>close</mat-icon>
+          </button> -->
+        </mat-form-field>
+        </div>
+
+      </div>
+    <div class="card card-border-color card-border-color-primary">
+      <div class="card-header card-header-divider">Lista de Usuarios del WMS<span class="card-subtitle">Usuarios registrados en el sistema</span></div>
+      <div class="card-body">
+          <div class="mat-elevation-z8">
+              <mat-table #table [dataSource] = "listData" matSort >
+            
+                  <ng-container matColumnDef="Id">
+                       <mat-header-cell *matHeaderCellDef> Id </mat-header-cell> 
+                      
+                      <mat-cell *matCellDef="let user"> {{user.id}} </mat-cell>
+                    </ng-container>
+            
+                  <ng-container matColumnDef="username">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header > Usuario </mat-header-cell>
+                      <mat-cell *matCellDef="let user"> {{user.username}} </mat-cell>
+                    </ng-container>
+            
+                    <!-- [style.color]="'#ff0000'" -->
+            
+                  <ng-container matColumnDef="nombreCompleto">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombres </mat-header-cell>
+                    <mat-cell  *matCellDef="let user" >  {{user.nombreCompleto}} </mat-cell>
+                  </ng-container>
+            
+                  <ng-container matColumnDef="email">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                      <mat-cell *matCellDef="let user"> 
+                        {{user.email}} 
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Dni">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Dni </mat-header-cell>
+                        <mat-cell *matCellDef="let user"> 
+                        
+                            {{user.dni}}
+                          <!-- {{user.dateOfBirth | date:'dd-MM-yyyy' }}  -->
+                        
+                        </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="lastActive">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header> Último ingreso </mat-header-cell>
+                          <mat-cell *matCellDef="let user"> 
+                              {{user.lastActive | date:'dd-MM-yyyy' }} 
+                      
+                            
+                          
+                          </mat-cell>
+                        </ng-container>
+              <ng-container matColumnDef="nombreEstado">
+                  <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+                  <mat-cell *matCellDef="let user"> 
+                        
+                      {{user.nombreEstado}}
+                    <!-- {{user.dateOfBirth | date:'dd-MM-yyyy' }}  -->
+                  
+                  </mat-cell>
+                </ng-container>
+                    
+                  <ng-container matColumnDef="enLinea">
+                      <mat-header-cell *matHeaderCellDef> En Línea </mat-header-cell>
+                      <mat-cell *matCellDef="let user">
+                          <div *ngIf="user.enLinea then thenBlock else elseBlock"></div>
+                          <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">Online     </div>     </ng-template>
+                          <ng-template #elseBlock>Offline</ng-template>  
+                        
+                      
+                      </mat-cell>
+                    </ng-container>
+            
+            
+                    <ng-container matColumnDef="actionsColumn">
+                        <mat-header-cell *matHeaderCellDef>
+                            <button class="btn btn-space btn-primary" routerLink="/nuevousuario">Create new</button>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-space btn-secondary btn-google-plus" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
+                            <button class="btn btn-space btn-secondary btn-google-plus" (click)="open(row)" type="button"><i class="fa fa-trash"></i></button>
+                            <!-- <button class="btn btn-outline-primary" (click)="open('autofocus')">
+                                <div>Open confirm modal with `ngbAutofocus`</div>
+                                <div class="text-dark" aria-hidden="true"><small>Ok button will be focused</small></div>
+                              </button> -->
+                        </mat-cell>
+                    </ng-container>
+           
+            
+              <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" 
+              [ngClass]="{'highlight': selectedRowIndex == row.id}"
+              (click)="highlight(row)">
+
+
+
+              </mat-row>
+              
+              
+              
+            
+            
+              </mat-table>
+
+
+             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+

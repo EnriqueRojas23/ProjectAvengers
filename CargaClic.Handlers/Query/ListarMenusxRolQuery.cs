@@ -17,14 +17,14 @@ namespace CargaClic.Handlers.Query
             _config = config;   
             
         }
-        public async Task<QueryResult> Execute(ListarMenusxRolParameter parameters)
+        public QueryResult Execute(ListarMenusxRolParameter parameters)
         {
             using (var conn = new ConnectionFactory(_config).GetOpenConnection())
             {
                  var parametros = new DynamicParameters();
                  parametros.Add("IdRol", dbType: DbType.Int32, direction: ParameterDirection.Input, value: parameters.idRol);
                  var result = new ListarMenusxRolResult();
-                 result.Hits = await conn.QueryAsync<ListarMenusxRolDto>("seguridad.pa_listarmenu"
+                 result.Hits =  conn.Query<ListarMenusxRolDto>("seguridad.pa_listarmenu"
                                                                         ,parametros
                                                                         ,commandType:CommandType.StoredProcedure);
                 return result;

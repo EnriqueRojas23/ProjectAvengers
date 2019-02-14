@@ -14,7 +14,6 @@ namespace CargaClic.Data.Mappings.Seguridad
             builder.Property(x=>x.Username).HasMaxLength(15).IsRequired();
             builder.Property(x=>x.NombreCompleto).HasMaxLength(50).IsRequired();
             builder.Property(x=>x.Email).HasMaxLength(50).IsRequired();
-            builder.Property(x=>x.DateOfBirth).HasColumnType("datetime").IsRequired();
             builder.Property(x=>x.LastActive).HasColumnType("datetime").IsRequired();
         }
     }

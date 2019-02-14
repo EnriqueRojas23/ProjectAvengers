@@ -18,23 +18,42 @@ namespace CargaClic.Handlers.Query
         {
             _config = config;
         }
-        public async Task<QueryResult> Execute(ListarUsuariosParameters parameters)
+
+        public QueryResult Execute(ListarUsuariosParameters parameters)
         {
-             using (var con = new ConnectionFactory(_config).GetOpenConnection())
+            using (var con = new ConnectionFactory(_config).GetOpenConnection())
             {
                 var parametros = new DynamicParameters();
-                parametros.Add("idtipoproducto", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.Id);
-                parametros.Add("idnivelreparacion", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.IdUsuario);
-                parametros.Add("idpartner", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.Username);
+                // parametros.Add("idtipoproducto", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.Id);
+                // parametros.Add("idnivelreparacion", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.IdUsuario);
+                // parametros.Add("idpartner", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.Username);
 
                 var resultado = new ListarUsuariosResult();
-                resultado.Hits = await con.QueryAsync<ListarUsuariosDto>(
-                        "agendamiento.pa_calculartarifa",
+                resultado.Hits =  con.Query<ListarUsuariosDto>(
+                        "seguridad.pa_listarusuarios",
                         parametros,
                         commandType: CommandType.StoredProcedure);
 
                 return resultado;
-            }
+            };
         }
+        // public async Task<QueryResult> Execute(ListarUsuariosParameters parameters)
+        // {
+        //      using (var con = new ConnectionFactory(_config).GetOpenConnection())
+        //     {
+        //         var parametros = new DynamicParameters();
+        //         parametros.Add("idtipoproducto", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.Id);
+        //         parametros.Add("idnivelreparacion", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.IdUsuario);
+        //         parametros.Add("idpartner", dbType: DbType.Int64, direction: ParameterDirection.Input, value: parameters.Username);
+
+        //         var resultado = new ListarUsuariosResult();
+        //         resultado.Hits = await con.QueryAsync<ListarUsuariosDto>(
+        //                 "agendamiento.pa_calculartarifa",
+        //                 parametros,
+        //                 commandType: CommandType.StoredProcedure);
+
+        //         return resultado;
+        //     }
+        // }
     }
 }

@@ -30,4 +30,39 @@
     "LastActive": "05/25/2018",
     "Password": "123",
     "EstadoId" : "1"
-}]
+},
+{
+    "UserName": "ccronell",
+    "NombreCompleto": "Chris Cornell",
+    "Email": "chris.cornell@soundgarden.com",
+    "EnLinea": true,
+    "DateOfBirth": "05/25/1983",
+    "Created": "05/25/2018",
+    "LastActive": "05/25/2018",
+    "Password": "password",
+    "EstadoId" : "1"
+},
+{
+    "UserName": "lstaley",
+    "NombreCompleto": "Layne Staley",
+    "Email": "lstaley@aic.net",
+    "EnLinea": true,
+    "DateOfBirth": "05/25/1983",
+    "Created": "05/25/2018",
+    "LastActive": "05/25/2018",
+    "Password": "password",
+    "EstadoId" : "1"
+},
+{
+    "UserName": "jantrell",
+    "NombreCompleto": "Jerry Cantrell",
+    "Email": "jantrells@aic.net",
+    "EnLinea": true,
+    "DateOfBirth": "05/25/1983",
+    "Created": "05/25/2018",
+    "LastActive": "05/25/2018",
+    "Password": "password",
+    "EstadoId" : "1"
+}
+
+]

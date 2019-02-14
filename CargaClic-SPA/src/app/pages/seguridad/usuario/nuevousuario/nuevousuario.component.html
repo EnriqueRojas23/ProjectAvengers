@@ -1,0 +1,111 @@
+<div class="page-head">
+  <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2>
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb page-head-nav">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+      <li class="breadcrumb-item"><a href="#">Listado de Usuarios</a></li>
+      <li class="breadcrumb-item active">Nuevo Usuario</li>
+    </ol>
+  </nav>
+</div>
+<div class="main-content container-fluid">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-border-color card-border-color-primary">
+        <div class="card-header card-header-divider">Datos de Usuario<span class="card-subtitle">Nuevo usuario de sistema</span></div>
+        <div class="card-body ">
+          <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+            <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Usuario</label>
+              <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                <input matInput  minlength="5" maxlength="10" required [(ngModel)]="model.username"  #username="ngModel" placeholder="Username para el login"  name="username" type="text">
+              </mat-form-field>
+              <div class="alert alert-danger" *ngIf="username.errors && !isValidFormSubmitted"> 
+                  <div *ngIf="username.errors.minlength">
+                  Usuario debe tener mas de 5 caracteres.
+            </div>
+               </div>	
+            </div>
+            <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="password">Password</label>
+              <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                <input matInput  minlength="5" maxlength="20"  required [(ngModel)]="model.password"  #password="ngModel" name="password" placeholder="Contraseña de ingreso" type="password">
+              </mat-form-field>
+              <div class="alert alert-danger" *ngIf="password.errors && !isValidFormSubmitted"> 
+                  <div *ngIf="password.errors.minlength">
+                  password debe tener mas de 5 caracteres.
+            </div>
+          </div>
+            </div>
+            <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="nombreCompleto">Nombres y Apellidos</label>
+              <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                <input matInput  minlength="5" maxlength="50"  required [(ngModel)]="model.nombreCompleto" name="nombreCompleto" #nombrecompleto="ngModel" type="text" placeholder="Nombres y apellidos completos">
+              </mat-form-field>
+              <div class="alert alert-danger" *ngIf="nombrecompleto.errors && !isValidFormSubmitted"> 
+                  <div *ngIf="nombrecompleto.errors.minlength">
+                  password debe tener menos de 5 caracteres.
+            </div>
+            </div>
+          </div>
+            <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="dni">DNI</label>
+                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput minlength="8" maxlength="8"   onkeyup="if (/\D/g.test(this.value))  this.value = this.value.replace(/\D/g,'')" required [(ngModel)]="model.dni" name="dni" type="text" placeholder="">
+                </mat-form-field>
+              </div>
+          <!-- <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="dni">Fecha Nacimiento</label>
+            <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                <input matInput [matDatepicker]="dp3" placeholder="" disabled>
+                <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+                <mat-datepicker startView="year" [startAt]="startDate" #dp3 disabled="false"></mat-datepicker>
+              </mat-form-field>
+            </div> -->
+
+
+              <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="email">Email</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput  required [(ngModel)]="model.email" autocomplete="off" name="email" [email]="true" #email="ngModel" type="email" placeholder="@">
+                  </mat-form-field>
+                  <div class="alert alert-danger" *ngIf="email.errors && !isValidFormSubmitted"> 
+                      <div *ngIf="email.errors.email">
+                      Email debe de tener una dirección válida
+                </div>
+                </div>
+                 
+              </div>
+                <!-- <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="power">Tipo de Usuario</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <mat-select placeholder="Selección">
+                        <mat-option *ngFor="let pow of tipos" [value]="pow.viewValue">
+                            {{pow.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                </div> -->
+                <div class="row pt-2 pt-sm-5 mt-1">
+                    <div class="col-sm-6 pl-0">
+                      <p class="text-right">
+                        <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                        <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button>
+                  
+                      </p>
+                    </div>
+                  </div>
+     
+           
+          </form>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+

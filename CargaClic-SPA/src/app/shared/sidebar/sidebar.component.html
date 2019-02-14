@@ -6,11 +6,10 @@
       <nav class="sidebar-nav">
         <ul class="sidebar-elements">
           <li class="divider">Menu</li> 
-          <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard']"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
+          <li class="active"><a [routerLink]="['/dashboard']"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
           </li>
           <li class="parent" *ngFor="let menu of _sidebar.menu" >
-              <a [routerLink]="['/dashboard']"><i [class]="menu.icono"></i><span> {{ menu.descripcion }} </span></a>
+              <a><i [class]="menu.icono"></i><span> {{ menu.descripcion }} </span></a>
             <ul class="sub-menu">
                <li *ngFor='let submenu of menu.submenu'>
                 <a routerLinkActive="Active" [routerLink]="[ submenu.link ]">{{ submenu.descripcion }}</a>

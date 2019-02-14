@@ -85,9 +85,34 @@ namespace CargaClic.Handlers.Seguridad
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
 
+                transaction.Commit();
+                transaction.Dispose();
+                
+
                 return user;
             }
           
+        }
+        public async Task<User> Update(User user)
+        {
+
+            using(var transaction = _context.Database.BeginTransaction())
+            {
+               
+                var userDb = await _context.Users.SingleOrDefaultAsync(x=>x.Id == user.Id);
+                userDb.Dni = user.Dni;
+                userDb.Email = user.Email;
+                userDb.EstadoId = user.EstadoId;
+                userDb.NombreCompleto = user.NombreCompleto;
+                
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
+                transaction.Dispose();
+                
+
+                return user;
+            }
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -107,8 +132,6 @@ namespace CargaClic.Handlers.Seguridad
             return false;
         }
 
-       
-
-       
+        
     }
 }

@@ -1,0 +1,18 @@
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+.mat-column-Id {
+  flex: 0 0 50px;
+  color: blue;
+}
+.mat-column-username {
+  flex: 0 0 85px;
+}
+.mat-column-email {
+  flex: 0 0 205px;
+}
+.highlight{
+  background: rgb(224, 216, 238); /* green */
+}

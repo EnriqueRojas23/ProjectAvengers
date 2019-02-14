@@ -12,3 +12,17 @@ C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\obj\
 C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.pdb
 C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\bin\Debug\netstandard2.0\Common.dll
 C:\Users\ENRIQUE\OneDrive\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\bin\Debug\netstandard2.0\Common.pdb
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\bin\Debug\netstandard2.0\CargaClic.Handlers.deps.json
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\bin\Debug\netstandard2.0\CargaClic.Handlers.dll
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\bin\Debug\netstandard2.0\CargaClic.Handlers.pdb
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\bin\Debug\netstandard2.0\CargaClic.Data.dll
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\bin\Debug\netstandard2.0\Common.dll
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\bin\Debug\netstandard2.0\CargaClic.Data.pdb
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\bin\Debug\netstandard2.0\Common.pdb
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.csprojAssemblyReference.cache
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.csproj.CoreCompileInputs.cache
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.AssemblyInfoInputs.cache
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.AssemblyInfo.cs
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.csproj.CopyComplete
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.dll
+D:\RIA\RIA\2018\Proyecto Avengers\app\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.pdb

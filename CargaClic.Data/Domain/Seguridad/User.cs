@@ -14,9 +14,9 @@ namespace CargaClic.Data.Domain.Seguridad
         public string NombreCompleto { get; set; }
         public string Email {get;set;}
         public bool EnLinea { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public DateTime Created { get; set; }
-        public DateTime LastActive { get; set; }
+        public String Dni {get;set;}
+        public DateTime? LastActive { get; set; }
         [Required]
         public byte[] PasswordHash { get; set; }
         [Required]

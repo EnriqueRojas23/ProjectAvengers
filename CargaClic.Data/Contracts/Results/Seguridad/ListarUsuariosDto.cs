@@ -12,12 +12,13 @@ namespace CargaClic.Data.Contracts.Results.Seguridad
     {
         public int Id {get;set;}
         public string Username { get; set; }
-        public string Nombre { get; set; }
+        public string NombreCompleto { get; set; }
         public string Email {get;set;}
         public bool EnLinea { get; set; }
         public string Estado { get; set; }
         public int Edad { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string Dni { get; set; }
+        public string NombreEstado {get;set;}
         public DateTime Created { get; set; }
         public DateTime LastActive { get; set; }
         

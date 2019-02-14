@@ -14,6 +14,30 @@ decodedToken: any;
 
 constructor(private http: HttpClient) { }
 
+registrar(model: any){
+  return this.http.post(this.baseUrl + 'register', model)
+  .pipe(
+    map((response: any) => {
+       const user = response;
+       if(user)
+       {
+         console.log('pase');
+       }
+    } 
+  )
+  )};
+actualizar(model:any){
+  return this.http.post(this.baseUrl + 'update', model)
+  .pipe(
+    map((response: any) => {
+      const user = response;
+       if(user)
+       {
+         console.log('pase');
+       }
+    })
+  )
+}
 login(model: any) {
   return this.http.post(this.baseUrl + 'login', model)
   .pipe(
@@ -22,6 +46,9 @@ login(model: any) {
       if (user) {
         localStorage.setItem('token', user.token);
         this.decodedToken = this.jwtHelper.decodeToken(user.token);
+
+        const stringMenu = JSON.stringify(user.menu);
+        localStorage.setItem('menu', stringMenu);
       }
     })
   );
@@ -30,6 +57,4 @@ login(model: any) {
    const token = localStorage.getItem('token');
    return !this.jwtHelper.isTokenExpired(token);
  }
-
-
 }

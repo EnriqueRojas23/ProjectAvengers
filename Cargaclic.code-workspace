@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "CargaClic.API"
+		},
+		{
+			"path": "CargaClic.Data"
+		},
+		{
+			"path": "CargaClic.Handlers"
+		},
+		{
+			"path": "Common"
+		},
+		{
+			"path": ".git"
+		},
+		{
+			"path": ".vscode"
+		},
+		{
+			"path": "CargaClic-SPA"
+		}
+	]
+}

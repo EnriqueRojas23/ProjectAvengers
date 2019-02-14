@@ -15,6 +15,12 @@ import { SharedModule } from './shared/shared.module';
 import { PagesComponent } from './pages/pages.component';
 import { ErrorInterceptorProvide } from './_services/error.interceptor';
 import { AlertifyService } from './_services/alertify.service';
+import { RouterModule } from '@angular/router';
+import { UserService } from './_services/user.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatTableModule, MatPaginatorModule, MatSortModule, MatDatepickerModule } from '@angular/material';
+
 
 
 
@@ -24,19 +30,29 @@ import { AlertifyService } from './_services/alertify.service';
    declarations: [
       AppComponent,
       LoginComponent,
-      PagesComponent
+      PagesComponent,
+      
+      
      ],
    imports: [
       BrowserModule,
       HttpClientModule,
       APP_ROUTES,
       FormsModule,
-      SharedModule
+      SharedModule,
+      BrowserAnimationsModule,
+      MatTableModule,
+      MatPaginatorModule,
+      MatSortModule,
+      
+   
+      
    ],
    providers: [
         AuthService,
         ErrorInterceptorProvide,
         AlertifyService,
+        UserService
    ],
    bootstrap: [
       AppComponent

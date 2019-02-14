@@ -46,7 +46,7 @@ namespace CargaClic.API
              services.AddCors();
              services.AddAutoMapper();
              services.AddTransient<Seed>();
-             services.AddTransient<Seed>();
+             //services.AddTransient<Seed>();
              services.AddScoped<IRepository<User>,Repository<User>>();
              services.AddScoped<IAuthRepository,AuthRepository>();
              services.AddScoped<IQueryHandler<ListarUsuariosParameters>,ListarUsuarios>();
@@ -90,7 +90,7 @@ namespace CargaClic.API
             // app.UseHttpsRedirection();
             
             //seeder.SeedEstados();
-            //seeder.SeedUsers();
+           // seeder.SeedUsers();
             //seeder.SeedPaginas();
             //seeder.SeedRoles();
            // seeder.SeedRolPaginas();

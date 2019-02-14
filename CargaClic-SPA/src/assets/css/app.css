@@ -98,7 +98,7 @@ html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
-  -ms-overflow-style: scrollbar;
+  
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -13629,7 +13629,7 @@ canvas {
 }
 
 .main-content {
-  padding: 25px;
+  padding: 5px;
 }
 
 @media (max-width: 991.98px) {
@@ -13666,7 +13666,7 @@ canvas {
   [Page head]
 */
 .page-head {
-  padding: 20px 25px 10px;
+  padding: 10px 15px 5px;
   position: relative;
 }
 

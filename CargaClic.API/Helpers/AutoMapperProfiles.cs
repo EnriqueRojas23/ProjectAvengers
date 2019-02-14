@@ -9,10 +9,10 @@ namespace CargaClic.API.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<User,UserForDetailedDto>()
-                .ForMember(dest => dest.Edad , opt => {
-                    opt.ResolveUsing( d => d.DateOfBirth.CalcularEdad());
-                });
+            // CreateMap<User,UserForDetailedDto>()
+            //     .ForMember(dest => dest.Edad , opt => {
+            //         opt.ResolveUsing( d => (d.DateOfBirth != null)?d.DateOfBirth.Value.CalcularEdad() : 1);
+            //     });
             
         }
     }

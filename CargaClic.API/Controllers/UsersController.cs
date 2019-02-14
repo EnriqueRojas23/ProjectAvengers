@@ -3,6 +3,7 @@ using AutoMapper;
 using CargaClic.API.Data;
 using CargaClic.API.Dtos;
 using CargaClic.Data.Contracts.Parameters.Seguridad;
+using CargaClic.Data.Contracts.Results.Seguridad;
 using CargaClic.Data.Domain.Seguridad;
 using CargaClic.Handlers;
 using CargaClic.Handlers.Query;
@@ -32,26 +33,23 @@ namespace CargaClic.API.Controllers
             _repo = repo;
         }
         [HttpGet]
-        public IActionResult GetUsers(int IdUser)
+        public IActionResult GetUsers(string nombres)
         {
             ListarUsuariosParameters Param = new ListarUsuariosParameters();
-            Param.Id = IdUser;
-            var users = _user.Execute(Param);
-            return Ok(users);
+            
+            Param.Nombre = nombres;
+            var users = (ListarUsuariosResult) _user.Execute(Param);
+            return Ok(users.Hits);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await _repo.Get(x => x.Id == id);
-
-            // _repo.Add(user);
-            // await _repo.SaveAll();
-
-            //var user = await _repo.GetUser(id);
             var userToResult = _mapper.Map<UserForDetailedDto>(user);
             return Ok(userToResult);
         }
 
+    
 
 
 

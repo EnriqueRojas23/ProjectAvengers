@@ -5,6 +5,7 @@ namespace Common.QueryHandlers
 {
     public interface IQueryHandler<in T> where T : QueryParameter
     {
-       Task<QueryResult> Execute(T parameters);
+       // Task<QueryResult> ExecuteAsync(T parameters);
+       QueryResult Execute(T parameters);
     }
 }

@@ -16,13 +16,13 @@ export class LoginComponent implements OnInit {
   }
   login(form: NgForm) {
     if (form.invalid) {
-      return;
+      return; 
     }
-    this.authService.login(this.model).subscribe(resp => {
+    this.authService.login(this.model).subscribe(resp => { 
     }, error => {
        this.alertify.error(error);
-       console.log(error);
-    }, () => {
+       //console.log(error);
+    }, () => { 
       this.router.navigate(['/dashboard']);
     });
   }
