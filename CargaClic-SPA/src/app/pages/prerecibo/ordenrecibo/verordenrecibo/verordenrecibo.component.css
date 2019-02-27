@@ -1,0 +1,26 @@
+.input-div{
+    display: flex;
+   
+    
+      }
+      .input-form-field{
+          width: 30%;
+          margin-left: 10px;
+          padding: 1px 1px;
+          border-radius: 1px;
+          color: #4285f4;
+       
+          }
+          .input-form-field div.mat-form-field-underline {
+              display: none;
+          }
+          .input-form-field div.mat-form-field-infix{
+              border-top: 5px;
+          }
+          .input-form-field div.mat-form-field-wrapper{
+            padding-bottom: 5px;
+        }
+        .input-form-field div.mat-form-field-suffix button{
+            height: 32px;
+            width: 32px;
+        }

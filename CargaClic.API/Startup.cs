@@ -23,10 +23,17 @@ using Microsoft.IdentityModel.Tokens;
 using CargaClic.API.Data;
 using CargaClic.Handlers;
 using CargaClic.Handlers.Seguridad;
-using CargaClic.Data.Domain.Seguridad;
-using CargaClic.Handlers.Query;
 using Common.QueryHandlers;
 using CargaClic.Data.Contracts.Parameters.Seguridad;
+using CargaClic.Data.Interface;
+using CargaClic.Domain.Seguridad;
+using Common;
+using CargaClic.Contracts.Parameters.Prerecibo;
+using CargaClic.Handlers.Precibo;
+using CargaClic.Domain.Mantenimiento;
+using CargaClic.Domain.Prerecibo;
+using CargaClic.Contracts.Parameters.Mantenimiento;
+using CargaClic.Handlers.Mantenimiento;
 
 namespace CargaClic.API
 {
@@ -48,9 +55,28 @@ namespace CargaClic.API
              services.AddTransient<Seed>();
              //services.AddTransient<Seed>();
              services.AddScoped<IRepository<User>,Repository<User>>();
+             services.AddScoped<IRepository<Rol>,Repository<Rol>>();
+             
+             services.AddScoped<IRepository<RolPagina>,Repository<RolPagina>>();
+             services.AddScoped<IRepository<Pagina>,Repository<Pagina>>();
+             services.AddScoped<IRepository<RolUser>,Repository<RolUser>>();
+             services.AddScoped<IRepository<Estado>,Repository<Estado>>();
+
+             services.AddScoped<IQueryHandler<ListarOrdenReciboParameter>,ListarOrdenReciboQuery>();
+
              services.AddScoped<IAuthRepository,AuthRepository>();
-             services.AddScoped<IQueryHandler<ListarUsuariosParameters>,ListarUsuarios>();
+             services.AddScoped<IQueryHandler<ListarUsuariosParameters>,ListarUsuariosQuery>();
              services.AddScoped<IQueryHandler<ListarMenusxRolParameter>,ListarMenusxRolQuery>();
+             services.AddScoped<IQueryHandler<ListarTreeViewParameter>,ListarTreeViewQuery>();
+             services.AddScoped<IQueryHandler<ListarRolesPorUsuarioParameter>,ListarRolesPorUsuarioQuery>();
+
+
+            services.AddScoped<IRepository<Cliente>, Repository<Cliente>>();
+            services.AddScoped<IQueryHandler<ListarProductosParameter>,ListarProductosQuery>();
+
+            services.AddScoped<IRepository<OrdenRecibo>,Repository<OrdenRecibo>>();
+            services.AddScoped<IRepository<OrdenReciboDetalle>,Repository<OrdenReciboDetalle>>();
+             
              services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(options => {
                             options.TokenValidationParameters = new TokenValidationParameters

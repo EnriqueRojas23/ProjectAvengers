@@ -1,38 +1,38 @@
 
 <div class="page-head">
-    <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2>
-    <nav aria-label="breadcrumb" role="navigation">
+    <!-- <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2> -->
+    <!-- <nav aria-label="breadcrumb" role="navigation">
       <ol class="breadcrumb page-head-nav">
         <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
         <li class="breadcrumb-item active">Listado de Usuarios</li>
       </ol>
-    </nav>
+    </nav> -->
   </div>
 
 <div class="main-content container-fluid">
 <div class="col-md-12">
-    <div class="search-div">
-        <!-- <button mat-raised-button>
-          <mat-icon>add</mat-icon>Create
-        </button> -->
-        <div class="input-container">
-        <i class="fa fa-search"></i>
-        <mat-form-field class="search-form-field" >
-          
-      
-          <input matInput [(ngModel)]="searchKey" placeholder="Búsqueda" autocomplete="off" (keyup)="applyFilter()">
-          <!-- <button mat-button matSuffix mat-icon-button aria-label="Clear"*ngIf="searchKey"  (click)="onSearchClear()">
-            <mat-icon>close</mat-icon>
-          </button> -->
-        </mat-form-field>
-        </div>
 
-      </div>
+
     <div class="card card-border-color card-border-color-primary">
-      <div class="card-header card-header-divider">Lista de Usuarios del WMS<span class="card-subtitle">Usuarios registrados en el sistema</span></div>
+      <div class="card-header card-header-divider">
+          
+       <div class="row">
+            <b> Usuarios del WMS  |  </b>  <span class="card-subtitle">   Usuarios registrados en el sistema</span>
+          </div>
+        </div>
+            <div class="search-div">
+                <div class="input-container">
+                <i class="fa fa-search"></i>
+                <mat-form-field class="search-form-field" >
+                  <input matInput [(ngModel)]="searchKey" placeholder="Buscar por usuario, nombre y correo " autocomplete="off" (keyup)="applyFilter()">
+                </mat-form-field>
+                </div>
+            </div>
+     
+      
+   
       <div class="card-body">
-          <div class="mat-elevation-z8">
+          <div  class="mat-elevation-z8">
               <mat-table #table [dataSource] = "listData" matSort >
             
                   <ng-container matColumnDef="Id">
@@ -103,11 +103,15 @@
             
                     <ng-container matColumnDef="actionsColumn">
                         <mat-header-cell *matHeaderCellDef>
-                            <button class="btn btn-space btn-primary" routerLink="/nuevousuario">Create new</button>
+                            <div class="example-button-row">
+                            <button mat-fab color="primary"  routerLink="/nuevousuario"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
+                            </div>
+                            <!-- <button class="btn btn-space btn-primary" routerLink="/nuevousuario">Nuevo Usuario</button> -->
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button class="btn btn-space btn-secondary btn-google-plus" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
-                            <button class="btn btn-space btn-secondary btn-google-plus" (click)="open(row)" type="button"><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-outline-primary" (click)="openDialog(row.id)" type="button"><i class="fas fa-running"></i></button>
+                            <button class="btn btn-space btn-outline-primary" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
+                            <button class="btn  btn-outline-primary" (click)="open(row)" type="button"><i class="fa fa-trash"></i></button>
                             <!-- <button class="btn btn-outline-primary" (click)="open('autofocus')">
                                 <div>Open confirm modal with `ngbAutofocus`</div>
                                 <div class="text-dark" aria-hidden="true"><small>Ok button will be focused</small></div>
@@ -140,3 +144,5 @@
   </div>
 </div>
 
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate"></ngx-loading>

@@ -1,0 +1,73 @@
+
+
+<div class="page-head">
+  <h2 class="page-head-title">Mantenimiento de Opciones del Sistema</h2>
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb page-head-nav">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item"><a href="#">Lista de Roles</a></li>
+      <li class="breadcrumb-item active">Listado de Opciones</li>
+    </ol>
+  </nav>
+</div>
+
+       
+      <ng-template #itemTemplate let-item="item" let-onCollapseExpand="onCollapseExpand" let-onCheckedChange="onCheckedChange">
+        <div class="form-inline row-item">
+          <i *ngIf="item.children" (click)="onCollapseExpand()" aria-hidden="true" class="fa" [class.fa-caret-right]="item.collapsed"
+            [class.fa-caret-down]="!item.collapsed"></i>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" [(ngModel)]="item.checked" (ngModelChange)="onCheckedChange()" [disabled]="item.disabled"
+              [indeterminate]="item.indeterminate" />
+            <label class="form-check-label" (click)="item.checked = !item.checked; onCheckedChange()">
+              {{item.text}}
+            </label>
+            <!-- <label class="form-check-label">
+              <i class="fa fa-trash" aria-hidden="true" title="Remove" (click)="removeItem(item)"></i>
+            </label> -->
+          </div>
+        </div>
+      </ng-template>
+
+
+
+
+<div class="main-content container-fluid">
+  <div class="col-md-12">
+    <div class="card card-border-color card-border-color-primary">
+      <div class="card-header card-header-divider">Lista de Opciones del WMS<span class="card-subtitle">Opciones del menú del sistema</span></div>
+      <div class="card-body">
+
+
+
+<div class="row">
+  <div class="col-6">
+    <div class="form-group">
+      <div class="d-inline-block">
+        <ngx-treeview [items]="items" [itemTemplate]="itemTemplate" (selectedChange)="onSelectedChange($event)">
+        </ngx-treeview>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="alert alert-success" role="alert">
+     Menu Seleccionado:
+      <div *ngFor="let row of rows">{{row}}</div>
+    </div>
+  </div>
+</div>
+<div class="row pt-2 pt-sm-5 mt-1">
+  <div class="col-sm-6 pl-0">
+    <p class="text-right">
+      <button  class="btn btn-space btn-primary" (click)="save(rows)">Guardar</button>
+      <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button>
+    </p>
+  </div>
+</div>
+
+</div>
+</div>
+
+
+</div>
+</div>

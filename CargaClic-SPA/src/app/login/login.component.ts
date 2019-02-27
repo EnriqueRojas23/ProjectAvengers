@@ -11,17 +11,35 @@ import { AlertifyService } from '../_services/alertify.service';
 })
 export class LoginComponent implements OnInit {
   model: any = {};
+  public loading = false;
   constructor(private authService: AuthService, private router: Router, private alertify: AlertifyService) { }
   ngOnInit() {
+    var rememberme =  localStorage.getItem('Name');
+    this.model.recuerdame = true;
+    this.model.username = rememberme;
+
+
   }
   login(form: NgForm) {
+    this.loading = true;
     if (form.invalid) {
       return; 
     }
     this.authService.login(this.model).subscribe(resp => { 
+      
+
+
     }, error => {
-       this.alertify.error(error);
-       //console.log(error);
+      
+        if('Unauthorized' == error)
+           this.alertify.error('usuario y/o contraseña incorrecta');
+        else if('Bloqueado' == error)
+           this.alertify.error('usuario bloqueado');
+        else if('Eliminado' == error)
+           this.alertify.error('usuario eliminado');
+        else 
+          this.alertify.error(error);
+
     }, () => { 
       this.router.navigate(['/dashboard']);
     });

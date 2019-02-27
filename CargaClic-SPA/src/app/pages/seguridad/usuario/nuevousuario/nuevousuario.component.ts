@@ -5,14 +5,11 @@ import { MatFormField, MatSelect } from '@angular/material';
 import { AuthService } from 'src/app/_services/auth.service';
 import { Router } from '@angular/router';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { UserService } from 'src/app/_services/user.service';
 declare var $: any;
 
 
 
-export interface TipoUsuario {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-nuevousuario',
@@ -23,13 +20,14 @@ export class NuevousuarioComponent implements OnInit {
   model: any = {}  ;
   
 
-  constructor(private authService: AuthService, private router: Router, private alertify: AlertifyService ) {  }
+  constructor(private userService: UserService,
+    private authService: AuthService, private router: Router, private alertify: AlertifyService ) {  }
 
   registrar(form: NgForm) {
     if (form.invalid) {
       return; 
     }
-    this.authService.registrar(this.model).subscribe(resp => { 
+    this.userService.registrar(this.model).subscribe(resp => { 
     }, error => {
        this.alertify.error(error);
     }, () => { 

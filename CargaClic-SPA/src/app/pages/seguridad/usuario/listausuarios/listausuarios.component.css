@@ -16,3 +16,8 @@
 .highlight{
   background: rgb(224, 216, 238); /* green */
 }
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+

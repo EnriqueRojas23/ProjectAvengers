@@ -6,13 +6,13 @@
       <nav class="sidebar-nav">
         <ul class="sidebar-elements">
           <li class="divider">Menu</li> 
-          <li class="active"><a [routerLink]="['/dashboard']"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
+          <li><a [routerLink]="['/dashboard']"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
           </li>
           <li class="parent" *ngFor="let menu of _sidebar.menu" >
-              <a><i [class]="menu.icono"></i><span> {{ menu.descripcion }} </span></a>
+              <a><i  [ngClass]="{active: activeRoute(menu.link)}" [class]="menu.icono"></i><span> {{ menu.descripcion }} </span></a>
             <ul class="sub-menu">
-               <li *ngFor='let submenu of menu.submenu'>
-                <a routerLinkActive="Active" [routerLink]="[ submenu.link ]">{{ submenu.descripcion }}</a>
+               <li    [ngClass]="{active: activeRoute(submenu.link)}" *ngFor='let submenu of menu.submenu'>
+                <a  *ngIf="submenu.visible"  routerLinkActive="Active" [routerLink]="[ submenu.link ]">{{ submenu.descripcion }}</a>
               </li> 
             </ul>
           </li>
@@ -24,31 +24,31 @@
   <div class="sidebar-collapse">
       <ul class="nav metismenu" id="side-menu">
           <li class="nav-header">
-              <div class="dropdown profile-element">
-                  <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+            
+                  <!-- <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                       <span class="block m-t-xs"> <strong class="font-bold">Example user</strong> </span>
                       <span class="text-muted text-xs block">Example <b class="caret"></b> </span>
-                  </a>
-                  <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                  </a> -->
+                  <!-- <ul class="dropdown-menu animated fadeInRight m-t-xs">
                       <li><a href="#">Logout</a></li>
-                  </ul>
-              </div>
-              <div class="logo-element">
+                  </ul> -->
+             
+              <!-- <div class="logo-element">
                   IN+
-              </div>
+              </div> -->
           </li>
-          <li [ngClass]="{active: activeRoute('mainView')}">
+          <!-- <li [ngClass]="{active: activeRoute('mainView')}">
               <a [routerLink]="['/mainView']"><i class="fa fa-th-large"></i> <span class="nav-label">Main view</span></a>
           </li>
           <li [ngClass]="{active: activeRoute('minorView')}">
               <a [routerLink]="['/minorView']"><i class="fa fa-desktop"></i> <span class="nav-label">Minor view</span> </a>
-          </li>
-          <li>
+          </li> -->
+          <!-- <li>
               <a [routerLink]="['/login']"><i class="fa fa-sign-in"></i> <span class="nav-label">Login</span> </a>
           </li>
           <li>
               <a [routerLink]="['/register']"><i class="fa fa-pencil"></i> <span class="nav-label">Register</span> </a>
-          </li>
+          </li> -->
       </ul>
 
   </div>

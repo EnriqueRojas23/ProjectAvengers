@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CargaClic.Data;
-using CargaClic.Data.Domain.Mantenimiento;
-using CargaClic.Data.Domain.Seguridad;
+using CargaClic.Domain.Mantenimiento;
+using CargaClic.Domain.Seguridad;
 using CargaClic.Handlers;
 using Newtonsoft.Json;
 

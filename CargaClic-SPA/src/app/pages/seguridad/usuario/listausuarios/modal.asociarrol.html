@@ -1,0 +1,34 @@
+<!-- <h1 mat-dialog-title>Hi {{data.id}}</h1>
+<div mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.animal">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+</div> -->
+
+
+<div class="modal-header">
+        <!-- <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true"><span class="mdi mdi-close"></span></button> -->
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <div class="text-center">  <i class="fas fa-running fa-4x"></i>
+          <h3>Asociar Roles a Usuario</h3>
+        </div>
+</div>
+<div class="modal-body">
+        <div class="container">
+                <dual-list [source]="source"  [format]="format" [(destination)]="target" height="100px" display="[_all]"></dual-list>
+            </div>
+ </div>
+
+<div class="modal-footer">
+    <div class="col-md-8">
+        <button class="btn btn-success btn-space" type="button" (click)="Save(data.id)">Guardar</button>
+        <button class="btn btn-secondary btn-space"  type="button" (click)="onNoClick()">Cancel</button>
+    </div>
+</div>
+
+

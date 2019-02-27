@@ -6,7 +6,7 @@ import { NgForm } from '@angular/forms';
 import { UserService } from 'src/app/_services/user.service';
 import { User } from 'src/app/_models/user';
 import { modelGroupProvider } from '@angular/forms/src/directives/ng_model_group';
-import { EstadosUsuario } from 'src/app/_models/Constantes';
+import { Dropdownlist } from 'src/app/_models/Constantes';
 
 
 @Component({
@@ -21,21 +21,31 @@ export class EditarusuarioComponent implements OnInit {
   id: number;
   private sub: any;
   public selected2: any;
+  date: Date = new Date();
+	settings = {
+		bigBanner: true,
+		timePicker: false,
+		format: 'dd-MM-yyyy',
+		defaultOpen: true
+	}
 
   constructor(private userService: UserService,
     private authService: AuthService, private activatedRoute: ActivatedRoute,  private router: Router, private alertify: AlertifyService ) {  }
 
-  tipos: EstadosUsuario[] = [
+  tipos: Dropdownlist[] = [
     {val: 1, viewValue: 'Habilitado'},
     {val: 2, viewValue: 'Bloqueado'},
     {val: 3, viewValue: 'Eliminado'},
   ];
 
   ngOnInit() {
+
+  
+
     this.id = this.sub = this.activatedRoute.snapshot.params["uid"];
      this.userService.getUser(this.id).subscribe(resp => { 
       this.model = resp;
-      this.selected2 = resp.estadoId ;
+      //this.selected2 = resp.estadoId ;
     }, error => {
        this.alertify.error(error);
     }, () => { 
@@ -49,7 +59,7 @@ export class EditarusuarioComponent implements OnInit {
     if (form.invalid) {
       return; 
     }
-    this.authService.actualizar(this.model).subscribe(resp => { 
+    this.userService.actualizar(this.model).subscribe(resp => { 
     }, error => {
        this.alertify.error(error);
     }, () => { 
@@ -57,8 +67,8 @@ export class EditarusuarioComponent implements OnInit {
       this.router.navigate(['/listausuarios']);
     });
   }
-  cancel(){
-    this.router.navigate(['/listausuarios']);
-  }
+    cancel(){
+      this.router.navigate(['/listausuarios']);
+    }
 
 }

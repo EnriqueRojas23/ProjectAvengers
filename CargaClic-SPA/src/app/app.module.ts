@@ -21,6 +21,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatTableModule, MatPaginatorModule, MatSortModule, MatDatepickerModule } from '@angular/material';
 
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
+import { GeneralService } from './_services/Mantenimiento/general.service';
+
 
 
 
@@ -44,6 +48,7 @@ import { MatTableModule, MatPaginatorModule, MatSortModule, MatDatepickerModule 
       MatTableModule,
       MatPaginatorModule,
       MatSortModule,
+      AngularDateTimePickerModule
       
    
       
@@ -52,7 +57,9 @@ import { MatTableModule, MatPaginatorModule, MatSortModule, MatDatepickerModule 
         AuthService,
         ErrorInterceptorProvide,
         AlertifyService,
-        UserService
+        UserService,
+      
+        
    ],
    bootstrap: [
       AppComponent

@@ -2,7 +2,7 @@ export class Constantes {
 
     
 }
-export interface EstadosUsuario {
+export interface Dropdownlist {
     val: number;
     viewValue: string;
   }

@@ -1,0 +1,88 @@
+<div class="page-head">
+    <!-- <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2> -->
+    <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a href="#">Listado de órdenes</a></li>
+        <li class="breadcrumb-item active"><a href="#">Nueva Orden de Recibo</a></li>
+        <!-- <li class="breadcrumb-item active">Nuevo Usuario</li> -->
+      </ol>
+    </nav>
+  </div>
+  <div class="main-content container-fluid">
+  
+
+      <div class="col-md-12">
+        <div class="card card-border-color card-border-color-primary">
+          <div class="card-header card-header-divider">Orden de Recibo<span class="card-subtitle"> Datos de cabecera de la orden de recibo</span></div>
+          <div class="card-body ">
+            <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+
+                <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="power">Cliente Propietario</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <mat-select required   [(value)]="model.PropietarioId"   placeholder="Selección">
+                        <mat-option  *ngFor="let pow of clientes" [value]="pow.val">
+                            {{pow.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                
+                </div> 
+
+                <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="FechaEsperada">Fecha de llegada</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput required type="datetime" [matDatepicker]="picker" autocomplete="off" [(ngModel)]="model.FechaEsperada" name="FechaEsperada" #FechaEsperada="ngModel" >
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                      <div class="alert alert-danger" *ngIf="FechaEsperada.errors && !isValidFormSubmitted"> 
+                          <div *ngIf="FechaEsperada.errors.datetime">
+                          Email debe de tener una dirección válida
+                         </div>
+                    </div>
+                    
+               </div>
+
+                <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="nombreCompleto">Hora de llegada</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput required  placeholder="Hora llegada" aria-label="12hr format" [ngxTimepicker]="default" >
+                  </mat-form-field>
+                    <ngx-material-timepicker #default></ngx-material-timepicker>
+               </div>
+
+              <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="guiaremision">Guía de Remisión</label>
+                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.guiaremision" name="guiaremision" #guiaremision="ngModel" type="text">
+                </mat-form-field>
+                <div class="alert alert-danger" *ngIf="guiaremision.errors && !isValidFormSubmitted"> 
+                    <div *ngIf="guiaremision.errors.minlength">
+                    Debe tener mas de 5 caracteres.
+                  </div>
+                </div>
+              </div>
+              <div class="row pt-2 pt-sm-5 mt-1">
+                  <div class="col-sm-6 pl-0">
+                    <p class="text-right">
+                      <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                      <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button>
+                    </p>
+                  </div>
+                </div>
+                
+       
+             
+            </form>
+          </div>
+          </div>
+        </div>
+    
+
+  
+  
+   
+
+</div>
+  

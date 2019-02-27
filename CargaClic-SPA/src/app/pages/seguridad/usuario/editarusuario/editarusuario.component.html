@@ -20,7 +20,7 @@
               <div class="input-div">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Usuario</label>
                 <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                  <input matInput  minlength="5" maxlength="10" required [(ngModel)]="model.username"  #username="ngModel" placeholder="Username para el login"  name="username" type="text">
+                  <input matInput disabled minlength="5" maxlength="10" required [(ngModel)]="model.username"  #username="ngModel" placeholder="Username para el login"  name="username" type="text">
                 </mat-form-field>
                 <div class="alert alert-danger" *ngIf="username.errors && !isValidFormSubmitted"> 
                     <div *ngIf="username.errors.minlength">

@@ -1,0 +1,127 @@
+<div class="page-head">
+    <!-- <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2> -->
+    <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a href="#">Listado de órdenes</a></li>
+        <li class="breadcrumb-item active"><a href="#">Nueva Orden de Recibo</a></li>
+        <li class="breadcrumb-item"><a href="#">Nueva Orden de Recibo Detalle</a></li>
+        <!-- <li class="breadcrumb-item active">Nuevo Usuario</li> -->
+      </ol>
+    </nav>
+  </div>
+  <div class="main-content container-fluid">
+  
+
+      <div class="row">
+         <div class="col-md-12">
+        <div class="card card-border-color card-border-color-primary">
+          <div class="card-header card-header-divider">Orden de Recibo Detalle<span class="card-subtitle"> Datos de detalle de la orden de recibo</span></div>
+          <div class="card-body ">
+            <form #f="ngForm"  (ngSubmit)="actualizar(f)" >
+
+          <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="linea">Línea</label>
+              <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                <input matInput disabled required [(ngModel)]="model.linea" #linea="ngModel"  name="linea" type="text">
+              </mat-form-field>
+              <div class="alert alert-danger" *ngIf="linea.errors && !isValidFormSubmitted"> 
+                  <div *ngIf="linea.errors.minlength">
+                  Usuario debe tener mas de 5 caracteres.
+                  </div>
+               </div>	
+            </div>
+                
+
+          <div class="input-div">
+            <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">SKU</label>
+            <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input  [(ngModel)]="model.codigo" name="codigo" placeholder="TAB para buscar elemento" matInput (blur)="onBlurMethod($event.target.value)" type="text">
+            </mat-form-field>
+              <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="icon mdi mdi-search"></i></button>
+            </div>
+
+                
+               
+            <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Descripción Larga</label>
+                <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput disabled required [(ngModel)]="model.descripcionLarga"  #username="ngModel"  name="descripcionLarga" type="text">
+                </mat-form-field>
+             </div>
+
+              <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Lote / DAM</label>
+                  <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput minlength="5" maxlength="10"  [(ngModel)]="model.lote"  #lote="ngModel" placeholder="Lote / DAM"  name="lote" type="text">
+                  </mat-form-field>
+      
+                </div>
+                <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Código Origen</label>
+                    <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <input matInput  minlength="5" maxlength="10"  [(ngModel)]="model.codigoorigen"  #codigoorigen="ngModel" placeholder="Código de Origen"  name="codigoorigen" type="text">
+                    </mat-form-field>
+                    <div class="alert alert-danger" *ngIf="username.errors && !isValidFormSubmitted"> 
+                        <div *ngIf="codigoorigen.errors.minlength">
+                        Usuario debe tener mas de 5 caracteres.
+                  </div>
+                      </div>	
+                  </div>
+
+                  <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Estado del Recibo</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <mat-select required  [(value)]="model.estadoId"  placeholder="Selección">
+                            <mat-option  *ngFor="let pow of clientes"  [value]="pow.val">
+                                {{pow.viewValue}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      <div class="alert alert-danger" *ngIf="username.errors && !isValidFormSubmitted"> 
+                          <div *ngIf="username.errors.minlength">
+                          Usuario debe tener mas de 5 caracteres.
+                           </div>
+                        </div>	
+                    </div>
+                    <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Fecha Manufactura</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <input matInput required type="datetime" [matDatepicker]="picker" autocomplete="off" [(ngModel)]="model.fechallegada" name="fechallegada" #fechallegada="ngModel" >
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                          <div class="alert alert-danger" *ngIf="fechallegada.errors && !isValidFormSubmitted"> 
+                              <div *ngIf="fechallegada.errors.datetime">
+                              Email debe de tener una dirección válida
+                             </div>
+                        </div>
+                      </div>
+                      <div class="input-div">
+                          <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidad">Cantidad</label>
+                          <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <input matInput type="text" (keypress)="numberOnly($event)" maxlength="5" required [(ngModel)]="model.cantidad"  #cantidad="ngModel"  name="cantidad" >
+                          </mat-form-field>
+                          <div class="alert alert-danger" *ngIf="username.errors && !isValidFormSubmitted"> 
+                              <div *ngIf="cantidad.errors.pattern">
+                              Usuario debe tener mas de 5 caracteres.
+                              </div>
+                            </div>	
+                        </div>
+             
+                
+                        <div class="row pt-2 pt-sm-5 mt-1">
+                            <div class="col-sm-6 pl-0">
+                              <p class="text-right">
+                                <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                                <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button>
+                              </p>
+                            </div>
+                          </div>
+             
+            </form>
+          </div>
+          </div>
+        </div>
+      </div>
+  </div>
+    

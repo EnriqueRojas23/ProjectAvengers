@@ -1,0 +1,117 @@
+
+<div class="page-head">
+    <!-- <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2> -->
+    <!-- <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active">Listado de Usuarios</li>
+      </ol>
+    </nav> -->
+  </div>
+
+<div class="main-content container-fluid">
+<div class="col-md-12">
+
+    <div class="card card-border-color card-border-color-primary">
+      
+      <div class="card-header card-header-divider">
+          <div class="row">
+        <b> Roles del WMS  |  </b><span class="card-subtitle">Roles registrados en el sistema</span>
+      </div>
+    </div>
+      <div class="search-div">
+          <div class="input-container">
+          <i class="fa fa-search"></i>
+          <mat-form-field class="search-form-field" >
+            <input matInput [(ngModel)]="searchKey" placeholder="Buscar por usuario, nombre y correo " autocomplete="off" (keyup)="applyFilter()">
+          </mat-form-field>
+          </div>
+      </div>
+
+      <div class="card-body">
+          <div class="mat-elevation-z8">
+              <mat-table #table [dataSource] = "listData" matSort >
+            
+                  <ng-container matColumnDef="Id">
+                       <mat-header-cell *matHeaderCellDef> Id </mat-header-cell> 
+                      
+                      <mat-cell *matCellDef="let user"> {{user.id}} </mat-cell>
+                    </ng-container>
+            
+                  <ng-container matColumnDef="descripcion">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header > Descripción </mat-header-cell>
+                      <mat-cell *matCellDef="let rol"> {{rol.descripcion}} </mat-cell>
+                    </ng-container>
+            
+                    <!-- [style.color]="'#ff0000'" -->
+            
+                  <ng-container matColumnDef="alias">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Alias </mat-header-cell>
+                    <mat-cell  *matCellDef="let rol" >  {{rol.alias}} </mat-cell>
+                  </ng-container>
+            
+                
+                    
+                  <ng-container matColumnDef="activo">
+                      <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+                      <mat-cell *matCellDef="let rol">
+                          <div *ngIf="rol.activo then thenBlock else elseBlock"></div>
+                          <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">Activo     </div>     </ng-template>
+                          <ng-template #elseBlock>Inactivo</ng-template>  
+                        
+                      
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="publico">
+                        <mat-header-cell *matHeaderCellDef> Público </mat-header-cell>
+                        <mat-cell *matCellDef="let rol">
+                            <div *ngIf="rol.activo then thenBlock else elseBlock"></div>
+                            <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">Público     </div>     </ng-template>
+                            <ng-template #elseBlock>Privado</ng-template>  
+                          
+                        
+                        </mat-cell>
+                      </ng-container>
+            
+            
+                    <ng-container matColumnDef="actionsColumn">
+                        <mat-header-cell *matHeaderCellDef>
+                            <!-- <button class="btn btn-space btn-primary" routerLink="/nuevorol">Nuevo Rol</button> -->
+                            <button mat-fab color="primary"  routerLink="/nuevorol"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-space btn-outline-primary " (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
+                            <button class="btn btn-outline-primary" (click)="open(row)" type="button"><i class="fa fa-trash"></i></button>
+                            <!-- <button class="btn btn-outline-primary" (click)="open('autofocus')">
+                                <div>Open confirm modal with `ngbAutofocus`</div>
+                                <div class="text-dark" aria-hidden="true"><small>Ok button will be focused</small></div>
+                              </button> -->
+                        </mat-cell>
+                    </ng-container>
+           
+            
+              <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" 
+              [ngClass]="{'highlight': selectedRowIndex == row.id}"
+              (click)="highlight(row)">
+
+
+
+              </mat-row>
+              
+              
+              
+            
+            
+              </mat-table>
+
+
+             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,17 @@
+
+<div class="modal-header">
+        <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true"><span class="mdi mdi-close"></span></button>
+</div>
+<div class="modal-body">
+    <div class="text-center"><span class="modal-main-icon mdi mdi-delete"></span>
+        <h3>Eliminar Usuario</h3>
+        <p>Esta seguro que desea eliminar al usuario.<br> {{model.nombreCompleto}}</p>
+        <div class="mt-8">
+                <button class="btn btn-secondary btn-space" type="button" (click)="modal.dismiss('cancel')">Cancel</button>
+                <button class="btn btn-success btn-space" type="button" (click)=" modal.close('Ok')">Eliminar</button>
+            </div>
+    </div>
+</div>
+
+
+    

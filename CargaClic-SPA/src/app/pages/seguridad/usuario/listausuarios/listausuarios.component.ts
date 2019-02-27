@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, Inject } from '@angular/core';
 import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { NgForm } from '@angular/forms';
@@ -6,70 +6,93 @@ import { User } from 'src/app/_models/user';
 import { DataSource } from '@angular/cdk/collections';
 import {MatPaginator, MatTableDataSource, MatSort , MatFormField   } from '@angular/material';
 import { AuthService } from 'src/app/_services/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { AngularDualListBoxModule, DualListComponent } from 'angular-dual-listbox';
+import { RolService } from 'src/app/_services/rol.service';
+import { RolUserForRegisterResult } from 'src/app/_models/paginarol';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
-
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 
 
 @Component({
-  selector: 'ngbd-modal-confirm',
-  template: `
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">Profile deletion</h4>
-    <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p><strong>Are you sure you want to delete <span class="text-primary">"John Doe"</span> profile?</strong></p>
-    <p>All information associated to this user profile will be permanently deleted.
-    <span class="text-danger">This operation can not be undone.</span>
-    </p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
-    <button type="button" class="btn btn-danger" (click)="modal.close('Ok click')">Ok</button>
-  </div>
-  `
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'modal.asociarrol.html',
+  
 })
-export class NgbdModalConfirm {
-  constructor(public modal: NgbActiveModal) {}
+export class DialogOverviewExampleDialog {
+  source = [];
+  target = [];
+  format = { add: 'Agregar', remove: 'Quitar', all: 'Todo', none: 'Ninguno',
+  direction: DualListComponent.LTR, draggable: true, locale: 'es'  };
+  aux_source = [] ;
+  aux_target = [];
+  _all = false;
+  roles: RolUserForRegisterResult[] = []
+  id: number;
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    private rolService: RolService,
+    private alertify: AlertifyService,
+    private activatedRoute: ActivatedRoute,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+      this.source = [];
+      this.target = [];
+
+      rolService.getAll().subscribe(list => {
+        list.forEach(element => {
+          this.aux_source.push(element.alias);
+        });
+        this.source = this.aux_source;
+      });
+
+      rolService.getRolesForUser(data["id"]).subscribe(list => {
+        list.forEach(element => {
+          this.aux_target.push(element.descripcion)
+        });
+        this.target =  this.aux_target
+      });
+
+    }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+  Save(id){
+
+    this.roles = [];
+    this.target.forEach(element=> {
+      this.roles.push({ 
+        UserId: id,
+        Alias: element
+         });
+     });
+    
+     this.rolService.saveRoles(this.roles,id ).subscribe(resp => { 
+    }, error => {
+       this.alertify.error(error);
+    }, () => { 
+      this.alertify.success("Se registró correctamente.");
+      this.dialogRef.close();
+    });
+    
+  }
 }
+
 
 @Component({
   selector: 'ngbd-modal-confirm-autofocus',
-  template: `
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">Eliminación de Usuario</h4>
-    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p><strong>¿Está seguro que desea eliminar al usuario <span class="text-primary">{{user.nombreCompleto}}</span> ?</strong></p>
-    <p>Si desea bloquear al usuario dirijase a la edición del usuario.
-    <span class="text-danger">Esta operación no se puede deshacer.</span>
-    </p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Cancel</button>
-    <button type="button" ngbAutofocus class="btn btn-danger" (click)=" modal.close('Ok')">Ok</button>
-  </div>
-  `
+  templateUrl: './modal.eliminar.html',
+  encapsulation: ViewEncapsulation.None,
 })
 export class NgbdModalConfirmAutofocus {
   constructor(public modal: NgbActiveModal) {}
 }
-
-const MODALS = {
-  focusFirst: NgbdModalConfirm,
-  autofocus: NgbdModalConfirmAutofocus
-};
-
-
-
-
 declare var $: any;
 
 
@@ -81,28 +104,38 @@ declare var $: any;
 })
 export class ListausuariosComponent implements OnInit {
 
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   searchKey: string;
-
+  animal: string;
+  name: string;
+  public loading = false;
+  
   withAutofocus = `<button type="button" ngbAutofocus class="btn btn-danger"
       (click)="modal.close('Ok click')">Ok</button>`;
 
   
   listData: MatTableDataSource<User>;
   users: User[];
+  user : User;
   pageSizeOptions:number[] = [5, 10, 25, 50, 100];
   displayedColumns: string[] = [ 'Id','username', 'nombreCompleto' ,'email', 'Dni', 'lastActive' ,'nombreEstado','enLinea','actionsColumn' ];
   closeResult: string;
 
   constructor(private userService: UserService, private alertify: AlertifyService, private router: Router
-    ,private _modalService: NgbModal) { }
+    ,private _modalService: NgbModal,
+    public dialog: MatDialog) { 
+     // overlayContainer.getContainerElement().classList.add('app-dark-theme');
+    }
 
   ngOnInit() {
+    this.loading = true;
 
     this.userService.getUsers().subscribe(list => {
+      console.log(list);
       this.users = list;
-
+     this.loading = false;
     this.listData = new MatTableDataSource(this.users);
     this.listData.paginator = this.paginator;
     this.listData.sort = this.sort;
@@ -120,25 +153,56 @@ export class ListausuariosComponent implements OnInit {
         })
        }
     });
-    $("html,body").animate({ scrollTop: 100 }, "slow");
+    //$("html,body").animate({ scrollTop: 100 }, "slow");
   }
   onSearchClear() {
     this.searchKey = "";
     this.applyFilter();
   }
-  open(id: any) {
-    const modal =  this._modalService.open(NgbdModalConfirmAutofocus);
-    modal.componentInstance.user = id;
+  openDialog(id: any): void {
+    
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '650px',
+      height: '400px',
+      data: {id: id }
+    });
 
+    
+
+    dialogRef.afterClosed().subscribe(result => {
+      
+      this.animal = result;
+    });
+  }
+  open(user: any) {
+    const modal =  this._modalService.open(NgbdModalConfirmAutofocus, { windowClass: 'danger-modal' });
+    modal.componentInstance.model = user;
 
      modal.result.then((result) => {
       this.closeResult = `${result}`;
-      console.log(this.closeResult);
-      console.log(id);
+      
+      if(this.closeResult == "Ok")
+      {
+          user.EstadoId = 3;
+          this.userService.actualizarEstado(user).subscribe(resp => { 
+            }, error => {
+              
+              this.alertify.error(error);
+            }, () => { 
+              this.userService.getUsers().subscribe(list => {
+                this.users = list;
+              this.listData = new MatTableDataSource(this.users);
+              this.listData.paginator = this.paginator;
+              this.listData.sort = this.sort;
+              
+              
+          }); 
+        })
+       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      console.log(this.closeResult);
-    });
+         
+      });
     
 
   }
@@ -169,14 +233,12 @@ export class ListausuariosComponent implements OnInit {
     // }, error => {
     //    this.alertify.error(error);
     // }, () => { 
-    //   console.log('lo logre');
+    
     // });
 
 
   }
 }
-
-
 
 
 

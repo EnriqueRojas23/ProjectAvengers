@@ -7,7 +7,8 @@ import { User } from '../_models/user';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Authorization' : 'Bearer ' + localStorage.getItem('token')
+    'Authorization' : 'Bearer ' + localStorage.getItem('token'),
+    'Content-Type' : 'application/json'
   })
 }
 
@@ -18,6 +19,42 @@ export class UserService {
   baseUrl = 'http://localhost:5000/api/users/';
   constructor(private http: HttpClient) { }
 
+  registrar(model: any){
+    return this.http.post(this.baseUrl + 'register', model,httpOptions)
+    .pipe(
+      map((response: any) => {
+         const user = response;
+         if(user)
+         {
+         
+         }
+      } 
+    )
+    )};
+  actualizar(model:any){
+    return this.http.post(this.baseUrl + 'update', model,httpOptions)
+    .pipe(
+      map((response: any) => {
+        const user = response;
+         if(user)
+         {
+           
+         }
+      })
+    )
+  }
+  actualizarEstado(model:any){
+    return this.http.post(this.baseUrl + 'updateestado', model,httpOptions)
+    .pipe(
+      map((response: any) => {
+        const user = response;
+         if(user)
+         {
+           
+         }
+      })
+    )
+  }
 
   getUsers() : Observable<User[]> {
      return this.http.get<User[]>(this.baseUrl, httpOptions);

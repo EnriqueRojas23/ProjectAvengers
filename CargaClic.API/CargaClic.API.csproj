@@ -7,12 +7,15 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.8" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CargaClic.Data\CargaClic.Data.csproj" />
-    <ProjectReference Include="..\CargaClic.Handlers\CargaClic.Handlers.csproj" />
+    <ProjectReference Include="..\Data\CargaClic.Data\CargaClic.Data.csproj" />
+    <ProjectReference Include="..\Lectura\CargaClic.Handlers\CargaClic.Handlers.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Domain\CargaClic.Domain\CargaClic.Domain.csproj" />
+    <ProjectReference Include="..\Escritura\CargaCLic.repository\cargaclic.repository.csproj" />
   </ItemGroup>
 </Project>

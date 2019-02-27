@@ -1,6 +1,9 @@
 <nav  class="navbar navbar-expand fixed-top be-top-header">
     <div class="container-fluid"> 
-      <div class="be-navbar-header"><a class="nav-link be-toggle-left-sidebar" href="#"><span class="icon mdi mdi-menu"></span></a><a class="navbar-brand" href="index.html"></a>
+      <div class="be-navbar-header">
+          <div class="page-title"><span>WareHouse</span></div>
+        <!-- <a class="nav-link be-toggle-left-sidebar" href="#"><span class="icon mdi mdi-menu"></span></a>
+        <a width="10" height="12" class="navbar-brand" ></a> -->
       </div>
       <div class="be-right-navbar">
         <ul class="nav navbar-nav float-right be-user-nav">
@@ -10,14 +13,14 @@
                 <div class="user-name">  {{ authService.decodedToken?.unique_name | titlecase }} </div>
                 <div class="user-position online">Online</div>
               </div>
-                    <a class="dropdown-item" href="pages-profile.html"><span class="icon mdi mdi-face"></span>Cuenta</a>
+                    <!-- <a class="dropdown-item" href="pages-profile.html"><span class="icon mdi mdi-face"></span>Cuenta</a> -->
                     <!-- <a class="dropdown-item" href="#"><span class="icon mdi mdi-settings"></span>Settings</a> -->
                     <a class="dropdown-item" (click)="logout()"><span class="icon mdi mdi-power"></span>Cerrar sesión</a>
             </div>
           </li>
         </ul>
-        <div class="page-title"><span> </span></div>
-        <ul class="nav navbar-nav float-right be-icons-nav">
+        <!-- <div class="page-title"><span>Toscanos WareHouse</span></div> -->
+        <ul class="nav navbar-nav float-right be-icons-nav">  
           <!-- <li class="nav-item dropdown"><a class="nav-link be-toggle-right-sidebar" href="#" role="button" aria-expanded="false"><span class="icon mdi mdi-settings"></span></a></li> -->
           <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon mdi mdi-notifications"></span><span class="indicator"></span></a>
             <ul class="dropdown-menu be-notifications">
@@ -77,4 +80,6 @@
         </ul>
       </div>
     </div>
+    
   </nav>
+  

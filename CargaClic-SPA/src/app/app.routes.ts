@@ -13,10 +13,10 @@ const appRoutes: Routes = [
 
    {path : 'login', component : LoginComponent} ,
    {
-    path: '',
-    component: PagesComponent,
-    canActivate: [AuthGuard],
-    loadChildren: './pages/pages.module#PagesModule'
+        path: '',
+        component: PagesComponent,
+        canActivate: [AuthGuard],
+        loadChildren: './pages/pages.module#PagesModule'
     },
     { path: '**', component: NopagefoundComponent },
 
