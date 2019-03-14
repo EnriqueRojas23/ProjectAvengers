@@ -8,7 +8,7 @@
           margin-left: 10px;
           padding: 1px 1px;
           border-radius: 1px;
-          color: #4285f4;
+          font-size: 12px;
        
           }
           .input-form-field div.mat-form-field-underline {
@@ -24,3 +24,13 @@
             height: 32px;
             width: 32px;
         }
+
+.mat-column-Codigo {
+    flex: 0 0 100px;
+    }
+.mat-column-Linea {
+    flex: 0 0 85px;
+    }
+.mat-column-Descripcion {
+    flex: 0 0 485px;
+    }

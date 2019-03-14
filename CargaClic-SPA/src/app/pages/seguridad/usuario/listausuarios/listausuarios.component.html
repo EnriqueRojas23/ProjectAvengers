@@ -1,6 +1,6 @@
 
 <div class="page-head">
-    <!-- <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2> -->
+    <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2>
     <!-- <nav aria-label="breadcrumb" role="navigation">
       <ol class="breadcrumb page-head-nav">
         <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -104,14 +104,14 @@
                     <ng-container matColumnDef="actionsColumn">
                         <mat-header-cell *matHeaderCellDef>
                             <div class="example-button-row">
-                            <button mat-fab color="primary"  routerLink="/nuevousuario"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
+                            <button mat-fab color="primary" ngbTooltip="Nuevo Usuario del Sistema" routerLink="/nuevousuario"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
                             </div>
                             <!-- <button class="btn btn-space btn-primary" routerLink="/nuevousuario">Nuevo Usuario</button> -->
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button class="btn btn-outline-primary" (click)="openDialog(row.id)" type="button"><i class="fas fa-running"></i></button>
-                            <button class="btn btn-space btn-outline-primary" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
-                            <button class="btn  btn-outline-primary" (click)="open(row)" type="button"><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-outline-primary" ngbTooltip="Vincular Rol" (click)="openDialog(row.id)" type="button"><i class="fas fa-running"></i></button>
+                            <button class="btn btn-space btn-outline-primary" ngbTooltip="Editar Usuario" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
+                            <button class="btn  btn-outline-primary" (click)="open(row)" ngbTooltip="Eliminar Usuario"  type="button"><i class="fa fa-trash"></i></button>
                             <!-- <button class="btn btn-outline-primary" (click)="open('autofocus')">
                                 <div>Open confirm modal with `ngbAutofocus`</div>
                                 <div class="text-dark" aria-hidden="true"><small>Ok button will be focused</small></div>
@@ -136,7 +136,7 @@
               </mat-table>
 
 
-             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+             <mat-paginator [pageSizeOptions]="[10, 30, 60, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
 
             </div>
       </div>

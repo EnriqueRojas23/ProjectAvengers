@@ -34,6 +34,8 @@ using CargaClic.Domain.Mantenimiento;
 using CargaClic.Domain.Prerecibo;
 using CargaClic.Contracts.Parameters.Mantenimiento;
 using CargaClic.Handlers.Mantenimiento;
+using CargaClic.Repository.Interface;
+using CargaClic.Repository.Repository;
 
 namespace CargaClic.API
 {
@@ -62,7 +64,7 @@ namespace CargaClic.API
              services.AddScoped<IRepository<RolUser>,Repository<RolUser>>();
              services.AddScoped<IRepository<Estado>,Repository<Estado>>();
 
-             services.AddScoped<IQueryHandler<ListarOrdenReciboParameter>,ListarOrdenReciboQuery>();
+             
 
              services.AddScoped<IAuthRepository,AuthRepository>();
              services.AddScoped<IQueryHandler<ListarUsuariosParameters>,ListarUsuariosQuery>();
@@ -72,10 +74,22 @@ namespace CargaClic.API
 
 
             services.AddScoped<IRepository<Cliente>, Repository<Cliente>>();
+            services.AddScoped<IRepository<Proveedor>, Repository<Proveedor>>();
+            services.AddScoped<IRepository<Vehiculo>, Repository<Vehiculo>>();
+            services.AddScoped<IRepository<Chofer>, Repository<Chofer>>();
             services.AddScoped<IQueryHandler<ListarProductosParameter>,ListarProductosQuery>();
+            services.AddScoped<IQueryHandler<ListarPlacasParameter>,ListarPlacasQuery>();
+            services.AddScoped<IQueryHandler<ListarProveedorParameter>,ListarProveedorQuery>();
+            services.AddScoped<IQueryHandler<ObtenerEquipoTransporteParameter>,ObtenerEquipoTransporteQuery>();
 
             services.AddScoped<IRepository<OrdenRecibo>,Repository<OrdenRecibo>>();
             services.AddScoped<IRepository<OrdenReciboDetalle>,Repository<OrdenReciboDetalle>>();
+            services.AddScoped<IOrdenReciboRepository,OrdenReciboRepository>();
+            
+            services.AddScoped<IQueryHandler<ListarOrdenReciboParameter>,ListarOrdenReciboQuery>();
+            services.AddScoped<IQueryHandler<ObtenerOrdenReciboParameter>,ObtenerOrdenReciboQuery>();
+            services.AddScoped<IQueryHandler<ListarUbicacionesParameter>,ListarUbicacionesQuery>();
+
              
              services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(options => {

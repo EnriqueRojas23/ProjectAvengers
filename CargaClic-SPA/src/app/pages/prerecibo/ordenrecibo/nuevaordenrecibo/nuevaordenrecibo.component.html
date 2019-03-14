@@ -1,19 +1,19 @@
 <div class="page-head">
     <!-- <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2> -->
-    <nav aria-label="breadcrumb" role="navigation">
+    <!-- <nav aria-label="breadcrumb" role="navigation">
       <ol class="breadcrumb page-head-nav">
         <li class="breadcrumb-item"><a href="#">Listado de órdenes</a></li>
         <li class="breadcrumb-item active"><a href="#">Nueva Orden de Recibo</a></li>
-        <!-- <li class="breadcrumb-item active">Nuevo Usuario</li> -->
+         <li class="breadcrumb-item active">Nuevo Usuario</li> 
       </ol>
-    </nav>
+    </nav> -->
   </div>
   <div class="main-content container-fluid">
   
 
       <div class="col-md-12">
         <div class="card card-border-color card-border-color-primary">
-          <div class="card-header card-header-divider">Orden de Recibo<span class="card-subtitle"> Datos de cabecera de la orden de recibo</span></div>
+          <div class="card-header card-header-divider">Nueva Orden de Recibo<span class="card-subtitle"> Datos de cabecera de la orden de recibo</span></div>
           <div class="card-body ">
             <form #f="ngForm"  (ngSubmit)="registrar(f)" >
 
@@ -45,9 +45,9 @@
                </div>
 
                 <div class="input-div">
-                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="nombreCompleto">Hora de llegada</label>
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="HoraEsperada">Hora de llegada</label>
                     <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                    <input matInput required  placeholder="Hora llegada" aria-label="12hr format" [ngxTimepicker]="default" >
+                    <input matInput required  placeholder="Hora llegada" [(ngModel)]="model.HoraEsperada" name="HoraEsperada" aria-label="12hr format" [ngxTimepicker]="default" >
                   </mat-form-field>
                     <ngx-material-timepicker #default></ngx-material-timepicker>
                </div>
@@ -67,7 +67,7 @@
                   <div class="col-sm-6 pl-0">
                     <p class="text-right">
                       <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
-                      <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button>
+                      <button  [routerLink]="['/listaordenrecibo']" routerLinkActive="router-link-active"  class="btn btn-space btn-secondary">Cancel</button>
                     </p>
                   </div>
                 </div>

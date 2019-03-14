@@ -35,6 +35,10 @@ import { NuevaordenrecibodetalleComponent, DialogBuscarProducto } from './prerec
 import { VerordenreciboComponent } from './prerecibo/ordenrecibo/verordenrecibo/verordenrecibo.component';
 import { OrdenReciboService } from '../_services/Recepcion/ordenrecibo.service';
 import { GeneralService } from '../_services/Mantenimiento/general.service';
+import { VincularequipotransporteComponent, DialogBuscarPlaca, DialogBuscarEmpTransporte, DialogBuscarChofer } from './prerecibo/equipotransporte/vincularequipotransporte/vincularequipotransporte.component';
+import { AsignarpuertaComponent } from './prerecibo/puerta/asignarpuerta/asignarpuerta.component';
+import { ListaordenrecibidaComponent } from './recibo/ordenrecibo/listaordenrecibida/listaordenrecibida.component';
+import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarrecibo/identificarrecibo.component';
 
  
 
@@ -57,10 +61,18 @@ import { GeneralService } from '../_services/Mantenimiento/general.service';
     NgbdModalConfirmAutofocus,
     DialogOverviewExampleDialog,
     DialogBuscarProducto,
+    DialogBuscarPlaca,
+    DialogBuscarEmpTransporte,
+    DialogBuscarChofer,
     NuevaordenreciboComponent,
     ListaordenreciboComponent,
     NuevaordenrecibodetalleComponent,
-    VerordenreciboComponent
+    VerordenreciboComponent,
+    VincularequipotransporteComponent,
+    AsignarpuertaComponent,
+    ListaordenrecibidaComponent,
+    IdentificarreciboComponent,
+    
     
   
 
@@ -109,7 +121,14 @@ import { GeneralService } from '../_services/Mantenimiento/general.service';
     OrdenReciboService,
     GeneralService
   ],
-  entryComponents: [ NgbdModalConfirmAutofocus,DialogOverviewExampleDialog, DialogBuscarProducto],
+  entryComponents: [ 
+    NgbdModalConfirmAutofocus,
+    DialogOverviewExampleDialog, 
+    DialogBuscarProducto,
+    DialogBuscarPlaca,
+    DialogBuscarEmpTransporte,
+    DialogBuscarChofer,
+  ],
   
 })
 

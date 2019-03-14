@@ -10,14 +10,16 @@ export interface OrdenRecibo {
      FechaRegistro	:  Date ;
      EstadoID	:  number ;
      NombreEstado:  string ;
-     ordenDetalle: OrdenReciboDetalle[];
+     ubicacion: string;
+     detalles: OrdenReciboDetalle[];
 }
 
 export interface OrdenReciboDetalle {
-     OrdenReciboDetalleId?: number;
+     id?: number;
      OrdenReciboId: number;
-     Linea: string;
+     linea: string;
      ProductoId: any;
+     producto: string;
      Lote: string;
      HuellaId: number;
      FechaRegistro?: Date;

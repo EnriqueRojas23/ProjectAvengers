@@ -7,6 +7,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { OrdenReciboService } from 'src/app/_services/Recepcion/ordenrecibo.service';
 import { Router } from '@angular/router';
 import { OrdenRecibo } from 'src/app/_models/Recepcion/ordenrecibo';
+import { Dropdownlist } from 'src/app/_models/Constantes';
+import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
 
 @Component({
   selector: 'app-listaordenrecibo',
@@ -18,7 +20,7 @@ export class ListaordenreciboComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   searchKey: string;
   pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = [ 'select','Propietario', 'NumOrden', 'nombreEstado' ,'EquipoTransporte', 'Urgente','FechaEsperada','actionsColumn' ];
+  displayedColumns: string[] = [ 'almacen', 'numOrden' ,'propietario','nombreEstado','ubicacion' ,'EquipoTransporte', 'Urgente','fechaEsperada','fechaRegistro','actionsColumn' ];
   
   listData: MatTableDataSource<OrdenRecibo>;
   public loading = false;
@@ -26,8 +28,24 @@ export class ListaordenreciboComponent implements OnInit {
   model: any;
 
 
+  clientes: Dropdownlist[] = [
+    {val: 1, viewValue: 'Desde Siempre'},
+    {val: 2, viewValue: 'Hoy'},
+    {val: 3, viewValue: 'Hace tres días'},
+    {val: 4, viewValue: 'Hace una semana '},
+    {val: 5, viewValue: 'Hace un mes '},
+  ];
+  estados: Dropdownlist[] = [
+    {val: 1, viewValue: 'Planeado'},
+    {val: 2, viewValue: 'Recibiendo'},
+    {val: 3, viewValue: 'En Stage'},
+    {val: 4, viewValue: 'Terminado'},
+    
+  ];
+
   constructor(private ordenreciboService: OrdenReciboService,
-    private router: Router) { }
+    private router: Router,
+    private generalService: GeneralService) { }
 
   ngOnInit() {
     this.loading = true;
@@ -39,27 +57,31 @@ export class ListaordenreciboComponent implements OnInit {
 
     this.ordenreciboService.getAll(this.model).subscribe(list => {
       this.ordenes = list;
-      
+      console.log(list);
     this.loading = false;
     this.listData = new MatTableDataSource(this.ordenes);
     this.listData.paginator = this.paginator;
     this.listData.sort = this.sort;
 
-    console.log(this.listData);
     
+    this.model.intervalo = 3;
+    this.model.estadoIdfiltro = 1;
     
   
     this.listData.filterPredicate = (data,filter) => {
       return this.displayedColumns.some(ele => {
-        console.log(data);
-        if(ele !='Id' && ele != 'Urgente' && ele != 'fechaesperada' && ele != 'select')
+        
+        if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
            {
+            console.log(ele);
               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
          
            }
         })
        }
     });
+
+   
 
   }
   selection = new SelectionModel<OrdenRecibo>(true, []);
@@ -86,7 +108,12 @@ export class ListaordenreciboComponent implements OnInit {
     this.router.navigate(['/verordenrecibo',id]);
 
    }
-
+   equipotransporte(id){
+    this.router.navigate(['/vincularequipotransporte',id]);
+   }
+   openDoor(id){
+    this.router.navigate(['/asignarpuerta',id]);
+   }
 
 
 }

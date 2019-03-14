@@ -57,6 +57,7 @@ export class UserService {
   }
 
   getUsers() : Observable<User[]> {
+     console.log(localStorage.getItem('token'));
      return this.http.get<User[]>(this.baseUrl, httpOptions);
   }
   getUser(id: number) : Observable<User> {

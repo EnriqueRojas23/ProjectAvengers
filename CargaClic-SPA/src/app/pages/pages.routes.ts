@@ -15,6 +15,10 @@ import { ListaordenreciboComponent } from './prerecibo/ordenrecibo/listaordenrec
 import { NuevaordenreciboComponent } from './prerecibo/ordenrecibo/nuevaordenrecibo/nuevaordenrecibo.component';
 import { NuevaordenrecibodetalleComponent } from './prerecibo/ordenrecibo/nuevaordenrecibodetalle/nuevaordenrecibodetalle.component';
 import { VerordenreciboComponent } from './prerecibo/ordenrecibo/verordenrecibo/verordenrecibo.component';
+import { VincularequipotransporteComponent } from './prerecibo/equipotransporte/vincularequipotransporte/vincularequipotransporte.component';
+import { AsignarpuertaComponent } from './prerecibo/puerta/asignarpuerta/asignarpuerta.component';
+import { ListaordenrecibidaComponent } from './recibo/ordenrecibo/listaordenrecibida/listaordenrecibida.component';
+import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarrecibo/identificarrecibo.component';
 
 
 const pagesRoutes: Routes = [
@@ -37,6 +41,13 @@ const pagesRoutes: Routes = [
     {path : 'listaordenrecibo', component : ListaordenreciboComponent, canActivate: [AuthGuard]} ,
     {path : 'nuevaordenrecibodetalle/:uid', component : NuevaordenrecibodetalleComponent, canActivate: [AuthGuard]} ,
     {path : 'verordenrecibo/:uid', component : VerordenreciboComponent, canActivate: [AuthGuard]} ,
+    {path : 'asignarpuerta/:uid', component : AsignarpuertaComponent, canActivate: [AuthGuard]} ,
+    {path : 'vincularequipotransporte/:uid', component : VincularequipotransporteComponent, canActivate: [AuthGuard]} ,
+
+
+
+    {path : 'listaordenrecibida', component : ListaordenrecibidaComponent, canActivate: [AuthGuard]} ,
+    {path : 'identificarrecibo/:uid', component : IdentificarreciboComponent, canActivate: [AuthGuard]} ,
 
 
     {path : '', redirectTo : '/dashboard', pathMatch: 'full'},

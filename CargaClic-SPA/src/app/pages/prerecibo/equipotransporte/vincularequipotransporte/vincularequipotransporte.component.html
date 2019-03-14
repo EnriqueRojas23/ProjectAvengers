@@ -1,0 +1,170 @@
+<div class="page-head">
+  <h2 class="page-head-title">Vincular Equipo de Transporte</h2>
+  <!-- <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb page-head-nav">
+      <li class="breadcrumb-item"><a href="#">Listado de órdenes</a></li>
+      <li class="breadcrumb-item active"><a href="#">Nueva Orden de Recibo</a></li>
+       <li class="breadcrumb-item active">Nuevo Usuario</li> 
+    </ol>
+  </nav> -->
+</div>
+<div class="main-content container-fluid">
+
+<div class="row">
+    <div class="col-md-12">
+      <div class="card card-border-color card-border-color-primary">
+        <div class="card-header card-header-divider">Vehículo<span class="card-subtitle"> Datos del vehículo y Empresa Transportista</span></div>
+        <div class="card-body ">
+          <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+
+            <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Placa</label>
+              <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                <!-- (blur)="onBlurMethod($event.target.value)" -->
+                <input  minlength="5" [(ngModel)]="model.placa" required name="placa" #placa="ngModel" placeholder="Placa del vehículo" matInput  type="text">
+              </mat-form-field>
+              <div class="btn-group" role="group">
+                  <button  class="btn btn-primary" (click)="openDialog(model.placa)" type="button"><i class="mdi mdi-search"></i></button>
+                  <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-plus"></i></button>
+                </div>
+             
+              <div class="alert alert-danger" *ngIf="placa.errors && !isValidFormSubmitted"> 
+                  <div *ngIf="placa.errors.minlength">
+                  Debe tener mas de 5 caracteres.
+                </div>
+              </div>
+        
+  
+            </div>
+       
+            <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="tipocamion">Tipo de Vehículo</label>
+              <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                <input matInput   readonly autocomplete="off" [(ngModel)]="model.tipoVehiculo" name="tipocamion" #tipocamion="ngModel" type="text">
+              </mat-form-field>
+            </div>
+
+
+
+            <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="guiaremision">Modelo del Vehículo</label>
+                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput   readonly  autocomplete="off" [(ngModel)]="model.modelo" name="guiaremision" #guiaremision="ngModel" type="text">
+                </mat-form-field>
+              </div>
+          
+              
+    
+        
+            
+  
+            <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="marca">Marca de Vehículo</label>
+                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput  readonly  autocomplete="off" [(ngModel)]="model.marca" name="marca" #guiaremision="ngModel" type="text">
+                </mat-form-field>
+              </div>
+  
+             
+  
+            
+              <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cargautil">Carga Útil</label>
+                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput readonly  autocomplete="off" [(ngModel)]="model.cargaUtil" name="cargautil" #cargautil="ngModel" type="text">
+                </mat-form-field>
+              </div>
+
+              <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="pesobruto">Peso Bruto</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput  readonly  autocomplete="off" [(ngModel)]="model.pesoBruto" name="pesobruto" #guiaremision="ngModel" type="text">
+                  </mat-form-field>
+              </div>
+
+
+                <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Empresa Transportista</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <input  [(ngModel)]="model.razonSocial" name="razonSocial" placeholder="RUC y Razón Social" matInput  type="text">
+                    </mat-form-field>
+                    <input  [(ngModel)]="model.ruc" name="ruc"  type="hidden">
+                    <div class="btn-group" role="group">
+                      <button  class="btn btn-primary" (click)="openDialog_EmpTrans()" type="button"><i class="mdi mdi-search"></i></button>
+                      <button  class="btn btn-primary" (click)="openDialog_EmpTrans()" type="button"><i class="mdi mdi-plus"></i></button>
+                    </div>
+                  </div>
+            
+       
+             
+            </form>
+          </div>
+          </div>
+        </div>
+    
+
+        <div class="col-md-12">
+          <div class="card card-border-color card-border-color-primary">
+            <div class="card-header card-header-divider">Chofer <span class="card-subtitle"> Datos del chofer</span></div>
+            <div class="card-body ">
+              <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+    
+                <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="dni">DNI</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input required minlength="8" [(ngModel)]="model.dni" name="dni" #dni="ngModel"  placeholder="DNI del chofer" matInput type="text">
+                  </mat-form-field>
+
+
+                  <div class="btn-group" role="group">
+                      <button  class="btn btn-primary" (click)="openDialog_Dni(model.dni)" type="button"><i class="mdi mdi-search"></i></button>
+                      <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-plus"></i></button>
+                    </div>
+                  <div class="alert alert-danger" *ngIf="dni.errors && !isValidFormSubmitted"> 
+                      <div *ngIf="dni.errors.minlength">
+                      Debe tener mas de 5 caracteres.
+                    </div>
+                  </div>
+              
+                 
+                </div>
+    
+               
+    
+              
+                <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="nombreCompleto">Nombre Completo</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.nombreCompleto" name="nombreCompleto" #nombreCompleto="ngModel" type="text">
+                  </mat-form-field>
+                 
+                </div>
+                <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="brevete">Brevete</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.brevete" name="brevete" #brevete="ngModel" type="text">
+                  </mat-form-field>
+                 
+                </div>
+                <div class="row pt-2 pt-sm-5 mt-1">
+                    <div class="col-sm-6 pl-0">
+                      <p class="text-right">
+                        <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Vincular</button>
+                        <button  [routerLink]="['/listaordenrecibo']" routerLinkActive="router-link-active"  class="btn btn-space btn-secondary">Cancel</button>
+                      </p>
+                    </div>
+                  </div>
+                  
+         
+               
+              </form>
+            </div>
+            </div>
+          </div>
+    
+          
+  
+      </div>
+ 
+
+</div>

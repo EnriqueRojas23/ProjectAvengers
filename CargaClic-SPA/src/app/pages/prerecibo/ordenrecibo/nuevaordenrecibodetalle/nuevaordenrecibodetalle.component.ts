@@ -6,9 +6,13 @@ import { ProductoService } from 'src/app/_services/Mantenimiento/producto.servic
 import { Producto } from 'src/app/_models/Mantenimiento/producto';
 import { Dropdownlist } from 'src/app/_models/Constantes';
 import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
+import { NgForm } from '@angular/forms';
+import { AlertifyService } from 'src/app/_services/alertify.service';
+import { OrdenReciboService } from 'src/app/_services/Recepcion/ordenrecibo.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export interface DialogData {
-  codigo: string;
+  codigo: any;
   descripcion: string;
 }
 
@@ -30,7 +34,8 @@ export class DialogBuscarProducto {
   constructor(
     public dialogRef: MatDialogRef<DialogBuscarProducto>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private productoService: ProductoService  ) {
+    private productoService: ProductoService ,
+    private ordenReciboService: OrdenReciboService ) {
       
 
     }
@@ -47,27 +52,34 @@ export class DialogBuscarProducto {
   }
 
   buscar(){
-    this.productoService.getAll(this.model.codigo,1).subscribe(list => {
-    console.log(list);
-    this.productos = list;
-     //this.loading = false;
-    this.listData = new MatTableDataSource(this.productos);
-    this.listData.paginator = this.paginator;
-    this.listData.sort = this.sort;
-    
-    
+    this.ordenReciboService.obtenerOrden(this.data.codigo).subscribe(x=> {
+      
+       this.model.propietarioId =    x.propietarioId;
+   
 
-    this.listData.filterPredicate = (data,filter) => {
-      return this.displayedColumns.some(ele => {
+        this.productoService.getAll(this.model.codigo,this.model.propietarioId).subscribe(list => {
         
-        if(ele !='Id' && ele != 'enLinea' && ele != 'Dni')
-           {
-              return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-         
-           }
-        })
-       }
-    });
+        this.productos = list;
+        //this.loading = false;
+        this.listData = new MatTableDataSource(this.productos);
+        this.listData.paginator = this.paginator;
+        this.listData.sort = this.sort;
+        
+        
+
+        this.listData.filterPredicate = (data,filter) => {
+          return this.displayedColumns.some(ele => {
+            
+            if(ele !='Id' && ele != 'enLinea' && ele != 'Dni')
+              {
+                  return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+            
+              }
+            })
+          }
+        });
+  })
+
 
   }
 }
@@ -104,14 +116,18 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
 
 
   constructor(public dialog: MatDialog,
-    private generalService: GeneralService) { }
+    private generalService: GeneralService,
+     private alertify: AlertifyService,
+     private ordenReciboService: OrdenReciboService,
+     private activatedRoute: ActivatedRoute,
+     private router: Router  ) { }
 
   ngOnInit() {
-        this.model.linea = '0001';
-
+        this.model.linea = 'Autogenerado';
+        this.model.OrdenReciboId  = this.activatedRoute.snapshot.params["uid"];
         this.generalService.getAll(3).subscribe(resp=>
           {
-            console.log(resp);
+            
             resp.forEach(element => {
               this.clientes.push({
                 val: element.id ,
@@ -127,15 +143,35 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogBuscarProducto, {
       width: '650px',
       height: '400px',
-      data: {codigo: 1, descripcion: "this.animal"}
+      data: {codigo: this.model.OrdenReciboId, descripcion: ""}
     });
     dialogRef.afterClosed().subscribe(result => {
       this.model.descripcionLarga = result.descripcionLarga;
       this.model.codigo = result.codigo;
+      this.model.productoid = result.id;
     });
   }
 
+  registrar(form: NgForm){
+     
 
+    if (form.invalid) {
+      return; 
+    }
+    this.ordenReciboService.registrar_detalle(this.model).subscribe(x=> {
+      
+    },error => {
+      this.alertify.error(error);
+    },() => {
+      this.alertify.success("Se actualizó correctamente.");
+      this.router.navigate(['/verordenrecibo',  this.model.OrdenReciboId ]);
+
+    })
+
+
+    
+  
+  }
 
 
 

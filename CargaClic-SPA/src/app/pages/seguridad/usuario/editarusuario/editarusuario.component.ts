@@ -42,7 +42,7 @@ export class EditarusuarioComponent implements OnInit {
 
   
 
-    this.id = this.sub = this.activatedRoute.snapshot.params["uid"];
+    this.id  = this.activatedRoute.snapshot.params["uid"];
      this.userService.getUser(this.id).subscribe(resp => { 
       this.model = resp;
       //this.selected2 = resp.estadoId ;

@@ -1,13 +1,13 @@
 <div class="page-head">
-    <!-- <h2 class="page-head-title">Mantenimiento de Usuarios del Sistema</h2> -->
-    <nav aria-label="breadcrumb" role="navigation">
+    <!-- <h2 class="page-head-title"> Nuevo Detalle de la Orden</h2>  -->
+    <!-- <nav aria-label="breadcrumb" role="navigation">
       <ol class="breadcrumb page-head-nav">
         <li class="breadcrumb-item"><a href="#">Listado de órdenes</a></li>
         <li class="breadcrumb-item active"><a href="#">Nueva Orden de Recibo</a></li>
         <li class="breadcrumb-item"><a href="#">Nueva Orden de Recibo Detalle</a></li>
-        <!-- <li class="breadcrumb-item active">Nuevo Usuario</li> -->
+        <li class="breadcrumb-item active">Nuevo Usuario</li> 
       </ol>
-    </nav>
+    </nav> -->
   </div>
   <div class="main-content container-fluid">
   
@@ -15,9 +15,9 @@
       <div class="row">
          <div class="col-md-12">
         <div class="card card-border-color card-border-color-primary">
-          <div class="card-header card-header-divider">Orden de Recibo Detalle<span class="card-subtitle"> Datos de detalle de la orden de recibo</span></div>
+          <div class="card-header card-header-divider">Nueva Orden Detalle<span class="card-subtitle"> Datos de detalle de la orden de recibo</span></div>
           <div class="card-body ">
-            <form #f="ngForm"  (ngSubmit)="actualizar(f)" >
+            <form #f="ngForm"  (ngSubmit)="registrar(f)" >
 
           <div class="input-div">
               <label class="col-12 col-sm-3 col-form-label text-sm-right" for="linea">Línea</label>
@@ -37,8 +37,11 @@
             <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                   <input  [(ngModel)]="model.codigo" name="codigo" placeholder="TAB para buscar elemento" matInput (blur)="onBlurMethod($event.target.value)" type="text">
             </mat-form-field>
-              <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="icon mdi mdi-search"></i></button>
+            <div class="btn-group" role="group">
+              <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-search"></i></button>
+              <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-plus"></i></button>
             </div>
+          </div>
 
                 
                

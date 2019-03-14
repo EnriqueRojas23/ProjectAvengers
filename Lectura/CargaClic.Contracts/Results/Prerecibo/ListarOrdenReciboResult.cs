@@ -26,6 +26,8 @@ namespace CargaClic.Contracts.Results.Prerecibo
         public string placa {get;set; }
         public string equipotransporte {get;set;}
         public string urgente {get;set;}
+        public string chofer {get;set;}
+        public string  Ubicacion {get;set;}
         
     }
 }

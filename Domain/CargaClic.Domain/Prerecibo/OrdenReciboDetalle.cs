@@ -15,7 +15,7 @@ namespace CargaClic.Domain.Prerecibo
         public int HuellaId {get;set;}
         public int EstadoID {get;set;}
         public int cantidad {get;set;}
-//        public OrdenRecibo OrdenRecibo { get; set; }
+
 
     }
 }

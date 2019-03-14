@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { Observable } from 'rxjs';
 import { OrdenRecibo } from 'src/app/_models/Recepcion/ordenrecibo';
+import { Ubicacion } from 'src/app/_models/Mantenimiento/ubicacion';
 
 
 const httpOptions = {
@@ -30,19 +31,43 @@ getAll(model: any) : Observable<OrdenRecibo[]> {
 
 };
 registrar(model: any){
-  return this.http.post(this.baseUrl + 'register', model,httpOptions)
+  
+  return this.http.post(this.baseUrl + 'register', model,httpOptions);
+}
+ obtenerOrden(id: any): Observable<OrdenRecibo> {
+  return this.http.get<OrdenRecibo>(this.baseUrl +"GetOrder?Id=" + id, httpOptions);
+ }
+ registrar_detalle(model: any){
+  return this.http.post(this.baseUrl + 'register_detail', model,httpOptions)
   .pipe(
     map((response: any) => {
-       const user = response;
-       if(user)
-       {
-       
-       }
+     
     } 
   )
   )};
 
- obtenerOrden(id: any): Observable<OrdenRecibo> {
-  return this.http.get<OrdenRecibo>(this.baseUrl +"GetOrder?Id=" + id, httpOptions);
- }
+  vincularEquipoTransporte(model: any){
+    return this.http.post(this.baseUrl + 'RegisterEquipoTransporte', model,httpOptions);
+  }
+
+   getAllUbicaciones(AlmacenId: number, AreaId: number): Observable<Ubicacion[]> {
+    let params = "AlmacenId=" + AlmacenId + "&AreaId=" + AreaId;
+    return this.http.get<Ubicacion[]>(this.baseUrl +"GetUbicaciones?" + params, httpOptions);
+   }
+   assignmentOfDoor(idOrdenRecibo: any , ubicacionId: number ){
+     console.log(idOrdenRecibo);
+    let model: any = {};
+    model.OrdenReciboId = idOrdenRecibo;
+    model.ubicacionId = ubicacionId;
+
+    return this.http.post(this.baseUrl + 'assignmentOfDoor', model,httpOptions)
+    .pipe(
+      map((response: any) => {
+       
+      } 
+    )
+    )
+   }
+
+
 }

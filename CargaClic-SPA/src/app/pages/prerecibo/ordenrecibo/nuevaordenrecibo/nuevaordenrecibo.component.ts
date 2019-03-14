@@ -76,11 +76,12 @@ export class NuevaordenreciboComponent implements OnInit {
 
     //this.alertify.success("Se registró correctamente.");
     this.ordenReciboService.registrar(this.model).subscribe(resp => { 
+      this.model = resp;
     }, error => {
        this.alertify.error(error);
     }, () => { 
       this.alertify.success("Se registró correctamente.");
-      this.router.navigate(['/listausuarios']);
+      this.router.navigate(['/verordenrecibo',  this.model.id ]);
     });
 
   }

@@ -1,0 +1,73 @@
+ 
+    <div class="modal-header modal-header-colored">
+        <h3 class="modal-title" aria-level="2">Buscar Empresa de Transporte</h3>
+        
+      </div>
+    
+
+<div class="modal-body">
+    
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-6">Búsqueda :</label>
+                <div class="input-group mb-3">
+                    <input class="form-control" [(ngModel)]="model.codigo" placeholder="Placa" type="text">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" (click)="buscar()" type="button"><i class="mdi mdi-search"></i></button>
+                    </div>
+                  </div>
+            </div>
+            <!-- <div class="form-group">
+                <div class="col-md-9"></div>
+                <div class="col-md-3">
+                    <button type="button" class="form-control" onclick="BuscarDocumentoPopUp_onClick()" class="btn btn-primary"><i class="fa fa-search"></i> Buscar </button>
+                </div>
+            </div> -->
+        </div>
+        <div class="card-body">
+            <div  class="mat-elevation-z8">
+                <mat-table #table [dataSource] = "listData" matSort >
+              
+                      <ng-container matColumnDef="ruc">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header > RUC </mat-header-cell>
+                        <mat-cell *matCellDef="let user"> {{user.ruc}} </mat-cell>
+                      </ng-container>
+
+
+                      <ng-container matColumnDef="razonSocial">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header > Razón Social </mat-header-cell>
+                          <mat-cell *matCellDef="let user"> {{user.razonSocial}} </mat-cell>
+                        </ng-container>
+
+                        
+                    
+              
+                    
+                      <ng-container matColumnDef="actionsColumn">
+                          <mat-header-cell *matHeaderCellDef>
+                              <!-- <div class="example-button-row">
+                              <button mat-fab color="primary"  routerLink="/nuevaordenrecibo"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
+                              </div> -->
+                              <!-- <button class="btn btn-space btn-primary" routerLink="/nuevousuario">Nuevo Usuario</button> -->
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row">
+                              <button class="btn  btn-outline-primary" [mat-dialog-close]="row.id" (click)="seleccionarEmpTransporte(row.id)" type="button"><i class="fa fa-check"></i></button>
+                          </mat-cell>
+                      </ng-container>
+             
+              
+                <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" 
+                [ngClass]="{'highlight': selectedRowIndex == row.id}"
+                (click)="highlight(row)">
+    
+                </mat-row>
+                
+                </mat-table>
+               <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+              </div>
+ </div>
+<div class="modal-footer">
+
+</div>
+

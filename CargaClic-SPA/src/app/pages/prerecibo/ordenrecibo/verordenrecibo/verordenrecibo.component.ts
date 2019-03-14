@@ -25,7 +25,7 @@ export class VerordenreciboComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = ['select', 'Linea', 'actionsColumn' ];
+  displayedColumns: string[] = [ 'Linea', 'Codigo', 'Descripcion' , 'Cantidad', 'Lote' , 'actionsColumn' ];
   listData: MatTableDataSource<OrdenReciboDetalle>;
   model: any = {} ;
   public selected2: any;
@@ -47,7 +47,8 @@ export class VerordenreciboComponent implements OnInit {
     this.ordenServicio.obtenerOrden(this.id).subscribe(resp => { 
       this.model = resp;
       
-      this.listData = new MatTableDataSource(this.model.ordenDetalle);
+      
+      this.listData = new MatTableDataSource(this.model.detalles);
       this.listData.paginator = this.paginator;
       this.listData.sort = this.sort;
       
@@ -82,22 +83,10 @@ export class VerordenreciboComponent implements OnInit {
   }
 
   nuevodetalle(){
-  
+    //onsole.log(this.model.detalles);
 
-    // this.OrdenesDetalle.push({
-    //    OrdenReciboId:  this.IdNuevaOrden,
-    //    Linea: "001",
-    //    ProductoId: 1,
-    //    Lote: "Lota001",
-    //    HuellaId : 1,
-    //    EstadoId: 1,
-    //    cantidad: 20
-    //  })
     
-
-    // localStorage.setItem('IdNuevaOrden' , this.IdNuevaOrden.toString());
-    // localStorage.setItem('DetallesOrden' , JSON.stringify(this.OrdenesDetalle));
-
+     
     this.router.navigate(['/nuevaordenrecibodetalle', this.id]);
     
   }

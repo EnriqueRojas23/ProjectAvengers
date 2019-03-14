@@ -119,7 +119,7 @@ export class ListausuariosComponent implements OnInit {
   listData: MatTableDataSource<User>;
   users: User[];
   user : User;
-  pageSizeOptions:number[] = [5, 10, 25, 50, 100];
+  pageSizeOptions:number[] = [10, 25, 50, 100];
   displayedColumns: string[] = [ 'Id','username', 'nombreCompleto' ,'email', 'Dni', 'lastActive' ,'nombreEstado','enLinea','actionsColumn' ];
   closeResult: string;
 

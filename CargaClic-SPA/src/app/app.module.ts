@@ -30,11 +30,13 @@ import { GeneralService } from './_services/Mantenimiento/general.service';
 
 
 
+
 @NgModule({
    declarations: [
       AppComponent,
       LoginComponent,
       PagesComponent,
+      
       
       
      ],

@@ -18,8 +18,10 @@ namespace CargaClic.Domain.Prerecibo
         public string HoraEsperada {get;set;}
         public int UsuarioRegistro {get;set;}
         public DateTime FechaRegistro {get;set;}
+        public long? EquipoTransporteId {get;set;}
         public int EstadoId {get;set;}
         public bool Activo {get;set;}
+        public int? UbicacionId {get;set;}
         public ICollection<OrdenReciboDetalle> OrdenDetalle {get;set;}
 
     }

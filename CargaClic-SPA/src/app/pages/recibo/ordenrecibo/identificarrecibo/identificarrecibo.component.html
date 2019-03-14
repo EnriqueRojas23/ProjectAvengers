@@ -1,0 +1,138 @@
+
+<div class="page-head">
+    <h2 class="page-head-title">Identificar Orden de Recibo</h2>
+   <!-- <nav aria-label="breadcrumb" role="navigation">
+     <ol class="breadcrumb page-head-nav">
+       <li class="breadcrumb-item"><a href="#">Home</a></li>
+       <li class="breadcrumb-item active">Listado de Usuarios</li>
+     </ol>
+   </nav> -->
+ </div>
+
+<div class="main-content container-fluid">
+  
+    <div class="row">
+
+        <div  class="col-md-12">
+            <div class="card card-border-color card-border-color-primary">
+              <div class="card-header card-header-divider">Detalle de Orden de Recibo<span class="card-subtitle">Datos del detalle de la Orden de Recibo</span></div>
+              <div class="card-body ">
+                  <div  class="mat-elevation-z8">
+
+
+                      <mat-table #table [dataSource] = "listData" matSort >
+                        
+                          
+                          <ng-container matColumnDef="Linea">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Línea  </mat-header-cell>
+                              <mat-cell *matCellDef="let orden"> {{orden.linea}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Codigo">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > SKU  </mat-header-cell>
+                              <mat-cell *matCellDef="let orden"> {{orden.codigo}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Descripcion">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Descripción  </mat-header-cell>
+                              <mat-cell *matCellDef="let orden"> {{orden.producto}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Cantidad">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Cantidad  </mat-header-cell>
+                              <mat-cell *matCellDef="let orden"> {{orden.cantidad}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Lote">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Lote  </mat-header-cell>
+                              <mat-cell *matCellDef="let orden"> {{orden.lote}} </mat-cell>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="actionsColumn">
+                                <mat-header-cell *matHeaderCellDef>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let row">
+                                    <button class="btn  btn-outline-primary" disabled (click)="open(row)" type="button"><i class="fa fa-check"></i></button>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;" 
+                                 [ngClass]="{'highlight': selectedRowIndex == row.id}"
+                                  (click)="highlight(row)">
+                            </mat-row>
+
+
+                        </mat-table>
+
+                  </div>
+                  
+                
+        </div>
+      </div>
+    
+       </div>
+        <div class="col-md-12">
+            <div class="card card-border-color card-border-color-primary">
+              <div class="card-header card-header-divider">Detalle de la Línea<span class="card-subtitle"> Datos para la identificación de la línea </span></div>
+              <div class="card-body ">
+                <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+      
+                    <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="propietario">Cliente Propietario</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <input matInput   autocomplete="off" [(ngModel)]="model.propietario" name="propietario" type="text">
+                        </mat-form-field>
+                      </div>
+      
+                      <div class="input-div">
+                          <label class="col-12 col-sm-3 col-form-label text-sm-right" for="numOrden">Número de Orden</label>
+                          <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <input matInput   autocomplete="off" [(ngModel)]="model.numOrden" name="numOrden" type="text">
+                          </mat-form-field>
+                        </div>
+      
+                    <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="fechaEsperada">Fecha de llegada</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <input matInput required type="datetime" [matDatepicker]="picker" autocomplete="off" [(ngModel)]="model.fechaEsperada" name="fechaEsperada" #fechaEsperada="ngModel" >
+                            <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker> -->
+                          </mat-form-field>
+                   </div>
+      
+                   <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="numOrden">Hora de Llegada</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.horaEsperada" name="horaEsperada" type="text">
+                      </mat-form-field>
+                    </div>
+      
+      
+                  <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="guiaremision">Guía de Remisión</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.guiaRemision" name="guiaremision" #guiaremision="ngModel" type="text">
+                    </mat-form-field>
+            
+                  </div>
+                 
+                </form>
+              </div>
+              </div>
+
+              <div class="row pt-2 pt-sm-5 mt-1">
+                  <div class="col-sm-6 pl-0">
+                    <p class="text-right">
+                      
+                      <button routerLink="/listaordenrecibo" class="btn btn-space btn-secondary">Regresar</button>
+                    </p>
+                  </div>
+                </div>
+            </div> 
+
+  
+   
+  
+  </div>

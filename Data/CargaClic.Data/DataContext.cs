@@ -22,6 +22,12 @@ namespace CargaClic.Data
         public DbSet<OrdenRecibo> OrdenesRecibo {get;set;}
         public DbSet<OrdenReciboDetalle> OrdenesReciboDetalle {get;set;}
 
+        public DbSet<Proveedor> Proveedor {get;set;}
+        public DbSet<Chofer> Chofer {get;set;}
+        public DbSet<Vehiculo> Vehiculo {get;set;}
+        public DbSet<EquipoTransporte> EquipoTransporte {get;set;}
+        public DbSet<Ubicacion> Ubicacion {get;set;}
+        
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -36,6 +42,12 @@ namespace CargaClic.Data
             builder.ApplyConfiguration(new ClienteConfiguration());
             builder.ApplyConfiguration(new OrdenReciboConfiguration());
             builder.ApplyConfiguration(new OrdenReciboDetalleConfiguration());
+
+            builder.ApplyConfiguration(new VehiculoConfiguration());
+            builder.ApplyConfiguration(new ChoferConfiguration());
+            builder.ApplyConfiguration(new ProveedorConfiguration());
+            builder.ApplyConfiguration(new EquipoTransporteConfiguration());
+            builder.ApplyConfiguration(new UbicacionConfiguration());
 
             base.OnModelCreating(builder);
 

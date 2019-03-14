@@ -3,20 +3,30 @@
   margin-right: 8px;
 }
 .mat-column-nombreEstado {
+  flex: 0 0 80px;
+  text-align: right;
   
-  text-align: center;
 }
 .mat-column-NumOrden {
-  flex: 0 0 135px;
-  text-align: center;
+  flex: 0 0 120px;
 }
-.mat-column-Propietario {
-  flex: 0 0 135px;
-  text-align: center;
+.mat-column-propietario {
+  flex:-1 0 140px;
+  
+  
+}
+.mat-column-Urgente {
+  flex: 0 0 80px;
+  
 }
 .mat-column-EquipoTransporte {
-  flex: 0 0 135px;
-  text-align: center;
+  flex: 0 0 140px;
+  
+}
+
+.mat-column-actionsColumn {
+  flex: 0 0 180px;
+  
 }
 
 
@@ -26,21 +36,17 @@
   margin-right: 8px;
 }
 
-.mat-cell ,
+/* .mat-cell ,
 th.mat-header-cell{
     border-bottom-width: 0px;
     font-size: 13px !important;
     color: #7a7a7a;
     text-align: left;
-}
-.mat-cell:first-of-type, 
+} */
+/* .mat-cell:first-of-type, 
 .mat-footer-cell:first-of-type, 
 .mat-header-cell:first-of-type 
 {
   padding-left: 10px;
-}
-.mat-footer-row, .mat-header-row, .mat-row
-{
-  border-bottom-width : 0px;
+} */
 
-}
