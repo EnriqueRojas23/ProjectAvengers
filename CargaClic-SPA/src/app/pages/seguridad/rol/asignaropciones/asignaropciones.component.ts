@@ -98,7 +98,7 @@ export class AsignaropcionesComponent implements OnInit  {
 
   ngOnInit() {
     this.id  = this.activatedRoute.snapshot.params["uid"];
-    console.log(this.id);   
+    
     this._rolService.getPaginas(this.id).subscribe(list => {
      
       let primary = list;

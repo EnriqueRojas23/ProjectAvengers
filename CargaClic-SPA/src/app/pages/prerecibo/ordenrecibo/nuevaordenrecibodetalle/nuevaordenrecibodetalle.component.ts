@@ -43,17 +43,15 @@ export class DialogBuscarProducto {
     
   }
   seleccionarProducto(row: any){
-     //console.log( this.model.descripcionLarga =this.productos.filter(x => x.id == row)[0]);
+     
      this.dialogRef.close( this.model.descripcionLarga =this.productos.filter(x => x.id == row)[0]);
   }
 
   buscar(){
     this.ordenReciboService.obtenerOrden(this.data.codigo).subscribe(x=> {
         this.model.propietarioId =    x.propietarioId;
-        console.log(x);
-        this.productoService.getAll(this.model.codigo,this.model.propietarioId).subscribe(list => {
         
-        console.log(list);
+        this.productoService.getAll(this.model.codigo,this.model.propietarioId).subscribe(list => {
 
         this.productos = list;
         //this.loading = false;

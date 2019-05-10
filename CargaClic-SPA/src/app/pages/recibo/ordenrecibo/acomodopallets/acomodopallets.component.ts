@@ -98,18 +98,6 @@ export class AcomodopalletsComponent implements OnInit {
   }
   onChange(value){
     
-    // this.generalService.getAllUbicaciones(1,value.value).subscribe(resp=>
-    //   {
-    //     console.log(resp);
-        
-    //     resp.forEach(element => {
-    //       this.ubicaciones.push({
-    //         val: element.id ,
-    //         viewValue: element.ubicacion
-    //       })
-    //     });
-    //   });
-
 
       this.generalService.getAllUbicaciones(1,value.value).subscribe(list => {
         this.ubicaciones = list;
@@ -162,7 +150,7 @@ asignarUbicacion(id){
      //this.alertify.error(error);
   }, () => { 
    
-    console.log(this.model.areaId);
+    
     this.generalService.getAllUbicaciones(1,this.model.areaId).subscribe(list => {
       this.ubicaciones = list;
       

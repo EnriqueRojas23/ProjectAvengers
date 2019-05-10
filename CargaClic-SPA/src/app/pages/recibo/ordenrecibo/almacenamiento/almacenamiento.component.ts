@@ -284,7 +284,7 @@ excepcion(id): void {
 
   }
   regresar(){
-    //console.log( this.model.EquipoTransporteId)
+    
     this.router.navigate(['/listaordenrecibida',  this.activatedRoute.snapshot.params["uid2"] ]);
   }
 }

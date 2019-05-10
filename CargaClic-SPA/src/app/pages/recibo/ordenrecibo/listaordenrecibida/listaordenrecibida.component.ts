@@ -54,7 +54,7 @@ export class ListaordenrecibidaComponent implements OnInit {
     this.model.EquipoTransporteId = this.activatedRoute.snapshot.params["uid"];
     this.ordenreciboService.getAllByEquipoTransporte(this.model).subscribe(list => {
 
-      console.log(list);
+      
     this.model.equipotransporte =  list[0].equipotransporte;
     
     this.ordenes = list;
@@ -69,7 +69,7 @@ export class ListaordenrecibidaComponent implements OnInit {
         
         if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
            {
-            console.log(ele);
+            
               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
            }
         })
@@ -87,7 +87,7 @@ export class ListaordenrecibidaComponent implements OnInit {
     this.router.navigate(['recibo/almacenamiento',id,  this.model.EquipoTransporteId ]);
   }
   buscar(){
-    console.log(this.model);
+    
     this.ordenreciboService.getAll(this.model).subscribe(list => {
       this.ordenes = list;
        
@@ -102,7 +102,7 @@ export class ListaordenrecibidaComponent implements OnInit {
           
           if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
              {
-              console.log(ele);
+              
                 return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
            
              }

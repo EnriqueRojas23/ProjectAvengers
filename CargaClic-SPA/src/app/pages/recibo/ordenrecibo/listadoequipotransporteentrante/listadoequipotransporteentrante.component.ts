@@ -141,10 +141,6 @@ export class ListadoequipotransporteentranteComponent implements OnInit {
     this.ordenreciboService.getAllEquipoTransporte(this.model).subscribe(list => {
       
 
-
-
-      console.log(list);
-
       this.transportes = list;
       this.loading = false;
       this.listData = new MatTableDataSource(this.transportes);

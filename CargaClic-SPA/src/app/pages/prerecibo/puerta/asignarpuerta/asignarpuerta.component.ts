@@ -35,7 +35,7 @@ export class AsignarpuertaComponent implements OnInit {
   ngOnInit() {
     this.generalService.getAllUbicaciones(1,1).subscribe(list => {
       this.ubicaciones = list;
-      console.log(list);
+      
     this.loading = false;
     this.listData = new MatTableDataSource(this.ubicaciones);
     this.listData.paginator = this.paginator;
@@ -47,7 +47,6 @@ export class AsignarpuertaComponent implements OnInit {
         
         if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
            {
-            console.log(ele);
               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
          
            }
@@ -61,7 +60,7 @@ export class AsignarpuertaComponent implements OnInit {
 
   asignarPuerta(id){
     let EquipoTransporteId = this.activatedRoute.snapshot.params["uid"];
-    console.log(EquipoTransporteId);
+    
     this.ordenreciboService.assignmentOfDoor(EquipoTransporteId,id).subscribe(resp => { 
     }, error => {
        this.alertify.error(error);

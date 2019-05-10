@@ -116,7 +116,7 @@ export class VerordenreciboComponent implements OnInit {
           
     });
      }, error => {
-       console.log(error);
+       
       if(error = "err020")
       this.alertify.error("Esta Orden de Recibo tiene productos asociados.");
       else

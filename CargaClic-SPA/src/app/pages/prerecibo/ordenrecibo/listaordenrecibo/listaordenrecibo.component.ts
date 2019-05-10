@@ -74,7 +74,7 @@ export class ListaordenreciboComponent implements OnInit {
     this.model.PropietarioId = "";
 
     this.ordenreciboService.getAll(this.model).subscribe(list => {
-      console.log(list);
+      
     this.ordenes = list;
     this.loading = false;
     this.listData = new MatTableDataSource(this.ordenes);

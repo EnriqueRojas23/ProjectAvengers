@@ -183,7 +183,7 @@ CambioHuella(id){
   this.huellaDetalle = [];
       this.productoService.getHuellasDetalle(id).subscribe(resp=>
       {
-        console.log(resp);
+        
         resp.forEach(element => {
           this.huellaDetalle.push({
             val: element.unidadMedidaId ,

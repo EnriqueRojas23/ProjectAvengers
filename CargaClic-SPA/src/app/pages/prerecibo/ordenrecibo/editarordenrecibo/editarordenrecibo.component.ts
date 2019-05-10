@@ -135,12 +135,11 @@ ngAfterViewInit() {
 
 
     if(this.model.PropietarioCtrl  != undefined){
-      console.log(this.model);
+      
       this.model.Propietario =   this.clientes.filter(x => x.val == this.model.PropietarioCtrl.val)[0].viewValue;
       this.model.PropietarioId = this.clientes.filter(x => x.val == this.model.PropietarioCtrl.val)[0].val;
     }
     else{
-      console.log(this.model);
       this.model.Propietario =  this.clientes.filter(x => x.val == this.model.PropietarioId )[0].viewValue;
     }
 
