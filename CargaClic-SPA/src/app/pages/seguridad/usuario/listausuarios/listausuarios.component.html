@@ -24,7 +24,7 @@
                 <div class="input-container">
                 <i class="fa fa-search"></i>
                 <mat-form-field class="search-form-field" >
-                  <input matInput [(ngModel)]="searchKey" placeholder="Buscar por usuario, nombre y correo " autocomplete="off" (keyup)="applyFilter()">
+                  <input matInput [(ngModel)]="searchKey" placeholder="Buscar por usuario, nombre y correo" autocomplete="off" (keyup)="applyFilter()">
                 </mat-form-field>
                 </div>
             </div>
@@ -144,5 +144,5 @@
   </div>
 </div>
 
-
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate"></ngx-loading>
+<!-- [template]="customLoadingTemplate" -->
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

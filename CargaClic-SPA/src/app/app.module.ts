@@ -15,15 +15,20 @@ import { SharedModule } from './shared/shared.module';
 import { PagesComponent } from './pages/pages.component';
 import { ErrorInterceptorProvide } from './_services/error.interceptor';
 import { AlertifyService } from './_services/alertify.service';
-import { RouterModule } from '@angular/router';
+
 import { UserService } from './_services/user.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatTableModule, MatPaginatorModule, MatSortModule, MatDatepickerModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatSortModule,  } from '@angular/material';
 
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
-import { GeneralService } from './_services/Mantenimiento/general.service';
+
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { XHRBackend } from '@angular/http';
+import { ApiXHRBackend } from './_services/http.interceptor';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+
 
 
 
@@ -39,6 +44,7 @@ import { GeneralService } from './_services/Mantenimiento/general.service';
       
       
       
+      
      ],
    imports: [
       BrowserModule,
@@ -50,7 +56,14 @@ import { GeneralService } from './_services/Mantenimiento/general.service';
       MatTableModule,
       MatPaginatorModule,
       MatSortModule,
-      AngularDateTimePickerModule
+      AngularDateTimePickerModule,
+      NgxMatSelectSearchModule,
+      SweetAlert2Module.forRoot({
+         buttonsStyling: false,
+         customClass: 'modal-content',
+         confirmButtonClass: 'btn btn-primary',
+         cancelButtonClass: 'btn'
+     })
       
    
       
@@ -60,6 +73,8 @@ import { GeneralService } from './_services/Mantenimiento/general.service';
         ErrorInterceptorProvide,
         AlertifyService,
         UserService,
+        { provide: XHRBackend, useClass: ApiXHRBackend }
+        
       
         
    ],

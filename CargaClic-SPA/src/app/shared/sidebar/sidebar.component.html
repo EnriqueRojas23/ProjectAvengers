@@ -1,23 +1,23 @@
 <div class="be-left-sidebar">
-    <div class="left-sidebar-wrapper"><a class="left-sidebar-toggle"></a>
+    <div class="left-sidebar-wrapper"><a class="left-sidebar-toggle">Dashboard</a>
     <div class="left-sidebar-spacer">
     <div class="left-sidebar-scroll">
 
-      <nav class="sidebar-nav">
+        <div class="left-sidebar-content">
         <ul class="sidebar-elements">
           <li class="divider">Menu</li> 
-          <li><a [routerLink]="['/dashboard']"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
+          <li><a  [routerLink]="['/dashboard']"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
           </li>
-          <li class="parent" *ngFor="let menu of _sidebar.menu" >
-              <a><i  [ngClass]="{active: activeRoute(menu.link)}" [class]="menu.icono"></i><span> {{ menu.descripcion }} </span></a>
+          <li  [ngClass]="{active: activeRouteMenu(menu.link)}"  *ngFor="let menu of _sidebar.menu" >
+              <a><i [class]="menu.icono"></i><span> {{ menu.descripcion }} </span></a>
             <ul class="sub-menu">
                <li    [ngClass]="{active: activeRoute(submenu.link)}" *ngFor='let submenu of menu.submenu'>
-                <a  *ngIf="submenu.visible"  routerLinkActive="Active" [routerLink]="[ submenu.link ]">{{ submenu.descripcion }}</a>
+                <a  *ngIf="submenu.visible"  [routerLink]="[ submenu.link ]">{{ submenu.descripcion }}</a>
               </li> 
             </ul>
           </li>
         </ul>
-      </nav>
+      </div>
     </div>
   </div>
 </div> 

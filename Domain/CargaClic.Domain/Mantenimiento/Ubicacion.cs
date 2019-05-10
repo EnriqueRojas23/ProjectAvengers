@@ -12,5 +12,6 @@ namespace CargaClic.Domain.Mantenimiento
         public decimal width { get; set; }
         public int AlmacenId { get; set; }
         public int EstadoId {get;set;}
+        public int TipoUbicacionId{get;set;}
     }
 }

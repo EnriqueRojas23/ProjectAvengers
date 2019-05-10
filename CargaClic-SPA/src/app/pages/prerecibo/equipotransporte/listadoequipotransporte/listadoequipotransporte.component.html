@@ -1,0 +1,253 @@
+
+<div class="page-head">
+  <h2 class="page-head-title">Operaciones Equipo de Transporte</h2>
+</div>
+
+<div class="main-content container-fluid">
+   <div class="col-md-12">
+   <div class="card card-border-color card-border-color-primary">
+       <div class="card-body">
+           <div class="row">
+         
+               <div class="col-md-4">
+                   <label class="control-label" for="username">Cliente:</label>
+                   <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                       <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
+                        <mat-option>
+                            <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
+                         </mat-option>
+                         <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
+                             {{pow.viewValue}}
+                         </mat-option>
+                       </mat-select>
+                     </mat-form-field>
+                 </div>
+                   <div class="col-md-4">
+                     <label class="control-label" for="username">Intervalo:</label>
+                      <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                         <mat-select  [(value)]="model.intervalo" >
+                           <mat-option  *ngFor="let pow of intervalo"  [value]="pow.val">
+                               {{pow.viewValue}}
+                           </mat-option>
+                         </mat-select>
+                       </mat-form-field>
+                   </div>
+                   <div class="col-md-4">
+                       <label class="control-label" for="username">Estado:</label>
+                       <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                           <mat-select  [(value)]="model.estadoIdfiltro" >
+                             <mat-option  *ngFor="let pow of estados"  [value]="pow.val">
+                                 {{pow.viewValue}}
+                             </mat-option>
+                           </mat-select>
+                         </mat-form-field>
+                     </div>
+ 
+               <div class="col-md-2 offset-md-10">
+                   
+                     <button class="btn btn-block btn-primary"  (click)="buscar()"  type="button">Buscar</button>
+                   
+               </div>
+            
+             </div>
+       </div>
+   </div>
+
+ </div>
+<div class="col-md-12">
+
+
+ <div class="card card-border-color card-border-color-primary">
+   <div class="card-header card-header-divider">
+       
+     <div  [hidden]="!checkSelects()" class="row">
+           <b> Órdenes de Recibo |  </b>  <span class="card-subtitle">   Listado de ordenes de recibo del sistema</span>
+         </div>
+         <div  [hidden]="checkSelects()" class="row">
+             <b> Órdenes seleccionadas  :  {{selection.selected.length}} </b> 
+         </div>
+     </div>
+    
+   <div class="row">
+       <div class="col-md-1">
+           <button class="btn-buttons btn-outline-primary"  > <i   class="fa-2x  fas fa-ellipsis-v"></i></button> 
+       </div>
+
+       
+       <div  class="col-md-8">
+       </div>
+       <div  class="col-md-3" >
+           <div class="input-container">
+               <i class="fa fa-search"></i>
+               <mat-form-field class="search-form-field" >
+                 <!-- <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" > -->
+               </mat-form-field>
+               </div>
+         </div>
+   </div>
+
+
+   <div class="card-body">
+       
+       <div  class="mat-elevation-z8">
+           <mat-table #table [dataSource] = "listData" matSort >
+
+
+               <ng-container matColumnDef="select">
+                   <mat-header-cell *matHeaderCellDef>
+                     <mat-checkbox (change)="$event ? masterToggle() : null"
+                                   [checked]="selection.hasValue() && isAllSelected()"
+                                   [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                   [aria-label]="checkboxLabel()">
+                     </mat-checkbox>
+                   </mat-header-cell>
+                   <mat-cell *matCellDef="let row">
+                     <mat-checkbox (click)="$event.stopPropagation()"
+                                   (change)="$event ? selection.toggle(row) : null"
+                                   [checked]="selection.isSelected(row)"
+                                   [aria-label]="checkboxLabel(row)">
+                     </mat-checkbox>
+                   </mat-cell>
+               </ng-container>
+              <!-- Checkbox Column -->
+              <!-- <ng-container matColumnDef="almacen">
+                 <mat-header-cell *matHeaderCellDef mat-sort-header >  Almacén </mat-header-cell>
+                 <mat-cell *matCellDef="let user"> {{user.almacen}} </mat-cell>
+               </ng-container> -->
+
+
+              <ng-container matColumnDef="equipoTransporte">
+               <mat-header-cell *matHeaderCellDef mat-sort-header>  Equipo Transporte</mat-header-cell>
+               <mat-cell  *matCellDef="let orden" > 
+                   <!-- <button class="btn btn-space btn-outline-primary" (click)="ver(orden.ordenReciboId)"  type="button"> -->
+                     <!-- <i class="mdi mdi-search"></i> -->
+                     <!-- <a class="router-link"  (click)="ver(orden.ordenReciboId)"> OR{{orden.numOrden}}  </a> -->
+                     <span class="label label-info pull-xs-center">{{orden.equipoTransporte}}</span>
+                   <!-- </button> -->
+           
+               </mat-cell>
+             </ng-container>
+       
+         
+               <ng-container matColumnDef="placa">
+                   <mat-header-cell *matHeaderCellDef mat-sort-header >  Placa </mat-header-cell>
+                   <mat-cell *matCellDef="let user"> {{user.placa}} </mat-cell>
+                 </ng-container>
+         
+                 <!-- [style.color]="'#ff0000'" -->
+         
+                 <ng-container matColumnDef="marca">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Marca </mat-header-cell>
+                  <mat-cell *matCellDef="let user"> {{user.marca}} </mat-cell>
+                </ng-container>
+
+                
+                <ng-container matColumnDef="tipoVehiculo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Tipo </mat-header-cell>
+                  <mat-cell *matCellDef="let user"> {{user.tipoVehiculo}} </mat-cell>
+                </ng-container>
+        
+
+               <ng-container matColumnDef="estado">
+                   <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
+                   <mat-cell *matCellDef="let user"> 
+
+                  <div *ngIf="user.nombreEstado == 'En Proceso' then thenBlock else elseBlock"></div>
+                 <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.estado}}     </div>     </ng-template>
+                 <ng-template #elseBlock>   <div>{{user.estado}}     </div>   </ng-template>  
+                   </mat-cell>
+                 </ng-container>
+
+                 <ng-container matColumnDef="chofer">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Chofer </mat-header-cell>
+                  <mat-cell *matCellDef="let user"> {{user.nombreCompleto}} </mat-cell>
+                </ng-container>
+        
+
+          
+               
+         
+                            
+                <ng-container matColumnDef="dni">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  DNI </mat-header-cell>
+                  <mat-cell *matCellDef="let user"> {{user.dni}} </mat-cell>
+                </ng-container>
+        
+
+                   <!-- <ng-container matColumnDef="fechaEsperada">
+                       <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Esperada</mat-header-cell>
+                       <mat-cell *matCellDef="let user"> 
+                           {{user.fechaEsperada | date:'dd-MM-yyyy' }} 
+                       </mat-cell>
+                     </ng-container>
+
+                     <ng-container matColumnDef="fechaRegistro">
+                         <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro</mat-header-cell>
+                         <mat-cell *matCellDef="let user"> 
+                             {{user.fechaRegistro | date:'dd-MM-yyyy' }} 
+                         </mat-cell>
+                       </ng-container> -->
+
+
+          
+                 <ng-container matColumnDef="actionsColumn">
+                     <mat-header-cell *matHeaderCellDef>
+                        
+                           <!-- <app-speed-dial-fab
+                           [ngClass]="speedDialFabPosition"
+                           [reverse-column-direction]="speedDialFabPosition===SpeedDialFabPosition.Left"
+                           class="speed-dial-container"
+                           (fabClick)="onSpeedDialFabClicked($event)"
+                           [options]="FabOptions"></app-speed-dial-fab> -->
+                             <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/nuevaordenrecibo"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> 
+                             <!-- <eco-fab-speed-dial>
+                                 <eco-fab-speed-dial-trigger>
+                                     <button mat-fab (click)="doAction('trigger')"><mat-icon>menu</mat-icon></button>
+                                 </eco-fab-speed-dial-trigger>
+                             
+                                 <eco-fab-speed-dial-actions>
+                                     <button mat-mini-fab (click)="doAction('action1')"><mat-icon>add</mat-icon></button>
+                                     <button mat-mini-fab (click)="doAction('action2')"><mat-icon>edit</mat-icon></button>
+                                     <button mat-mini-fab (click)="doAction('action3')"><mat-icon>search</mat-icon></button>
+                                 </eco-fab-speed-dial-actions>
+                             </eco-fab-speed-dial> -->
+                         
+
+                        
+                     </mat-header-cell>
+                     <mat-cell *matCellDef="let row">
+                         
+                         <button  class="btn btn-space btn-outline-primary" ngbTooltip="Asignar Puerta" (click)="openDoor(row.id)" type="button"><i class="fas fa-door-closed"></i></button>
+                         <!-- <button class="btn btn-space btn-outline-primary" ngbTooltip="Dar Entrada a Camión"    matTooltipPosition="left" (click)="openDialog(row.id)" type="button"><i class="fas fa-check"></i></button> -->
+                         <!-- <button  class="btn btn-space btn-outline-primary" (click)="open(row)" type="button"><i class="fas fa-trash"></i></button> -->
+                         <!-- <button  class="btn btn-space btn-outline-primary" (click)="ver(row.ordenReciboId)" type="button"><i class="fas fa-search"></i></button> -->
+
+                         
+                     </mat-cell>
+                 </ng-container>
+        
+         
+           <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
+           <mat-row *matRowDef="let row; columns: displayedColumns;" 
+           
+           [ngClass]="{ 'highlight': selectedRowIndex == row.id}"
+           (click)="highlight(row)">
+
+           </mat-row>
+         
+         
+           </mat-table>
+
+
+          <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+
+         </div>
+       
+   </div>
+  
+ </div>
+</div>
+</div>
+
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>

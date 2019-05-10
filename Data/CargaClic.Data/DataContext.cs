@@ -6,6 +6,7 @@ using CargaClic.Data.Mappings.Seguridad;
 using Microsoft.EntityFrameworkCore;
 using CargaClic.Data.Mappings.Prerecibo;
 using CargaClic.Domain.Prerecibo;
+using CargaClic.Domain.Inventario;
 
 namespace CargaClic.Data
 {
@@ -27,12 +28,16 @@ namespace CargaClic.Data
         public DbSet<Vehiculo> Vehiculo {get;set;}
         public DbSet<EquipoTransporte> EquipoTransporte {get;set;}
         public DbSet<Ubicacion> Ubicacion {get;set;}
-        
+        public DbSet<InventarioGeneral> InventarioGeneral {get;set;}
+        public DbSet<Huella> Huella {get;set;}
+        public DbSet<HuellaDetalle> HuellaDetalle {get;set;}
+        public DbSet<ValorTabla> ValorTabla {get;set;}
 
+        public DbSet<Producto> Producto {get;set;}
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
-            
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new PaginaConfiguration());
             builder.ApplyConfiguration(new RolConfiguration ());
@@ -42,12 +47,18 @@ namespace CargaClic.Data
             builder.ApplyConfiguration(new ClienteConfiguration());
             builder.ApplyConfiguration(new OrdenReciboConfiguration());
             builder.ApplyConfiguration(new OrdenReciboDetalleConfiguration());
+            builder.ApplyConfiguration(new InventarioGeneralConfiguration());
+            builder.ApplyConfiguration(new ValorTablaConfiguration());
 
             builder.ApplyConfiguration(new VehiculoConfiguration());
             builder.ApplyConfiguration(new ChoferConfiguration());
             builder.ApplyConfiguration(new ProveedorConfiguration());
             builder.ApplyConfiguration(new EquipoTransporteConfiguration());
             builder.ApplyConfiguration(new UbicacionConfiguration());
+            builder.ApplyConfiguration(new HuellaConfiguration());
+            builder.ApplyConfiguration(new AreaConfiguration());
+            builder.ApplyConfiguration(new HuellaDetalleConfiguration());
+            builder.ApplyConfiguration(new ProductoConfiguration());
 
             base.OnModelCreating(builder);
 

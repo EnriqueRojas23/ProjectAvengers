@@ -11,6 +11,7 @@ export class SidebarService  {
       IdRol: any;
   constructor(private http: HttpClient) {
       this.menu = JSON.parse(localStorage.getItem('menu'));
+      
    }
 
-}
+} 

@@ -17,5 +17,6 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Domain\CargaClic.Domain\CargaClic.Domain.csproj" />
     <ProjectReference Include="..\Escritura\CargaCLic.repository\cargaclic.repository.csproj" />
+    <ProjectReference Include="..\Lectura\CargaClic.ReadRepository\CargaClic.ReadRepository.csproj" />
   </ItemGroup>
 </Project>

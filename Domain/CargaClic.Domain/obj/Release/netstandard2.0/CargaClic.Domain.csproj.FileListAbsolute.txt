@@ -1,0 +1,12 @@
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\bin\Release\netstandard2.0\CargaClic.Domain.deps.json
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\bin\Release\netstandard2.0\CargaClic.Domain.dll
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\bin\Release\netstandard2.0\CargaClic.Domain.pdb
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\bin\Release\netstandard2.0\Common.dll
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\bin\Release\netstandard2.0\Common.pdb
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\obj\Release\netstandard2.0\CargaClic.Domain.csprojAssemblyReference.cache
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\obj\Release\netstandard2.0\CargaClic.Domain.csproj.CoreCompileInputs.cache
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\obj\Release\netstandard2.0\CargaClic.Domain.AssemblyInfoInputs.cache
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\obj\Release\netstandard2.0\CargaClic.Domain.AssemblyInfo.cs
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\obj\Release\netstandard2.0\CargaClic.Domain.csproj.CopyComplete
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\obj\Release\netstandard2.0\CargaClic.Domain.dll
+D:\RIA\RIA\2018\Proyecto Avengers\app\Domain\CargaClic.Domain\obj\Release\netstandard2.0\CargaClic.Domain.pdb

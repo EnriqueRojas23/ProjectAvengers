@@ -1,0 +1,9 @@
+D:\RIA\RIA\2018\Proyecto Avengers\app\Common\bin\Release\netstandard2.0\Common.deps.json
+D:\RIA\RIA\2018\Proyecto Avengers\app\Common\bin\Release\netstandard2.0\Common.dll
+D:\RIA\RIA\2018\Proyecto Avengers\app\Common\bin\Release\netstandard2.0\Common.pdb
+D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Release\netstandard2.0\Common.csprojAssemblyReference.cache
+D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Release\netstandard2.0\Common.csproj.CoreCompileInputs.cache
+D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Release\netstandard2.0\Common.AssemblyInfoInputs.cache
+D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Release\netstandard2.0\Common.AssemblyInfo.cs
+D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Release\netstandard2.0\Common.dll
+D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Release\netstandard2.0\Common.pdb

@@ -17,5 +17,7 @@ namespace CargaClic.Contracts.Results.Mantenimiento
         public string  TipoVehiculo	{get;set;}
         public decimal  PesoBruto	{get;set;}
         public decimal  CargaUtil	{get;set;}
+        public int TipoVehiculoId {get;set;}
+        public int MarcaId {get;set;}
     }
 }

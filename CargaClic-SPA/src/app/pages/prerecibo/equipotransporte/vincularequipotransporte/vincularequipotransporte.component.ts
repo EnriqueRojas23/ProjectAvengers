@@ -8,6 +8,8 @@ import { NgForm } from '@angular/forms';
 import { OrdenReciboService } from 'src/app/_services/Recepcion/ordenrecibo.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { Data } from 'src/app/_providers/data';
+import { Dropdownlist } from 'src/app/_models/Constantes';
 
 
 //Buscar Vehiculo Modal 
@@ -108,12 +110,12 @@ export class DialogBuscarEmpTransporte {
   }
 
   buscar(){
-    console.log(this.model.codigo);
+    
     this.equipotransporteService.getProveedores(this.model.codigo).subscribe(x=> {
       
      
         this.proveedores = x;
-        console.log(x);
+        
         this.listData = new MatTableDataSource(this.proveedores);
         this.listData.paginator = this.paginator;
         this.listData.sort = this.sort;
@@ -157,10 +159,12 @@ export class DialogBuscarChofer {
 
   constructor(
     public dialogRef: MatDialogRef<DialogBuscarChofer>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private equipotransporteService: GeneralService) {
+    @Inject(MAT_DIALOG_DATA) public dialogdata: DialogData,
+    private equipotransporteService: GeneralService
+    ) {
 
-      this.model.codigo = data.codigo;
+      this.model.codigo = dialogdata.codigo;
+      
       this.buscar();
       
 
@@ -170,7 +174,7 @@ export class DialogBuscarChofer {
     
   }
   seleccionarChofer(row: any){
-     console.log(this.choferes.filter(x => x.id == row)[0]);
+     
      this.dialogRef.close( this.model = this.choferes.filter(x => x.id == row)[0]);
   }
 
@@ -199,8 +203,7 @@ export class DialogBuscarChofer {
 }
 
 
-
-
+declare let alertify: any;
 @Component({
   selector: 'app-vincularequipotransporte',
   templateUrl: './vincularequipotransporte.component.html',
@@ -208,19 +211,48 @@ export class DialogBuscarChofer {
 })
 export class VincularequipotransporteComponent implements OnInit {
  model: any = {};
+ transporte: any = {};
  id: any;
+
+ tipoVehiculo: Dropdownlist[] = [
+];
+
+marcaVehiculo: Dropdownlist[] = [
+];
+
   constructor(public dialog: MatDialog,
    private equipoTransporteService: OrdenReciboService,
    private router: Router,
    private alertify: AlertifyService ,
-   private activatedRoute: ActivatedRoute ) { }
+   private general: GeneralService,
+   private equipotransporteService: GeneralService,
+   private data: Data ) { }
 
   ngOnInit() {
+    
+    this.model.PropietarioId =  (this.data.storage[0].propietarioID);
+
+    this.general.getValorTabla(4).subscribe(resp=> 
+      {
+        resp.forEach(element => {
+          this.tipoVehiculo.push({ val: element.id , viewValue: element.valorPrincipal});
+        });
+         
+      })
+      this.general.getValorTabla(5).subscribe(resp=> 
+        {
+          resp.forEach(element => {
+            this.marcaVehiculo.push({ val: element.id , viewValue: element.valorPrincipal});
+          });
+           
+        })
+
+    
   }
   openDialog(placa): void {
     const dialogRef = this.dialog.open(DialogBuscarPlaca, {
       width: '650px',
-      height: '400px',
+      height: '500px',
       data: {codigo:placa, descripcion: ""}
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -235,7 +267,7 @@ export class VincularequipotransporteComponent implements OnInit {
   openDialog_EmpTrans(): void {
     const dialogRef = this.dialog.open(DialogBuscarEmpTransporte, {
       width: '650px',
-      height: '400px',
+      height: '500px',
       data: {codigo: "this.model.OrdenReciboId", descripcion: ""}
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -246,7 +278,7 @@ export class VincularequipotransporteComponent implements OnInit {
   openDialog_Dni(dni): void {
     const dialogRef = this.dialog.open(DialogBuscarChofer, {
       width: '650px',
-      height: '400px',
+      height: '500px',
       data: {codigo: dni, descripcion: ""}
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -256,21 +288,93 @@ export class VincularequipotransporteComponent implements OnInit {
     });
   }
   registrar(form: NgForm) {
-    this.id  = this.activatedRoute.snapshot.params["uid"];
-    this.model.OrdenReciboId = this.id;
     
     if (form.invalid) {
       return; 
     }
-    console.log(this.model);
+
     this.equipoTransporteService.vincularEquipoTransporte(this.model).subscribe(resp => { 
+
+      this.transporte = resp;
+     
+
+
+
     }, error => {
        this.alertify.error(error);
     }, () => { 
-      this.alertify.success("Se vinculó correctamente.");
+
+      this.data.storage.forEach(element => {
+        
+  
+        
+        this.model.OrdenReciboId =element.ordenReciboId;
+        this.model.Id = this.transporte.id;
+
+        this.equipoTransporteService.matchEquipoTransporte(this.model).subscribe(resp1 => { 
+          
+   
+       }, error => {
+          this.alertify.error(error);
+       }, () => { 
+         this.alertify.success("Se vinculó al equipo correctamente.");
+         
+       });
+  
+     
+      });
+      new Promise( resolve => setTimeout(resolve, 300) );
+
+      this.alertify.success("Se creo el equipo de transporte correctamente.");
       this.router.navigate(['/listaordenrecibo']);
     });
 
+
+
+
+  }
+  onBlurMethod(placa){
+
+     // Buscar en 
+     this.equipoTransporteService.getEquipoTransporte(placa).subscribe(x=>
+      {
+        
+           
+            if(x != null)
+            {
+               this.model.tipoVehiculo  = x.tipoVehiculoId;
+               this.model.marcaVehiculo = x.marcaId;
+               this.model.razonSocial = x.razonSocial;
+               this.model.ruc = x.ruc;
+               this.model.id = x.id;
+               this.model.dni = x.dni;
+               this.model.nombreCompleto = x.nombreCompleto;
+               this.model.brevete = x.brevete;
+
+               
+               
+            } 
+            else
+            {
+                
+            }
+
+      });
+
+
+
+      
+  }
+  PlacaEncontrada(){
+    
+     if(this.model.id == undefined) return true; else return false;
+  }
+  numberOnly(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 
 }

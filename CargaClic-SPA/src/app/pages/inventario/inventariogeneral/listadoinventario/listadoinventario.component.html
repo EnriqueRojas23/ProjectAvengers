@@ -1,0 +1,42 @@
+
+<div class="page-head">
+    <h2 class="page-head-title">Reporte de Inventario por Cliente</h2>
+ </div>
+ 
+ <div class="main-content container-fluid">
+     <div class="col-md-12">
+     <div class="card card-border-color card-border-color-primary">
+         <div class="card-body">
+             <div class="row">
+           
+                 <div class="col-md-4">
+                     <label class="control-label" for="username">Cliente:</label>
+                     <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                         <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
+                          <mat-option>
+                              <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
+                           </mat-option>
+                           <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
+                               {{pow.viewValue}}
+                           </mat-option>
+                         </mat-select>
+                       </mat-form-field>
+                   </div>
+        
+   
+                 <div class="col-md-2 offset-md-10">
+                     
+                       <button class="btn btn-block btn-primary"  (click)="buscar(model.PropietarioId)"  type="button">Buscar</button>
+                     
+                 </div>
+              
+               </div>
+         </div>
+     </div>
+ 
+   </div>
+
+ </div>
+ 
+ <!-- [template]="customLoadingTemplate" -->
+ <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

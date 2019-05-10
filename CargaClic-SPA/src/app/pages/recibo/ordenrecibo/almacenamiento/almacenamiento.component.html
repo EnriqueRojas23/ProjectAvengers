@@ -1,0 +1,92 @@
+
+<div class="page-head">
+  <h2 class="page-head-title">Almacenamiento</h2>
+ <!-- <nav aria-label="breadcrumb" role="navigation">
+   <ol class="breadcrumb page-head-nav">
+     <li class="breadcrumb-item"><a href="#">Home</a></li>
+     <li class="breadcrumb-item active">Listado de Usuarios</li>
+   </ol>
+ </nav> -->
+</div>
+
+<div class="main-content container-fluid">
+
+  <div class="row">
+     
+      <div  class="col-md-12">
+          <div class="card card-border-color card-border-color-primary">
+            <div class="card-header card-header-divider">Inventario de la Orden de Recibo<span class="card-subtitle">Detalle del inventario</span></div>
+            <div class="row">
+                <div class="col-md-8">
+                    <button class="btn-buttons btn-primary"   (click)="regresar()"  type="button"> << Regresar a la Orden</button>  
+                </div>
+            </div>
+            <div class="card-body ">
+                <div  class="mat-elevation-z8">
+                  
+
+                    <mat-table #table [dataSource] = "listData" matSort >
+                      
+                        
+                        <ng-container matColumnDef="lodNum">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header > LPN  </mat-header-cell>
+                            <mat-cell *matCellDef="let orden"> {{orden.lodNum}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="descripcionLarga">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header > Producto  </mat-header-cell>
+                            <mat-cell *matCellDef="let orden"> {{orden.descripcionLarga}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="untQty">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header > untQty  </mat-header-cell>
+                            <mat-cell *matCellDef="let orden"> {{orden.untQty}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="ubicacion">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Ubicación  </mat-header-cell>
+                              <mat-cell *matCellDef="let orden"> {{orden.ubicacion}} </mat-cell>
+                           </ng-container>
+
+                           
+                          <ng-container matColumnDef="proximaubicacion">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header > Ubicación Destino  </mat-header-cell>
+                            <mat-cell *matCellDef="let orden"> {{orden.ubicacionProxima}} </mat-cell>
+                         </ng-container>
+
+                         
+                       
+
+                          <ng-container matColumnDef="actionsColumn">
+                              <mat-header-cell *matHeaderCellDef>
+                                 
+                              </mat-header-cell>
+                              <mat-cell *matCellDef="let orden">
+                                <div *ngIf="orden.almacenado then thenBlock else elseBlock"></div>
+                                <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'"> Almacenado    </div>     </ng-template>
+                                <ng-template #elseBlock> 
+                                  <button ngbTooltip="Confirmar" class="btn btn-space btn-primary" (click)="Confirmar(orden.id)">Confirmar depósito</button>
+                                  <button ngbTooltip="Excepciones" class="btn btn-space btn-primary" (click)="excepcion(orden.id)">Excepciones</button>
+                                </ng-template>  
+                            </mat-cell>
+                              <mat-cell *matCellDef="let row">
+                                  
+                              </mat-cell>
+                          </ng-container>
+
+                          <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumns;">
+                          </mat-row>
+
+
+                      </mat-table>
+                      <mat-paginator [pageSizeOptions]="[ 100, 200, 500, 1000]" [pageSize]="100" showFirstLastButtons></mat-paginator>
+                </div>
+                
+              
+      </div>
+    </div>
+  
+     </div>
+
+</div>

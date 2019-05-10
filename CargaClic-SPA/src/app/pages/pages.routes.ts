@@ -2,7 +2,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProgressComponent } from './progress/progress.component';
-import { Graficas1Component } from './graficas1/graficas1.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { ListausuariosComponent } from './seguridad/usuario/listausuarios/listausuarios.component';
 import { NuevousuarioComponent } from './seguridad/usuario/nuevousuario/nuevousuario.component';
@@ -19,35 +18,58 @@ import { VincularequipotransporteComponent } from './prerecibo/equipotransporte/
 import { AsignarpuertaComponent } from './prerecibo/puerta/asignarpuerta/asignarpuerta.component';
 import { ListaordenrecibidaComponent } from './recibo/ordenrecibo/listaordenrecibida/listaordenrecibida.component';
 import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarrecibo/identificarrecibo.component';
+import { ListadovehiculoComponent } from './mantenimiento/vehiculo/listadovehiculo/listadovehiculo.component';
+import { ListadoproveedorComponent } from './mantenimiento/proveedor/listadoproveedor/listadoproveedor.component';
+import { ListadochoferComponent } from './mantenimiento/chofer/listadochofer/listadochofer.component';
+import { ListadoproductoComponent } from './mantenimiento/producto/listadoproducto/listadoproducto.component';
+import { AcomodopalletsComponent } from './recibo/ordenrecibo/acomodopallets/acomodopallets.component';
+import { AlmacenamientoComponent } from './recibo/ordenrecibo/almacenamiento/almacenamiento.component';
+import { ListadoequipotransporteComponent } from './prerecibo/equipotransporte/listadoequipotransporte/listadoequipotransporte.component';
+import { ListadoequipotransporteentranteComponent } from './recibo/ordenrecibo/listadoequipotransporteentrante/listadoequipotransporteentrante.component';
+import { EditarordenreciboComponent } from './prerecibo/ordenrecibo/editarordenrecibo/editarordenrecibo.component';
+import { ListadoinventarioComponent } from './inventario/inventariogeneral/listadoinventario/listadoinventario.component';
+import { NuevoproductoComponent } from './mantenimiento/producto/nuevoproducto/nuevoproducto.component';
+import { VerproductoComponent } from './mantenimiento/producto/verproducto/verproducto.component';
+
 
 
 const pagesRoutes: Routes = [
 
     {path : 'dashboard', component : DashboardComponent ,} ,
     {path : 'progress', component : ProgressComponent,canActivate: [AuthGuard]} ,
-    {path : 'graficas1', component : Graficas1Component ,canActivate: [AuthGuard]} ,
     {path : 'account-settings', component : AccountSettingsComponent, canActivate: [AuthGuard]} ,
 
-    {path : 'listaroles', component : ListarolesComponent , canActivate: [AuthGuard]} ,
-    {path : 'nuevorol', component : NuevorolComponent , canActivate: [AuthGuard]} ,
-    {path : 'asignaropciones/:uid', component : AsignaropcionesComponent} ,
+    {path : 'seguridad/listaroles', component : ListarolesComponent , canActivate: [AuthGuard]} ,
+    {path : 'seguridad/nuevorol', component : NuevorolComponent , canActivate: [AuthGuard]} ,
+    {path : 'seguridad/asignaropciones/:uid', component : AsignaropcionesComponent} ,
+    {path : 'seguridad/listausuarios', component : ListausuariosComponent, canActivate: [AuthGuard]} ,
+    {path : 'seguridad/nuevousuario', component : NuevousuarioComponent, canActivate: [AuthGuard]} ,
+    {path : 'seguridad/editarusuario/:uid', component : EditarusuarioComponent, canActivate: [AuthGuard]} ,
+
+    {path : 'recibo/nuevaordenrecibo', component : NuevaordenreciboComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/listaordenrecibo', component : ListaordenreciboComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/equipotransporte', component : ListadoequipotransporteComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/nuevaordenrecibodetalle/:uid', component : NuevaordenrecibodetalleComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/verordenrecibo/:uid', component : VerordenreciboComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/editarordenrecibo/:uid', component : EditarordenreciboComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/asignarpuerta/:uid', component : AsignarpuertaComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/vincularequipotransporte/:uid', component : VincularequipotransporteComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/listaordenrecibida/:uid', component : ListaordenrecibidaComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/identificarrecibo/:uid/:uid2', component : IdentificarreciboComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/acomodopallets/:uid/:uid2', component : AcomodopalletsComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/almacenamiento/:uid/:uid2', component : AlmacenamientoComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/equipotransporteentrante', component : ListadoequipotransporteentranteComponent, canActivate: [AuthGuard]} ,
 
 
-    {path : 'listausuarios', component : ListausuariosComponent, canActivate: [AuthGuard]} ,
-    {path : 'nuevousuario', component : NuevousuarioComponent, canActivate: [AuthGuard]} ,
-    {path : 'editarusuario/:uid', component : EditarusuarioComponent, canActivate: [AuthGuard]} ,
+    {path : 'listadovehiculo', component : ListadovehiculoComponent, canActivate: [AuthGuard]} ,
+    {path : 'listadoproveedor', component : ListadoproveedorComponent, canActivate: [AuthGuard]} ,
+    {path : 'listadochofer', component : ListadochoferComponent, canActivate: [AuthGuard]} ,
 
-    {path : 'nuevaordenrecibo', component : NuevaordenreciboComponent, canActivate: [AuthGuard]} ,
-    {path : 'listaordenrecibo', component : ListaordenreciboComponent, canActivate: [AuthGuard]} ,
-    {path : 'nuevaordenrecibodetalle/:uid', component : NuevaordenrecibodetalleComponent, canActivate: [AuthGuard]} ,
-    {path : 'verordenrecibo/:uid', component : VerordenreciboComponent, canActivate: [AuthGuard]} ,
-    {path : 'asignarpuerta/:uid', component : AsignarpuertaComponent, canActivate: [AuthGuard]} ,
-    {path : 'vincularequipotransporte/:uid', component : VincularequipotransporteComponent, canActivate: [AuthGuard]} ,
+    {path : 'mantenimiento/listadoproducto', component : ListadoproductoComponent, canActivate: [AuthGuard]} ,
+    {path : 'mantenimiento/nuevoproducto', component : NuevoproductoComponent, canActivate: [AuthGuard] } ,
+    {path : 'mantenimiento/verproducto', component : VerproductoComponent, canActivate: [AuthGuard]} ,
 
-
-
-    {path : 'listaordenrecibida', component : ListaordenrecibidaComponent, canActivate: [AuthGuard]} ,
-    {path : 'identificarrecibo/:uid', component : IdentificarreciboComponent, canActivate: [AuthGuard]} ,
+    {path : 'inventariogeneral', component : ListadoinventarioComponent, canActivate: [AuthGuard]} ,
 
 
     {path : '', redirectTo : '/dashboard', pathMatch: 'full'},

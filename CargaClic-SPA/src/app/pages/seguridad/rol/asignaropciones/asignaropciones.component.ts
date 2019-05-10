@@ -70,7 +70,8 @@ export class AsignaropcionesComponent implements OnInit  {
             const reverseTexts = reverse(texts);
            
             const row = `${reverseTexts.join(' -> ')} : ${value}`;
-            this.rows.push(value);
+            this.rows.push(item.value);
+            
         });
     }
     removeItem(item: TreeviewItem) {
@@ -97,24 +98,31 @@ export class AsignaropcionesComponent implements OnInit  {
 
   ngOnInit() {
     this.id  = this.activatedRoute.snapshot.params["uid"];
+    console.log(this.id);   
     this._rolService.getPaginas(this.id).subscribe(list => {
+     
       let primary = list;
       this.items = [] ;
       primary.forEach(element => { 
           element.children.forEach(x=> {
-             x.checked =  (x.check == '1' ? true: false)
+             x.checked =  (x.check == true ? true: false)
           })
       })
+
       primary.forEach(element => {
           if(element.children.length != 0)
           {
+            
+            
             this.menu =  new TreeviewItem({  
                 text: element.text
               , value:element.value
-              , checked:  (element.check == '1' ? true: false)
+              , check: false 
+              , checked:  false //(element.check == true ? true: false)
               , children: []  = element.children
              
             });
+            
             this.items.push(this.menu);
           }
       });
@@ -124,7 +132,7 @@ export class AsignaropcionesComponent implements OnInit  {
 
 }
 cancel(){
-  this.router.navigate(['/listaroles']);
+  this.router.navigate(['/seguridad/listaroles']);
 }
 save(row){
 
@@ -141,7 +149,7 @@ save(row){
      this.alertify.error(error);
   }, () => { 
     this.alertify.success("Se registró correctamente.");
-    this.router.navigate(['/listaroles']);
+    this.router.navigate(['/seguridad/listaroles']);
   });
 }
 }

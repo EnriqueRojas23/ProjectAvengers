@@ -1,13 +1,8 @@
 import { NgModule } from '@angular/core';
-
 import { SharedModule } from '../shared/shared.module';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { Graficas1Component } from './graficas1/graficas1.component';
 import { ProgressComponent } from './progress/progress.component';
-
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PAGES_ROUTES } from './pages.routes';
 import { CommonModule } from '@angular/common';
@@ -39,6 +34,29 @@ import { VincularequipotransporteComponent, DialogBuscarPlaca, DialogBuscarEmpTr
 import { AsignarpuertaComponent } from './prerecibo/puerta/asignarpuerta/asignarpuerta.component';
 import { ListaordenrecibidaComponent } from './recibo/ordenrecibo/listaordenrecibida/listaordenrecibida.component';
 import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarrecibo/identificarrecibo.component';
+import { ListadovehiculoComponent } from './mantenimiento/vehiculo/listadovehiculo/listadovehiculo.component';
+import { ListadochoferComponent } from './mantenimiento/chofer/listadochofer/listadochofer.component';
+import { ListadoproveedorComponent } from './mantenimiento/proveedor/listadoproveedor/listadoproveedor.component';
+import { ListadoproductoComponent } from './mantenimiento/producto/listadoproducto/listadoproducto.component';
+import { ListadoequipotransporteComponent } from './prerecibo/equipotransporte/listadoequipotransporte/listadoequipotransporte.component';
+import { AcomodopalletsComponent } from './recibo/ordenrecibo/acomodopallets/acomodopallets.component';
+import { AlmacenamientoComponent, NgbdModalConfirmAlmacenamiento, DialogExcepciones } from './recibo/ordenrecibo/almacenamiento/almacenamiento.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { SpeedDialFabComponent } from './prerecibo/speed-dial-fab/speed-dial-fab.component';
+import { Data } from '../_providers/data';
+import { ListadoequipotransporteentranteComponent } from './recibo/ordenrecibo/listadoequipotransporteentrante/listadoequipotransporteentrante.component';
+import { EditarordenreciboComponent } from './prerecibo/ordenrecibo/editarordenrecibo/editarordenrecibo.component';
+import { XHRBackend } from '@angular/http';
+import { ApiXHRBackend } from '../_services/http.interceptor';
+import { ListadoinventarioComponent } from './inventario/inventariogeneral/listadoinventario/listadoinventario.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { NuevoproductoComponent } from './mantenimiento/producto/nuevoproducto/nuevoproducto.component';
+import { VerproductoComponent } from './mantenimiento/producto/verproducto/verproducto.component';
+
+
+
+
+
 
  
 
@@ -50,7 +68,6 @@ import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarreci
   declarations: [
     DashboardComponent,
     ProgressComponent,
-    Graficas1Component,
     AccountSettingsComponent,
     ListausuariosComponent,
     NuevousuarioComponent,
@@ -72,6 +89,21 @@ import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarreci
     AsignarpuertaComponent,
     ListaordenrecibidaComponent,
     IdentificarreciboComponent,
+    ListadovehiculoComponent,
+    ListadochoferComponent,
+    ListadoproveedorComponent,
+    ListadoproductoComponent,
+    ListadoequipotransporteComponent,
+    AcomodopalletsComponent,
+    AlmacenamientoComponent,
+    NgbdModalConfirmAlmacenamiento,
+    DialogExcepciones,
+    SpeedDialFabComponent,
+    ListadoequipotransporteentranteComponent,
+    EditarordenreciboComponent,
+    ListadoinventarioComponent,
+    NuevoproductoComponent,
+    VerproductoComponent
     
     
   
@@ -80,8 +112,6 @@ import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarreci
   exports: [
       DashboardComponent,
       ProgressComponent,
-      Graficas1Component,
-      
       
       
   ],
@@ -90,7 +120,7 @@ import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarreci
     PAGES_ROUTES,
     FormsModule,
     CommonModule,
-
+    ReactiveFormsModule,
     MatTableModule,
     MatButtonModule,
     MatPaginatorModule,
@@ -111,6 +141,13 @@ import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarreci
     NgxMaterialTimepickerModule.forRoot(),
     AngularDualListBoxModule ,
     AngularDateTimePickerModule,
+    NgxMatSelectSearchModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    SweetAlert2Module
+  
+    
+    
     
     
     
@@ -119,7 +156,9 @@ import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarreci
     AuthGuard,
     UserService,
     OrdenReciboService,
-    GeneralService
+    GeneralService,
+    Data,
+    { provide: XHRBackend, useClass: ApiXHRBackend }
   ],
   entryComponents: [ 
     NgbdModalConfirmAutofocus,
@@ -128,6 +167,8 @@ import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarreci
     DialogBuscarPlaca,
     DialogBuscarEmpTransporte,
     DialogBuscarChofer,
+    NgbdModalConfirmAlmacenamiento,
+    DialogExcepciones
   ],
   
 })

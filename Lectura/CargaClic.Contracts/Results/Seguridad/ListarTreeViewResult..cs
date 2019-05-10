@@ -17,7 +17,7 @@ public class TreeviewItemResult : QueryResult
         public string Nivel	{ get;set; }
         public string Orden	{ get;set; }
         public string Icono	{ get;set; }        
-        public string check { get;set; }
+        public bool check { get;set; }
         public List<TreeviewItem> children {get;set;}
 
     } 

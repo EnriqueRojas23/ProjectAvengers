@@ -648,7 +648,7 @@ pre code {
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   margin-right: -15px;
-  margin-left: -15px;
+  margin-left: 15px;
 }
 
 .no-gutters {
@@ -672,7 +672,7 @@ pre code {
   width: 100%;
   min-height: 1px;
   padding-right: 15px;
-  padding-left: 15px;
+  padding-left: 1px;
 }
 
 .col {
@@ -4862,12 +4862,12 @@ input[type="button"].btn-block {
   margin-left: 1.538rem;
 }
 
-.card-header {
-  padding: 0.7692rem 1.538rem;
+/* .card-header {
+  padding: 0.7692rem 0.538rem;
   margin-bottom: 0;
-  background-color: #FFFFFF;
+  background-color: rgb(107, 55, 55);
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-}
+} */
 
 .card-header:first-child {
   border-radius: calc(3px - 1px) calc(3px - 1px) 0 0;
@@ -19568,6 +19568,7 @@ fieldset[disabled] .btn-color.btn-evernote.active {
 .card-body {
   padding: 8px 20px 20px;
   border-radius: 0 0 3px 3px;
+  
 }
 
 .card-body .card-title {
@@ -19653,7 +19654,7 @@ fieldset[disabled] .btn-color.btn-evernote.active {
 
 .card-header-divider .card-subtitle {
   margin-top: 4px;
-  margin-left: 10px;
+  margin-left: 2px;
   margin-bottom: 0;
 }
 

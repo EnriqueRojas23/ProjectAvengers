@@ -36,7 +36,7 @@
                       <ng-container matColumnDef="DescripcionLarga">
                           <mat-header-cell *matHeaderCellDef mat-sort-header > Descripcion Larga </mat-header-cell>
                           <mat-cell *matCellDef="let user"> {{user.descripcionLarga}} </mat-cell>
-                        </ng-container>
+                      </ng-container>
               
                       <!-- [style.color]="'#ff0000'" -->
               
@@ -73,7 +73,7 @@
                 </mat-row>
                 
                 </mat-table>
-               <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+               <mat-paginator [pageSizeOptions]="[ 10, 25, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
               </div>
  </div>
 <div class="modal-footer">

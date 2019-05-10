@@ -22,7 +22,7 @@
                 <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
                   <input matInput disabled minlength="5" maxlength="10" required [(ngModel)]="model.username"  #username="ngModel" placeholder="Username para el login"  name="username" type="text">
                 </mat-form-field>
-                <div class="alert alert-danger" *ngIf="username.errors && !isValidFormSubmitted"> 
+                <div class="alert alert-danger" *ngIf="username.errors  "> 
                     <div *ngIf="username.errors.minlength">
                     Usuario debe tener mas de 5 caracteres.
               </div>
@@ -34,7 +34,7 @@
                 <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                   <input matInput  minlength="5" maxlength="50"  required [(ngModel)]="model.nombreCompleto" name="nombreCompleto" #nombrecompleto="ngModel" type="text" placeholder="Nombres y apellidos completos">
                 </mat-form-field>
-                <div class="alert alert-danger" *ngIf="nombrecompleto.errors && !isValidFormSubmitted"> 
+                <div class="alert alert-danger" *ngIf="nombrecompleto.errors  "> 
                     <div *ngIf="nombrecompleto.errors.minlength">
                     password debe tener menos de 5 caracteres.
                   </div>
@@ -61,7 +61,7 @@
                     <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                       <input matInput  required [(ngModel)]="model.email" autocomplete="off" name="email" [email]="true" #email="ngModel" type="email" placeholder="@">
                     </mat-form-field>
-                    <div class="alert alert-danger" *ngIf="email.errors && !isValidFormSubmitted"> 
+                    <div class="alert alert-danger" *ngIf="email.errors  "> 
                         <div *ngIf="email.errors.email">
                         Email debe de tener una dirección válida
                   </div>

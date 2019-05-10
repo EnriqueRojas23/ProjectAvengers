@@ -14,6 +14,7 @@ namespace CargaClic.Contracts.Results.Prerecibo
         public string  Ubicacion	{get;set;}
         public string  Area	{get;set;}
         public string  Estado	{get;set;}
+        public string Almacen {get;set;}
         
     }
 }

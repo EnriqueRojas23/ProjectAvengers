@@ -13,6 +13,26 @@ declare const App: any;
 export class PagesComponent implements OnInit   {
   title = 'CargaClic-SPA';
   jwtHelper =  new JwtHelperService();
+
+  FabOptions = {
+    buttons: [
+      {
+        icon: 'timeline'
+      },
+      {
+        icon: 'view_headline'
+      },
+      {
+        icon: 'room'
+      },
+      {
+        icon: 'lightbulb_outline'
+      },
+      {
+        icon: 'lock'
+      }
+    ]
+  };
   constructor(private authService: AuthService) {
     App.init();
   }

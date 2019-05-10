@@ -1,52 +1,16 @@
 
 <div class="page-head">
     <h2 class="page-head-title">Listado de Órdenes de Recibo</h2>
-   <!-- <nav aria-label="breadcrumb" role="navigation">
+   <nav aria-label="breadcrumb" role="navigation">
      <ol class="breadcrumb page-head-nav">
-       <li class="breadcrumb-item"><a href="#">Home</a></li>
-       <li class="breadcrumb-item active">Listado de Usuarios</li>
+       <li class="breadcrumb-item"><a href="#">Equipos de Transporte</a></li>
+       <li class="breadcrumb-item active">Listado de Órdenes de Recibo de {{model.equipotransporte}}</li>
      </ol>
-   </nav> -->
+   </nav>
  </div>
  
  <div class="main-content container-fluid">
-     <div class="col-md-12">
-     <div class="card card-border-color card-border-color-primary">
-         <div class="card-body">
-             <div class="row">
-           
-                     <div class="col-md-4">
-                       <label class="control-label" for="username">Intervalo:</label>
-                        <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                           <mat-select  [(value)]="model.intervalo" >
-                             <mat-option  *ngFor="let pow of clientes"  [value]="pow.val">
-                                 {{pow.viewValue}}
-                             </mat-option>
-                           </mat-select>
-                         </mat-form-field>
-                     </div>
-   
-                 <div class="col-md-4">
-                   <label class="control-label" for="username">Estado:</label>
-                   <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                       <mat-select  [(value)]="model.estadoIdfiltro" >
-                         <mat-option  *ngFor="let pow of estados"  [value]="pow.val">
-                             {{pow.viewValue}}
-                         </mat-option>
-                       </mat-select>
-                     </mat-form-field>
-                 </div>
-                 <div class="col-md-4">
-                     
-                       <button class="btn btn-block btn-primary"  (click)="edit(row.id)"  type="button">Buscar</button>
-                     
-                 </div>
-              
-               </div>
-         </div>
-     </div>
- 
-   </div>
+
  <div class="col-md-12">
  
  
@@ -58,15 +22,24 @@
          </div>
        </div>
  
-           <div class="search-div">
-               <div class="input-container">
-               <i class="fa fa-search"></i>
-               <mat-form-field class="search-form-field" >
-                 <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" (keyup)="applyFilter()">
-               </mat-form-field>
-               </div>
-           </div>
-    
+       <div class="row">
+        <div class="col-md-1">
+            <button class="btn-buttons btn-outline-primary"  > <i   class="fa-2x  fas fa-ellipsis-v"></i></button> 
+        </div>
+        <div class="col-md-8">
+            <button class="btn-buttons btn-primary"   (click)="equipotransporte()"  type="button"><< Regresar al listado</button>  
+            
+        </div>
+
+        <div  class="col-md-3" >
+            <div class="input-container">
+                <i class="fa fa-search"></i>
+                <mat-form-field class="search-form-field" >
+                         <input matInput [(ngModel)]="searchKey" placeholder="Buscar por usuario, nombre y correo " autocomplete="off" >
+                  </mat-form-field>
+                </div>
+          </div>
+    </div>
  
      <div class="card-body">
          
@@ -103,10 +76,24 @@
                  <ng-container matColumnDef="nombreEstado">
                      <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
                      <mat-cell *matCellDef="let user"> 
- 
-                    <div *ngIf="user.nombreEstado == 'Planeado' then thenBlock else elseBlock"></div>
-                   <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.nombreEstado}}     </div>     </ng-template>
-                   <ng-template #elseBlock>   <div>{{user.nombreEstado}}     </div>   </ng-template>  
+                        <div *ngIf="user.nombreEstado == 'Asignado' then
+                        Asignado "></div>
+                        <div *ngIf="user.nombreEstado == 'Recibiendo' then
+                        Recibiendo "></div>
+                         <div *ngIf="user.nombreEstado == 'Pendiente Acomodo' then
+                         PendienteAcomodo "></div>
+                         <div *ngIf="user.nombreEstado == 'Pendiente Almacenamiento' then
+                         PendienteAlmacenamiento "></div>
+                         <div *ngIf="user.nombreEstado == 'Almacenado' then
+                        Terminado "></div>
+    
+                        <ng-template #Asignado>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#676a6c'">{{user.nombreEstado}}     </div>     </ng-template>
+                        <ng-template #Recibiendo>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#676a6c'">{{user.nombreEstado}}     </div>     </ng-template>
+                        <ng-template #PendienteAcomodo>   <div [style.color]="'#FFFFFF'" [style.background-color]="'#d00101'" >{{user.nombreEstado}}     </div>   </ng-template>  
+                        <ng-template #PendienteAlmacenamiento>   <div [style.color]="'#FFFFFF'" [style.background-color]="'#d00101'" >{{user.nombreEstado}}     </div>   </ng-template>  
+                        <ng-template #Terminado>   <div [style.color]="'#FFFFFF'" [style.background-color]="'#757575'" >{{user.nombreEstado}}     </div>   </ng-template>  
+    
+     
                      </mat-cell>
                    </ng-container>
  
@@ -116,28 +103,21 @@
                      </ng-container>
  
  
-               <ng-container matColumnDef="EquipoTransporte">
+               <!-- <ng-container matColumnDef="EquipoTransporte">
                  <mat-header-cell *matHeaderCellDef> Equipo de Transporte </mat-header-cell>
                  <mat-cell *matCellDef="let user"> 
                    <div *ngIf="user.equipotransporte then thenBlock else elseBlock"></div>
-                   <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.equipotransporte}}     </div>     </ng-template>
+                   <ng-template #thenBlock>  {{user.equipotransporte}}          </ng-template>
                    <ng-template #elseBlock>  
                       Sin equipo 
                     </ng-template>  
                  
-                   <!-- {{user.dateOfBirth | date:'dd-MM-yyyy' }}  -->
+                   {{user.dateOfBirth | date:'dd-MM-yyyy' }}  
                  
                  </mat-cell>
                </ng-container>
                  
-               <ng-container matColumnDef="Urgente">
-                 <mat-header-cell *matHeaderCellDef> Urgente </mat-header-cell>
-                 <mat-cell *matCellDef="let user">
-                     <div *ngIf="user.urgente then thenBlock else elseBlock"></div>
-                     <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">Urgente     </div>     </ng-template>
-                     <ng-template #elseBlock>Normal</ng-template>  
-                 </mat-cell>
-               </ng-container>
+              -->
  
                    
  
@@ -152,15 +132,13 @@
             
                    <ng-container matColumnDef="actionsColumn">
                        <mat-header-cell *matHeaderCellDef>
-                           <div class="example-button-row">
-                               <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/nuevaordenrecibo"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
-                           </div>
-                
-                          
-                          
+                          Acciones
+
                        </mat-header-cell>
                        <mat-cell *matCellDef="let row">
-                           <button class="btn btn-space btn-outline-primary" ngbTooltip="Iniciar recibo"  (click)="identificar(row.ordenReciboId)"  type="button"><i class="fas fa-sign-in-alt"></i></button>
+                           <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Pendiente Acomodo' || row.nombreEstado == 'Pendiente Almacenamiento' " class="btn btn-space btn-outline-primary" ngbTooltip="Iniciar recibo"  (click)="identificar(row.ordenReciboId)"  type="button"><i class="fas fa-sign-in-alt"></i></button>
+                           <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Recibiendo' || row.nombreEstado == 'Pendiente Almacenamiento'" class="btn btn-space btn-outline-primary" ngbTooltip="Acomodo"  (click)="acomodo(row.ordenReciboId)"  type="button"><i class="fas fa-archive"></i></button>
+                           <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Pendiente Acomodo' || row.nombreEstado == 'Recibiendo'"  class="btn btn-space btn-outline-primary" ngbTooltip="Almacenamiento"  (click)="almacenar(row.ordenReciboId)"  type="button"><i class="fas fa-warehouse"></i></button>
                        </mat-cell>
                    </ng-container>
           
@@ -187,4 +165,4 @@
  </div>
  
  
- <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate"></ngx-loading>
+ <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

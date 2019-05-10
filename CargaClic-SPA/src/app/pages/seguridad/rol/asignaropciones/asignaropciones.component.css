@@ -5,3 +5,10 @@
   margin-left: .3rem;
 }
 
+::ng-deep .mat-checkbox .mat-checkbox-frame {
+  border-color: violet;
+}
+
+::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+  background-color: darkcyan !important;
+}

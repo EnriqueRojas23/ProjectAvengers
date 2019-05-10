@@ -22,7 +22,7 @@
                 <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
                   <input matInput  minlength="5" maxlength="10" required [(ngModel)]="model.alias"  #alias="ngModel" placeholder="alias para el login"  name="username" type="text">
                 </mat-form-field>
-                <div class="alert alert-danger" *ngIf="alias.errors && !isValidFormSubmitted"> 
+                <div class="alert alert-danger" *ngIf="alias.errors  "> 
                     <div *ngIf="alias.errors.minlength">
                     El álias debe tener mas de 5 caracteres.
               </div>
@@ -34,7 +34,7 @@
                 <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                   <input matInput  minlength="5" maxlength="50"  required [(ngModel)]="model.descripcion" name="descripcion" #descripcion="ngModel" type="text" placeholder="Nombres y apellidos completos">
                 </mat-form-field>
-                <div class="alert alert-danger" *ngIf="descripcion.errors && !isValidFormSubmitted"> 
+                <div class="alert alert-danger" *ngIf="descripcion.errors  "> 
                     <div *ngIf="descripcion.errors.minlength">
                     password debe tener menos de 5 caracteres.
               </div>
@@ -55,7 +55,7 @@
                       <div class="col-sm-6 pl-0">
                         <p class="text-right">
                           <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
-                          <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button>
+                          <!-- <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button> -->
                     
                         </p>
                       </div>

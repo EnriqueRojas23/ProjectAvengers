@@ -34,7 +34,9 @@ namespace CargaClic.Contracts.Results.Prerecibo
         public int HuellaId {get;set;}
         public int EstadoId {get;set;}
         public string Estado {get;set;}
+        public bool Completo {get;set;}
         public int Cantidad {get;set;}
+        public int CantidadRecibida {get;set;}
     }
 
 }

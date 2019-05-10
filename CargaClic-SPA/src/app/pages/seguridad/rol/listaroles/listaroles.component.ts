@@ -47,7 +47,7 @@ export class ListarolesComponent implements OnInit {
 
   }
   edit(id){
-    this.router.navigate(['/asignaropciones',id]);
+    this.router.navigate(['/seguridad/asignaropciones',id]);
   
 
 

@@ -1,24 +1,25 @@
 
 <div class="page-head">
-    <h2 class="page-head-title">Identificar Orden de Recibo</h2>
-   <!-- <nav aria-label="breadcrumb" role="navigation">
-     <ol class="breadcrumb page-head-nav">
-       <li class="breadcrumb-item"><a href="#">Home</a></li>
-       <li class="breadcrumb-item active">Listado de Usuarios</li>
-     </ol>
-   </nav> -->
+    <h2 class="page-head-title">Paletizar</h2>
+    <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a href="#">Equipos de Transporte</a></li>
+        <li class="breadcrumb-item">Listado de Órdenes de Recibo</li>
+        <li class="breadcrumb-item active">Identificar Pallets</li>
+      </ol>
+    </nav>
  </div>
 
 <div class="main-content container-fluid">
   
     <div class="row">
-
+      
         <div  class="col-md-12">
             <div class="card card-border-color card-border-color-primary">
-              <div class="card-header card-header-divider">Detalle de Orden de Recibo<span class="card-subtitle">Datos del detalle de la Orden de Recibo</span></div>
+              <div class="card-header card-header-divider">Líneas Orden de Recibo<span class="card-subtitle">Líneas de la Orden de Recibo</span></div>
               <div class="card-body ">
                   <div  class="mat-elevation-z8">
-
+                    
 
                       <mat-table #table [dataSource] = "listData" matSort >
                         
@@ -43,24 +44,44 @@
                               <mat-cell *matCellDef="let orden"> {{orden.cantidad}} </mat-cell>
                             </ng-container>
 
-                            <ng-container matColumnDef="Lote">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header > Lote  </mat-header-cell>
-                              <mat-cell *matCellDef="let orden"> {{orden.lote}} </mat-cell>
+                            <ng-container matColumnDef="CantidadRecibida">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Cantidad Recibida  </mat-header-cell>
+                              <mat-cell *matCellDef="let orden"> {{orden.cantidadRecibida}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="CantidadRestante">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Cantidad Restante  </mat-header-cell>
+                              <mat-cell *matCellDef="let orden"> {{orden.cantidad - orden.cantidadRecibida }} </mat-cell>
                             </ng-container>
 
 
+                            <ng-container matColumnDef="Completo">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Estado de Recibo  </mat-header-cell>
+                              <!-- <mat-cell *matCellDef="let orden"> {{ orden.completo  }} </mat-cell> -->
+                              <mat-cell *matCellDef="let orden">
+                                <div *ngIf="orden.completo then thenBlock else elseBlock"></div>
+                                <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">Completo     </div>     </ng-template>
+                                <ng-template #elseBlock>Pendiente</ng-template>  
+                            </mat-cell>
+                            </ng-container>
+                         
+
                             <ng-container matColumnDef="actionsColumn">
                                 <mat-header-cell *matHeaderCellDef>
+                                    <button class="btn btn-space btn-primary" (click)="terminar()">Terminar</button>
                                 </mat-header-cell>
+                                <mat-cell *matCellDef="let orden">
+                                  <div *ngIf="orden.completo then thenBlock else elseBlock"></div>
+                                  <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">     </div>     </ng-template>
+                                  <ng-template #elseBlock><button class="btn  btn-outline-primary" ngbTooltip="Identificar" (click)="identificar(orden.id)" type="button"><i class="fa fa-check"></i></button></ng-template>  
+                              </mat-cell>
                                 <mat-cell *matCellDef="let row">
-                                    <button class="btn  btn-outline-primary" disabled (click)="open(row)" type="button"><i class="fa fa-check"></i></button>
+                                    
                                 </mat-cell>
                             </ng-container>
 
                             <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: displayedColumns;" 
-                                 [ngClass]="{'highlight': selectedRowIndex == row.id}"
-                                  (click)="highlight(row)">
+                            <mat-row *matRowDef="let row; columns: displayedColumns;">
                             </mat-row>
 
 
@@ -75,64 +96,115 @@
        </div>
         <div class="col-md-12">
             <div class="card card-border-color card-border-color-primary">
-              <div class="card-header card-header-divider">Detalle de la Línea<span class="card-subtitle"> Datos para la identificación de la línea </span></div>
+              <!-- <div class="card-header card-header-divider">Identificar <span class="card-subtitle"> Datos para la identificación de la línea seleccionada </span></div> -->
               <div class="card-body ">
-                <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+                <form #f="ngForm"  (ngSubmit)="actualizar(f)" >
       
                     <div class="input-div">
-                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="propietario">Cliente Propietario</label>
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="propietario">Línea</label>
                         <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                          <input matInput   autocomplete="off" [(ngModel)]="model.propietario" name="propietario" type="text">
+                          <input matInput readonly   autocomplete="off" [(ngModel)]="modeldetail.linea" name="linea" type="text">
                         </mat-form-field>
                       </div>
-      
+<!--       
                       <div class="input-div">
-                          <label class="col-12 col-sm-3 col-form-label text-sm-right" for="numOrden">Número de Orden</label>
+                          <label class="col-12 col-sm-3 col-form-label text-sm-right" for="sku">SKU</label>
                           <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                            <input matInput   autocomplete="off" [(ngModel)]="model.numOrden" name="numOrden" type="text">
+                            <input matInput readonly  autocomplete="off" [(ngModel)]="modeldetail.codigo" name="sku" type="text">
+                          </mat-form-field>
+                        </div>
+                        <div class="input-div">
+                          <label class="col-12 col-sm-3 col-form-label text-sm-right" for="producto">Descripción</label>
+                          <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <input matInput  readonly autocomplete="off" [(ngModel)]="modeldetail.producto" name="producto" type="text">
+                          </mat-form-field>
+                        </div> -->
+                        <div class="input-div">
+                          <label class="col-12 col-sm-3 col-form-label text-sm-right" for="lote">Lote</label>
+                          <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <input matInput   autocomplete="off" [(ngModel)]="modeldetail.lote" name="lote" type="text">
                           </mat-form-field>
                         </div>
       
-                    <div class="input-div">
-                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="fechaEsperada">Fecha de llegada</label>
+                  <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="fechaManufactura">Fecha de Manufactura</label>
                         <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                            <input matInput required type="datetime" [matDatepicker]="picker" autocomplete="off" [(ngModel)]="model.fechaEsperada" name="fechaEsperada" #fechaEsperada="ngModel" >
-                            <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker> -->
+                            <input matInput type="datetime" [matDatepicker]="fechaManufactura" autocomplete="off" [(ngModel)]="modeldetail.fechaManufactura" name="fechaManufactura " #fechaManufactura="ngModel" >
+                            <mat-datepicker-toggle matSuffix [for]="fechaManufactura"></mat-datepicker-toggle>
+                            <mat-datepicker #fechaManufactura></mat-datepicker>
                           </mat-form-field>
                    </div>
-      
-                   <div class="input-div">
-                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="numOrden">Hora de Llegada</label>
-                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                        <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.horaEsperada" name="horaEsperada" type="text">
-                      </mat-form-field>
-                    </div>
-      
-      
+
                   <div class="input-div">
-                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="guiaremision">Guía de Remisión</label>
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="fechaExpire">Fecha de Expiración</label>
                     <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                      <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.guiaRemision" name="guiaremision" #guiaremision="ngModel" type="text">
+                        <input matInput type="datetime" [matDatepicker]="fechaExpire" autocomplete="off" [(ngModel)]="modeldetail.fechaExpire" name="fechaExpire" #fechaExpiracion="ngModel" >
+                        <mat-datepicker-toggle matSuffix [for]="fechaExpire"></mat-datepicker-toggle>
+                        <mat-datepicker #fechaExpire></mat-datepicker>
+                      </mat-form-field>
+                  </div>
+
+
+                   <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="estado">Estado de inventario</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <mat-select required  [(value)]="modeldetail.estadoId"  placeholder="Selección">
+                          <mat-option  *ngFor="let pow of estadoInventario"  [value]="pow.val">
+                              {{pow.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+        
+                  </div>
+
+
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="huella">Huella</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <mat-select  [(value)]="modeldetail.huellaId"  (selectionChange)="CambioHuella($event.value)"   placeholder="Selección" required>
+                        <mat-option  *ngFor="let hue of huellas"  [value]="hue.val">
+                            {{hue.viewValue}}
+                        </mat-option>
+                      </mat-select>
                     </mat-form-field>
-            
-                  </div>
-                 
-                </form>
-              </div>
-              </div>
+      
+      
+                    <!-- <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidad">Cantidad Esperada</label>
+                        <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <input matInput readonly type="text" (keypress)="numberOnly($event)" maxlength="5" required [(ngModel)]="modeldetail.cantidad"  #cantidad="ngModel"  name="cantidad" >
+                        </mat-form-field>
+                        
+                      </div> -->
 
-              <div class="row pt-2 pt-sm-5 mt-1">
-                  <div class="col-sm-6 pl-0">
-                    <p class="text-right">
-                      
-                      <button routerLink="/listaordenrecibo" class="btn btn-space btn-secondary">Regresar</button>
-                    </p>
-                  </div>
-                </div>
-            </div> 
+                      <div class="input-div">
+                          <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidadRecibida">Cantidad Recibida</label>
+                          <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <input matInput required type="text"  (keypress)="numberOnly($event)" maxlength="5"  [(ngModel)]="modeldetail.cantidadRecibida"  #cantidadRecibida="ngModel"  name="cantidadRecibida" >
+                          </mat-form-field>
+                       </div>
 
-  
-   
-  
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="huella">Unidad Medida</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <mat-select   [(value)]="modeldetail.unidadMedidaId"    placeholder="Selección" required>
+                              <mat-option   *ngFor="let hue of huellaDetalle"  [value]="hue.val">
+                                  {{hue.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <div class="row pt-2 pt-sm-5 mt-1">
+                            <div class="col-sm-6 pl-0">
+                              <p class="text-right">
+                                <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                                <button (click)="regresar()" class="btn btn-space btn-secondary">Regresar</button>
+                              </p>
+                            </div>
+                          </div>
+         
+              </form>
+
+            </div>
+          </div>
+      </div> 
   </div>
+
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

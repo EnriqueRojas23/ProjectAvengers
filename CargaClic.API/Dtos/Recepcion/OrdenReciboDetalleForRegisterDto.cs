@@ -15,7 +15,7 @@ namespace CargaClic.API.Dtos.Recepcion
         [Required]
         public Guid ProductoId {get;set;}
         public string Lote {get;set;}
-        public int HuellaId {get;set;}
+        public int? HuellaId {get;set;}
         [Required]
         public int EstadoID {get;set;}
         [Required]

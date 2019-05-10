@@ -1,0 +1,19 @@
+.mat-column-untQty {
+    flex: 0 0 100px;
+    }
+.mat-column-lodNum {
+    flex: 0 0 145px;
+    }
+.mat-column-descripcionlarga {
+    flex: 0 0 400px;
+    }
+
+.mat-column-ubicacion {
+flex: 0 0 145px;
+}
+
+.mat-column-proximaubicacion {
+    flex: 0 0 145px;
+    }
+
+        

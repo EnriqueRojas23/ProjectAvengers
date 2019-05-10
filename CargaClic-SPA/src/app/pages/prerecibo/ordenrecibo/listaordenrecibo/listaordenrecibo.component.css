@@ -2,16 +2,26 @@
 .example-button-row a {
   margin-right: 8px;
 }
+
+.mat-row {
+  cursor: pointer;
+}
+.mat-column-almacen {
+  flex: 0 0 80px;
+  text-align: right;
+  
+}
+
 .mat-column-nombreEstado {
   flex: 0 0 80px;
   text-align: right;
   
 }
 .mat-column-NumOrden {
-  flex: 0 0 120px;
+  flex: 0 0 110px;
 }
 .mat-column-propietario {
-  flex:-1 0 140px;
+  flex:-1 0 200px;
   
   
 }
@@ -19,13 +29,17 @@
   flex: 0 0 80px;
   
 }
+.mat-column-select {
+  flex: 0 0 58px;
+  
+}
 .mat-column-EquipoTransporte {
-  flex: 0 0 140px;
+  flex: 0 0 160px;
   
 }
 
 .mat-column-actionsColumn {
-  flex: 0 0 180px;
+  flex: 0 0 120px;
   
 }
 
@@ -50,3 +64,27 @@ th.mat-header-cell{
   padding-left: 10px;
 } */
 
+
+.speed-dial-container {
+  position: absolute;
+  right: 15px;
+}
+
+.speed-dial-container.top {
+  top: 15px;
+}
+
+.speed-dial-container.bottom {
+  bottom: 15px;
+}
+.highlight{
+  background: #e8f0fe;
+}
+
+::ng-deep .mat-checkbox .mat-accent .mat-checkbox-frame {
+  border-color: #757575;
+}
+
+::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+  background-color: #3f51b5 !important;
+}

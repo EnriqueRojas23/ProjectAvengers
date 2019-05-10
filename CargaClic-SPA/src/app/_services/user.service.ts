@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { User } from '../_models/user';
+import { environment } from 'src/environments/environment';
 
 
 const httpOptions = {
@@ -16,7 +17,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl = 'http://localhost:5000/api/users/';
+  baseUrl = environment.baseUrl + '/api/users/';
   constructor(private http: HttpClient) { }
 
   registrar(model: any){

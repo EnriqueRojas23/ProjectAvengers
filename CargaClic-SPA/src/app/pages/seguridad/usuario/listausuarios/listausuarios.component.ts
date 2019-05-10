@@ -15,6 +15,7 @@ import { RolUserForRegisterResult } from 'src/app/_models/paginarol';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
 export interface DialogData {
+  id: number;
   animal: string;
   name: string;
 }
@@ -93,6 +94,8 @@ export class DialogOverviewExampleDialog {
 export class NgbdModalConfirmAutofocus {
   constructor(public modal: NgbActiveModal) {}
 }
+
+
 declare var $: any;
 
 
@@ -133,7 +136,7 @@ export class ListausuariosComponent implements OnInit {
     this.loading = true;
 
     this.userService.getUsers().subscribe(list => {
-      console.log(list);
+      
       this.users = list;
      this.loading = false;
     this.listData = new MatTableDataSource(this.users);

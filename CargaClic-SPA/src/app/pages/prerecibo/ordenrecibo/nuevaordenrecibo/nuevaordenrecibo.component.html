@@ -20,12 +20,18 @@
                 <div class="input-div">
                     <label class="col-12 col-sm-3 col-form-label text-sm-right" for="power">Cliente Propietario</label>
                   <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                      <mat-select required   [(value)]="model.PropietarioId"   placeholder="Selección">
-                        <mat-option  *ngFor="let pow of clientes" [value]="pow.val">
+            
+                      <mat-select required [formControl]="ClientesCtrl" [(value)]="model.PropietarioControl"   placeholder="Selección" #singleSelect>
+                          <mat-option>
+                              <ngx-mat-select-search [placeholderLabel]="'Buscar'" [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
+                            </mat-option>
+                        <mat-option  *ngFor="let pow of filteredClientes | async" [value]="pow">
                             {{pow.viewValue}}
                         </mat-option>
                       </mat-select>
                     </mat-form-field>
+
+
                 
                 </div> 
 
@@ -36,7 +42,7 @@
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                       </mat-form-field>
-                      <div class="alert alert-danger" *ngIf="FechaEsperada.errors && !isValidFormSubmitted"> 
+                      <div class="alert alert-danger" *ngIf="FechaEsperada.errors  "> 
                           <div *ngIf="FechaEsperada.errors.datetime">
                           Email debe de tener una dirección válida
                          </div>
@@ -57,7 +63,7 @@
                 <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                   <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.guiaremision" name="guiaremision" #guiaremision="ngModel" type="text">
                 </mat-form-field>
-                <div class="alert alert-danger" *ngIf="guiaremision.errors && !isValidFormSubmitted"> 
+                <div class="alert alert-danger" *ngIf="guiaremision.errors  "> 
                     <div *ngIf="guiaremision.errors.minlength">
                     Debe tener mas de 5 caracteres.
                   </div>

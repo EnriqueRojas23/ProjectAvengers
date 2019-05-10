@@ -11,6 +11,8 @@ namespace CargaClic.Domain.Mantenimiento
         public int FamiliaId {get;set;}
         public string Codigo {get;set;}
         public string DescripcionLarga {get;set;}
+        public int UnidadMedidaId {get;set;}
+        public decimal Peso {get;set;}
 
 
     }

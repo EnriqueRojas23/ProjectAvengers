@@ -4,8 +4,8 @@
                   <div class="widget widget-tile">
                     <div class="chart sparkline" id="spark1"></div>
                     <div class="data-info">
-                      <div class="desc">New Users</div>
-                      <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span class="number" data-toggle="counter" data-end="113">0</span>
+                      <div class="desc">Recibos Pendientes</div>
+                      <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span class="number" data-toggle="counter" data-end="5">0</span>
                       </div>
                     </div>
                   </div>
@@ -14,7 +14,7 @@
                   <div class="widget widget-tile">
                     <div class="chart sparkline" id="spark2"></div>
                     <div class="data-info">
-                      <div class="desc">Monthly Sales</div>
+                      <div class="desc">Ocupabilidad %</div>
                       <div class="value"><span class="indicator indicator-positive mdi mdi-chevron-up"></span><span class="number" data-toggle="counter" data-end="80" data-suffix="%">0</span>
                       </div>
                     </div>
@@ -24,7 +24,7 @@
                   <div class="widget widget-tile">
                     <div class="chart sparkline" id="spark3"></div>
                     <div class="data-info">
-                      <div class="desc">Impressions</div>
+                      <div class="desc">Recibos Total</div>
                       <div class="value"><span class="indicator indicator-positive mdi mdi-chevron-up"></span><span class="number" data-toggle="counter" data-end="532">0</span>
                       </div>
                     </div>
@@ -34,8 +34,8 @@
                   <div class="widget widget-tile">
                     <div class="chart sparkline" id="spark4"></div>
                     <div class="data-info">
-                      <div class="desc">Downloads</div>
-                      <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-down"></span><span class="number" data-toggle="counter" data-end="113">0</span>
+                      <div class="desc">Excepciones</div>
+                      <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-down"></span><span class="number" data-toggle="counter" data-end="2">0</span>
                       </div>
                     </div>
                   </div>
@@ -54,35 +54,35 @@
             </div>
             <div class="button-toolbar d-none d-md-block">
               <div class="btn-group">
-                <button class="btn btn-secondary" type="button">Week</button>
-                <button class="btn btn-secondary active" type="button">Month</button>
-                <button class="btn btn-secondary" type="button">Year</button>
+                <button class="btn btn-secondary" type="button">Semana</button>
+                <button class="btn btn-secondary active" type="button">Mes</button>
+                <button class="btn btn-secondary" type="button">Año</button>
               </div>
               <div class="btn-group">
-                <button class="btn btn-secondary" type="button">Today</button>
+                <button class="btn btn-secondary" type="button">Hoy</button>
               </div>
-            </div><span class="title">Recent Movement</span>
+            </div><span class="title">Movimientos de Almacén</span>
           </div>
           <div class="widget-chart-container">
             <div class="widget-chart-info">
               <ul class="chart-legend-horizontal">
-                <li><span data-color="main-chart-color1"></span> Purchases</li>
-                <li><span data-color="main-chart-color2"></span> Plans</li>
-                <li><span data-color="main-chart-color3"></span> Services</li>
+                <li><span data-color="main-chart-color1"></span> Ingresos</li>
+                <li><span data-color="main-chart-color2"></span> Salidas</li>
+                <li><span data-color="main-chart-color3"></span> Servicios</li>
               </ul>
             </div>
             <div class="widget-counter-group widget-counter-group-right">
               <div class="counter counter-big">
                 <div class="value">25%</div>
-                <div class="desc">Purchase</div>
+                <div class="desc">Ingresos</div>
               </div>
               <div class="counter counter-big">
                 <div class="value">5%</div>
-                <div class="desc">Plans</div>
+                <div class="desc">Salidas</div>
               </div>
               <div class="counter counter-big">
                 <div class="value">5%</div>
-                <div class="desc">Services</div>
+                <div class="desc">Servicios</div>
               </div>
             </div>
             <div id="main-chart" style="height: 260px;"></div>
@@ -104,13 +104,13 @@
                 <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Separated link</a>
               </div>
             </div>
-            <div class="title">Purchases</div>
+            <div class="title">Ingresos</div>
           </div>
           <div class="card-body table-responsive">
             <table class="table table-striped table-borderless">
               <thead>
                 <tr>
-                  <th style="width:40%;">Product</th>
+                  <th style="width:40%;">Producto</th>
                   <th class="number">Price</th>
                   <th style="width:20%;">Date</th>
                   <th style="width:20%;">State</th>

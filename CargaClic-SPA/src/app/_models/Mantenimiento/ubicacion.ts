@@ -5,3 +5,7 @@ export interface Ubicacion {
     estado: string ;
 }
 
+export interface Area {
+    id:number;
+    nombre: string;
+}

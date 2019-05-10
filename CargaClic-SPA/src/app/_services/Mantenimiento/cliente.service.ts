@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cliente } from 'src/app/_models/Mantenimiento/cliente';
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,7 +18,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class ClienteService {
-  baseUrl = 'http://localhost:5000/api/cliente/';
+  baseUrl = environment.baseUrl + '/api/cliente/';
 
 constructor(private http: HttpClient) { }
 

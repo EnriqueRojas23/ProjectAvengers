@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { AlertifyService } from './alertify.service';
 import { Router } from '@angular/router';
 import { RolUser } from '../_models/roluser';
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -23,7 +24,7 @@ const httpOptions = {
   providedIn: 'root'
 })  
 export class RolService {
-  baseUrl = 'http://localhost:5000/api/roles/';
+  baseUrl = environment.baseUrl + '/api/roles/';
   constructor(private http: HttpClient, ) { }
 
   getAll() : Observable<Rol[]> {

@@ -43,7 +43,7 @@ namespace CargaClic.Handlers.Seguridad
             return entity;
         }
 
-        public void Delete(T entity) {  _context.Remove(entity);  }
+        public void Delete(T entity) {  _context.Remove(entity); _context.SaveChanges();  }
 
         public void DeleteAll(IEnumerable<T> entity) {  _context.RemoveRange(entity);  _context.SaveChanges(); }
 

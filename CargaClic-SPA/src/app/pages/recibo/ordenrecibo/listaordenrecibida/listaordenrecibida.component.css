@@ -3,8 +3,8 @@
   margin-right: 8px;
 }
 .mat-column-nombreEstado {
-  flex: 0 0 80px;
-  text-align: right;
+  flex: 0 0 180px;
+  
   
 }
 .mat-column-NumOrden {
@@ -12,6 +12,11 @@
 }
 .mat-column-propietario {
   flex:-1 0 140px;
+  
+  
+}
+.mat-column-almacen {
+  flex:-1 0 40px;
   
   
 }
@@ -25,7 +30,7 @@
 }
 
 .mat-column-actionsColumn {
-  flex: 0 0 60px;
+  flex: 0 0 140px;
   
 }
 

@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { DateAdapter, MAT_DATE_FORMATS, MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
-import { AppDateAdapter, APP_DATE_FORMATS } from 'src/app/pages/graficas1/datepicker.extend';
-import { OrdenRecibo } from 'src/app/_models/Recepcion/ordenrecibo';
+import { AppDateAdapter, APP_DATE_FORMATS } from 'src/app/pages/account-settings/datepicker.extend';
 import { ProductoService } from 'src/app/_services/Mantenimiento/producto.service';
 import { Producto } from 'src/app/_models/Mantenimiento/producto';
 import { Dropdownlist } from 'src/app/_models/Constantes';
@@ -44,21 +43,18 @@ export class DialogBuscarProducto {
     
   }
   seleccionarProducto(row: any){
-
-     
      //console.log( this.model.descripcionLarga =this.productos.filter(x => x.id == row)[0]);
      this.dialogRef.close( this.model.descripcionLarga =this.productos.filter(x => x.id == row)[0]);
-
   }
 
   buscar(){
     this.ordenReciboService.obtenerOrden(this.data.codigo).subscribe(x=> {
-      
-       this.model.propietarioId =    x.propietarioId;
-   
-
+        this.model.propietarioId =    x.propietarioId;
+        console.log(x);
         this.productoService.getAll(this.model.codigo,this.model.propietarioId).subscribe(list => {
         
+        console.log(list);
+
         this.productos = list;
         //this.loading = false;
         this.listData = new MatTableDataSource(this.productos);
@@ -78,9 +74,7 @@ export class DialogBuscarProducto {
             })
           }
         });
-  })
-
-
+    })
   }
 }
 
@@ -123,26 +117,23 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
      private router: Router  ) { }
 
   ngOnInit() {
-        this.model.linea = 'Autogenerado';
-        this.model.OrdenReciboId  = this.activatedRoute.snapshot.params["uid"];
-        this.generalService.getAll(3).subscribe(resp=>
-          {
-            
-            resp.forEach(element => {
-              this.clientes.push({
-                val: element.id ,
-                viewValue: element.nombreEstado
-              })
-            });
-          })
-
-        
-
+      this.model.linea = 'Autogenerado';
+      this.model.OrdenReciboId  = this.activatedRoute.snapshot.params["uid"];
+      this.generalService.getAll(3).subscribe(resp=>
+        {
+          
+          resp.forEach(element => {
+            this.clientes.push({
+              val: element.id ,
+              viewValue: element.nombreEstado
+            })
+          });
+        })
   }
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogBuscarProducto, {
       width: '650px',
-      height: '400px',
+      height: '500px',
       data: {codigo: this.model.OrdenReciboId, descripcion: ""}
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -153,8 +144,6 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
   }
 
   registrar(form: NgForm){
-     
-
     if (form.invalid) {
       return; 
     }
@@ -165,18 +154,13 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
     },() => {
       this.alertify.success("Se actualizó correctamente.");
       this.router.navigate(['/verordenrecibo',  this.model.OrdenReciboId ]);
-
     })
-
-
-    
-  
   }
 
 
 
   onBlurMethod(codigo: string){
-    alert(codigo);
+    
   }
   numberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
@@ -185,6 +169,9 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
     }
     return true;
 
+  }
+  cancel(){
+    this.router.navigate(['/listaordenrecibo']);
   }
 
 }

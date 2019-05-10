@@ -3,9 +3,10 @@ import { MatTableDataSource, DateAdapter, MAT_DATE_FORMATS, MatSort, MatPaginato
 
 import { OrdenReciboService } from 'src/app/_services/Recepcion/ordenrecibo.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppDateAdapter, APP_DATE_FORMATS } from 'src/app/pages/graficas1/datepicker.extend';
+import { AppDateAdapter, APP_DATE_FORMATS } from 'src/app/pages/account-settings/datepicker.extend';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrdenReciboDetalle } from 'src/app/_models/Recepcion/ordenrecibo';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 
 @Component({
@@ -40,7 +41,9 @@ export class VerordenreciboComponent implements OnInit {
 	}
   constructor(private ordenServicio : OrdenReciboService
     ,private activatedRoute: ActivatedRoute
-    ,  private router: Router) { }
+    ,  private router: Router
+    ,private alertify: AlertifyService
+    ) { }
 
   ngOnInit() {
     this.id  = this.activatedRoute.snapshot.params["uid"];
@@ -83,12 +86,61 @@ export class VerordenreciboComponent implements OnInit {
   }
 
   nuevodetalle(){
-    //onsole.log(this.model.detalles);
-
-    
-     
     this.router.navigate(['/nuevaordenrecibodetalle', this.id]);
-    
   }
+  delete(id){
+    this.ordenServicio.deleteOrderDetail(id).subscribe(resp => {
 
+    this.ordenServicio.obtenerOrden(this.id).subscribe(resp => { 
+      this.model = resp;
+      
+      
+      this.listData = new MatTableDataSource(this.model.detalles);
+      this.listData.paginator = this.paginator;
+      this.listData.sort = this.sort;
+      
+      this.listData.filterPredicate = (data,filter) => {
+        return this.displayedColumns.some(ele => {
+          
+          if(ele !='Id' && ele != 'activo' && ele != 'publico')
+             {
+                return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+           
+             }
+          })
+         }
+      
+    }, error => {
+       
+    }, () => { 
+          
+    });
+     }, error => {
+       console.log(error);
+      if(error = "err020")
+      this.alertify.error("Esta Orden de Recibo tiene productos asociados.");
+      else
+      this.alertify.error("Ocurrió un error inesperado.");
+
+      }, () => { 
+
+        this.listData.filterPredicate = (data,filter) => {
+          return this.displayedColumns.some(ele => {
+            
+            if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
+               {
+                 
+                  return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+             
+               }
+            })
+           };
+
+
+        
+    });
+  }
+  regresar(){
+    this.router.navigate(['/listaordenrecibo']);
+  }
 }

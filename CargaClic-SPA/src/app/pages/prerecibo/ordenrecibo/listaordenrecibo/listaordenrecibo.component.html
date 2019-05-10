@@ -1,12 +1,6 @@
 
 <div class="page-head">
    <h2 class="page-head-title">Listado de Órdenes de Recibo</h2>
-  <!-- <nav aria-label="breadcrumb" role="navigation">
-    <ol class="breadcrumb page-head-nav">
-      <li class="breadcrumb-item"><a href="#">Home</a></li>
-      <li class="breadcrumb-item active">Listado de Usuarios</li>
-    </ol>
-  </nav> -->
 </div>
 
 <div class="main-content container-fluid">
@@ -15,30 +9,43 @@
         <div class="card-body">
             <div class="row">
           
+                <div class="col-md-4">
+                    <label class="control-label" for="username">Cliente:</label>
+                    <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                        <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
+                         <mat-option>
+                             <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
+                              {{pow.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
                     <div class="col-md-4">
                       <label class="control-label" for="username">Intervalo:</label>
                        <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
                           <mat-select  [(value)]="model.intervalo" >
-                            <mat-option  *ngFor="let pow of clientes"  [value]="pow.val">
+                            <mat-option  *ngFor="let pow of intervalo"  [value]="pow.val">
                                 {{pow.viewValue}}
                             </mat-option>
                           </mat-select>
                         </mat-form-field>
                     </div>
+                    <div class="col-md-4">
+                        <label class="control-label" for="username">Estado:</label>
+                        <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                            <mat-select  [(value)]="model.estadoIdfiltro" >
+                              <mat-option  *ngFor="let pow of estados"  [value]="pow.val">
+                                  {{pow.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
   
-                <div class="col-md-4">
-                  <label class="control-label" for="username">Estado:</label>
-                  <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                      <mat-select  [(value)]="model.estadoIdfiltro" >
-                        <mat-option  *ngFor="let pow of estados"  [value]="pow.val">
-                            {{pow.viewValue}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-2 offset-md-10">
                     
-                      <button class="btn btn-block btn-primary"  (click)="edit(row.id)"  type="button">Buscar</button>
+                      <button class="btn btn-block btn-primary"  (click)="buscar()"  type="button">Buscar</button>
                     
                 </div>
              
@@ -53,25 +60,57 @@
   <div class="card card-border-color card-border-color-primary">
     <div class="card-header card-header-divider">
         
-     <div class="row">
-          <b> Ordenes de Recibo |  </b>  <span class="card-subtitle">   Listado de ordenes de recibo del sistema</span>
-        </div>
-      </div>
-
-          <div class="search-div">
-              <div class="input-container">
-              <i class="fa fa-search"></i>
-              <mat-form-field class="search-form-field" >
-                <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" (keyup)="applyFilter()">
-              </mat-form-field>
-              </div>
+      <div  [hidden]="!checkSelects()" class="row">
+            <b> Órdenes de Recibo |  </b>  <span class="card-subtitle">   Listado de ordenes de recibo del sistema</span>
           </div>
-   
+          <div  [hidden]="checkSelects()" class="row">
+              <b> Órdenes seleccionadas  :  {{selection.selected.length}} </b> 
+          </div>
+      </div>
+     
+    <div class="row">
+        <div class="col-md-1">
+            <button class="btn-buttons btn-outline-primary"  > <i   class="fa-2x  fas fa-ellipsis-v"></i></button> 
+        </div>
+        <div [hidden]="checkSelects()" class="col-md-7">
+            <button class="btn-buttons btn-outline-primary" ngbTooltip="Vincular Equipo Transporte"  (click)="equipotransporte()"  type="button"><i class="fa-2x fas fa-truck"></i></button>  
+            
+        </div>
+        <div [hidden]="!checkSelects()" class="col-md-7">
+        </div>
+        <div  class="col-md-4" >
+            <div class="input-container">
+                <i class="fa fa-search"></i>
+                <mat-form-field class="search-form-field" >
+                  <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" (keyup)="applyFilter()">
+                </mat-form-field>
+                </div>
+          </div>
+    </div>
 
+ 
     <div class="card-body">
         
         <div  class="mat-elevation-z8">
             <mat-table #table [dataSource] = "listData" matSort >
+
+
+                <ng-container matColumnDef="select">
+                    <mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                      </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)"
+                                    [aria-label]="checkboxLabel(row)">
+                      </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
                <!-- Checkbox Column -->
                <ng-container matColumnDef="almacen">
                   <mat-header-cell *matHeaderCellDef mat-sort-header >  Almacén </mat-header-cell>
@@ -82,11 +121,9 @@
                <ng-container matColumnDef="numOrden">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> N° Orden</mat-header-cell>
                 <mat-cell  *matCellDef="let orden" > 
-                    <!-- <button class="btn btn-space btn-outline-primary" (click)="ver(orden.ordenReciboId)"  type="button"> -->
-                      <!-- <i class="mdi mdi-search"></i> -->
-                      <!-- <a class="router-link"  (click)="ver(orden.ordenReciboId)"> OR{{orden.numOrden}}  </a> -->
+                    
                       <span class="label label-info pull-xs-center">{{orden.numOrden}}</span>
-                    <!-- </button> -->
+                    
             
                 </mat-cell>
               </ng-container>
@@ -97,18 +134,18 @@
                     <mat-cell *matCellDef="let user"> {{user.propietario}} </mat-cell>
                   </ng-container>
           
-                  <!-- [style.color]="'#ff0000'" -->
+                  
           
                
                 <ng-container matColumnDef="nombreEstado">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
-                    <mat-cell *matCellDef="let user"> 
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
+                      <mat-cell *matCellDef="let user"> 
 
-                   <div *ngIf="user.nombreEstado == 'Planeado' then thenBlock else elseBlock"></div>
-                  <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.nombreEstado}}     </div>     </ng-template>
-                  <ng-template #elseBlock>   <div>{{user.nombreEstado}}     </div>   </ng-template>  
-                    </mat-cell>
-                  </ng-container>
+                    <div *ngIf="user.nombreEstado == 'Planeado' then thenBlock else elseBlock"></div>
+                    <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.nombreEstado}}     </div>     </ng-template>
+                    <ng-template #elseBlock>   <div>{{user.nombreEstado}}     </div>   </ng-template>  
+                      </mat-cell>
+                </ng-container>
 
                   <ng-container matColumnDef="ubicacion">
                       <mat-header-cell *matHeaderCellDef mat-sort-header >  Ubicación </mat-header-cell>
@@ -116,7 +153,7 @@
                     </ng-container>
 
 
-              <ng-container matColumnDef="EquipoTransporte">
+              <ng-container matColumnDef="equipotransporte">
                 <mat-header-cell *matHeaderCellDef> Equipo de Transporte </mat-header-cell>
                 <mat-cell *matCellDef="let user"> 
                   <div *ngIf="user.equipotransporte then thenBlock else elseBlock"></div>
@@ -125,19 +162,11 @@
                      Sin equipo 
                    </ng-template>  
                 
-                  <!-- {{user.dateOfBirth | date:'dd-MM-yyyy' }}  -->
+                  
                 
                 </mat-cell>
               </ng-container>
-                
-              <ng-container matColumnDef="Urgente">
-                <mat-header-cell *matHeaderCellDef> Urgente </mat-header-cell>
-                <mat-cell *matCellDef="let user">
-                    <div *ngIf="user.urgente then thenBlock else elseBlock"></div>
-                    <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">Urgente     </div>     </ng-template>
-                    <ng-template #elseBlock>Normal</ng-template>  
-                </mat-cell>
-              </ng-container>
+
 
                     <ng-container matColumnDef="fechaEsperada">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Esperada</mat-header-cell>
@@ -157,29 +186,21 @@
            
                   <ng-container matColumnDef="actionsColumn">
                       <mat-header-cell *matHeaderCellDef>
-                          <div class="example-button-row">
-                              <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/nuevaordenrecibo"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
-                          </div>
-               
-                         
-                         
+                           <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/nuevaordenrecibo"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> 
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row">
-                          <button class="btn btn-space btn-outline-primary" ngbTooltip="Vincular Equipo Transporte"  (click)="equipotransporte(row.ordenReciboId)"  type="button"><i class="icon mdi mdi-truck"></i></button>
-                          <button  class="btn btn-space btn-outline-primary" ngbTooltip="Asignar Puerta" (click)="openDoor(row.ordenReciboId)" type="button"><i class="fas fa-door-closed"></i></button>
-                          <!-- <button class="btn btn-space btn-outline-primary" ngbTooltip="Dar Entrada a Camión"    matTooltipPosition="left" (click)="openDialog(row.id)" type="button"><i class="fas fa-check"></i></button> -->
-                          <button  class="btn btn-space btn-outline-primary" (click)="open(row)" type="button"><i class="fas fa-trash"></i></button>
+                          <button   class="btn btn-space btn-outline-primary" ngbTooltip="Editar Orden" (click)="edit(row.ordenReciboId)" type="button"><i class="fas fa-edit"></i></button>
+                          <button [swal]="deleteSwal" (confirm)="delete(row.ordenReciboId)"  [disabled]="row.nombreEstado != 'Planeado'"  class="btn btn-space btn-outline-primary" ngbTooltip="Eliminar Orden" type="button"><i class="fas fa-trash"></i></button>
                           <button  class="btn btn-space btn-outline-primary" (click)="ver(row.ordenReciboId)" type="button"><i class="fas fa-search"></i></button>
-
-                          
-                      </mat-cell>
+                        </mat-cell>
                   </ng-container>
          
           
             <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;" >
-            <!-- [ngClass]="{'highlight': selectedRowIndex == row.id}"
-            (click)="highlight(row)"> -->
+            <mat-row *matRowDef="let row; columns: displayedColumns;" 
+            
+            [ngClass]="{ 'highlight': selectedRowIndex == row.id}"
+             (click)="highlight(row)"> 
 
             </mat-row>
           
@@ -197,5 +218,15 @@
 </div>
 </div>
 
+<swal
+  #deleteSwal
+  title="Eliminar la Orden"
+  text="¿Esta seguro que desea eliminar la orden?"
+  type="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  [options]="{ confirmButtonText: 'Elminar' }"
+  >
+</swal>
 
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate"></ngx-loading>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

@@ -35,7 +35,14 @@ using CargaClic.Domain.Prerecibo;
 using CargaClic.Contracts.Parameters.Mantenimiento;
 using CargaClic.Handlers.Mantenimiento;
 using CargaClic.Repository.Interface;
-using CargaClic.Repository.Repository;
+
+using CargaClic.Repository;
+using CargaClic.Contracts.Parameters.Inventario;
+using CargaClic.Handlers.Inventario;
+using CargaClic.Domain.Inventario;
+using CargaClic.Repository.Interface.Mantenimiento;
+using CargaClic.Repository.Repository.Mantenimiento;
+using CargaClic.ReadRepository.Interface.Mantenimiento;
 
 namespace CargaClic.API
 {
@@ -56,9 +63,9 @@ namespace CargaClic.API
              services.AddAutoMapper();
              services.AddTransient<Seed>();
              //services.AddTransient<Seed>();
+
              services.AddScoped<IRepository<User>,Repository<User>>();
              services.AddScoped<IRepository<Rol>,Repository<Rol>>();
-             
              services.AddScoped<IRepository<RolPagina>,Repository<RolPagina>>();
              services.AddScoped<IRepository<Pagina>,Repository<Pagina>>();
              services.AddScoped<IRepository<RolUser>,Repository<RolUser>>();
@@ -66,6 +73,7 @@ namespace CargaClic.API
 
              
 
+             services.AddScoped<IMantenimientoRepository,MantenimientoRepository>();
              services.AddScoped<IAuthRepository,AuthRepository>();
              services.AddScoped<IQueryHandler<ListarUsuariosParameters>,ListarUsuariosQuery>();
              services.AddScoped<IQueryHandler<ListarMenusxRolParameter>,ListarMenusxRolQuery>();
@@ -76,19 +84,39 @@ namespace CargaClic.API
             services.AddScoped<IRepository<Cliente>, Repository<Cliente>>();
             services.AddScoped<IRepository<Proveedor>, Repository<Proveedor>>();
             services.AddScoped<IRepository<Vehiculo>, Repository<Vehiculo>>();
+            services.AddScoped<IRepository<Huella>, Repository<Huella>>();
             services.AddScoped<IRepository<Chofer>, Repository<Chofer>>();
+            services.AddScoped<IRepository<ValorTabla>, Repository<ValorTabla>>();
+            services.AddScoped<IProductoRepository, ProductoRepository>();
+
+
             services.AddScoped<IQueryHandler<ListarProductosParameter>,ListarProductosQuery>();
             services.AddScoped<IQueryHandler<ListarPlacasParameter>,ListarPlacasQuery>();
             services.AddScoped<IQueryHandler<ListarProveedorParameter>,ListarProveedorQuery>();
             services.AddScoped<IQueryHandler<ObtenerEquipoTransporteParameter>,ObtenerEquipoTransporteQuery>();
+            services.AddScoped<IQueryHandler<ListarEquipoTransporteParameter>,ListarEquipoTransporteQuery>();
 
+
+
+            services.AddScoped<IInventarioRepository,InventarioRepository>();
+            
+            
+            services.AddScoped<IQueryHandler<ListarOrdenReciboParameter>,ListarOrdenReciboQuery>();
+            services.AddScoped<IQueryHandler<ObtenerOrdenReciboParameter>,ObtenerOrdenReciboQuery>();
+            services.AddScoped<IQueryHandler<ObtenerOrdenReciboDetalleParameter>,ObtenerOrdenReciboDetalleQuery>();
+            services.AddScoped<IQueryHandler<ListarUbicacionesParameter>,ListarUbicacionesQuery>();
             services.AddScoped<IRepository<OrdenRecibo>,Repository<OrdenRecibo>>();
             services.AddScoped<IRepository<OrdenReciboDetalle>,Repository<OrdenReciboDetalle>>();
             services.AddScoped<IOrdenReciboRepository,OrdenReciboRepository>();
             
-            services.AddScoped<IQueryHandler<ListarOrdenReciboParameter>,ListarOrdenReciboQuery>();
-            services.AddScoped<IQueryHandler<ObtenerOrdenReciboParameter>,ObtenerOrdenReciboQuery>();
-            services.AddScoped<IQueryHandler<ListarUbicacionesParameter>,ListarUbicacionesQuery>();
+
+            
+            
+            services.AddScoped<IQueryHandler<ListarOrdenReciboByEquipoTransporteParameter>,ListarOrdenReciboByEquipoTransporteQuery>();
+            services.AddScoped<IQueryHandler<ListarInventarioParameter>,ListarInventarioQuery>();
+            services.AddScoped<IRepository<Area>,Repository<Area>>();
+            services.AddScoped<IRepository<InventarioGeneral>,Repository<InventarioGeneral>>();
+                 
 
              
              services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -110,7 +138,17 @@ namespace CargaClic.API
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                  app.UseExceptionHandler(builder=> { 
+                    builder.Run(async context => {
+                        context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                        if(error != null)
+                        {
+                            context.Response.AddApplicationError(error.Error.Message); 
+                            await context.Response.WriteAsync(error.Error.Message); 
+                        }
+                    });
+                });
             }
             else
             {
@@ -121,7 +159,7 @@ namespace CargaClic.API
                         if(error != null)
                         {
                             context.Response.AddApplicationError(error.Error.Message); 
-                            await context.Response.WriteAsync(error.Error.Message);
+                            await context.Response.WriteAsync(error.Error.Message); 
                         }
                     });
                 });

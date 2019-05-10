@@ -1,0 +1,19 @@
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+.mat-row {
+  cursor: pointer;
+}
+
+.mat-column-puerta {
+    flex: 0 0 150px;
+    text-align: right;
+    
+  }
+  .mat-column-equipoTransporte {
+    flex: 0 0 150px;
+    text-align: right;
+    
+  }

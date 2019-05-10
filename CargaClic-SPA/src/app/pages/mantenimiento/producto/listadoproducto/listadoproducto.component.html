@@ -1,0 +1,132 @@
+
+<div class="page-head">
+    <h2 class="page-head-title">Mantenimiento de Producto del Sistema</h2>
+   <nav aria-label="breadcrumb" role="navigation">
+     <ol class="breadcrumb page-head-nav">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+        <li class="breadcrumb-item active">Listado de Productos</li>
+        <!-- <li class="breadcrumb-item active">Nuevo Producto</li>  -->
+      </ol>
+     </ol>
+   </nav>
+ </div>
+ 
+ <div class="main-content container-fluid">
+
+ <div class="col-md-12">
+ 
+ 
+   <div class="card card-border-color card-border-color-primary">
+     <div class="card-header card-header-divider">
+         
+      <div class="row">
+           <b> Productos |  </b>  <span class="card-subtitle">   Listado de productos del sistema</span>
+         </div>
+       </div>
+ 
+       <div class="row">
+          <div class="col-md-1">
+              <button class="btn-buttons btn-outline-primary"  > <i   class="fa-2x  fas fa-ellipsis-v"></i></button> 
+          </div>
+         
+          <div  class="col-md-7">
+          </div>
+          <div  class="col-md-4" >
+              <div class="input-container">
+                  <i class="fa fa-search"></i>
+                  <mat-form-field class="search-form-field" >
+                    <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" >
+                  </mat-form-field>
+                  </div>
+            </div>
+      </div>
+ 
+     <div class="card-body">
+         
+         <div  class="mat-elevation-z8">
+             <mat-table #table [dataSource] = "listData" matSort >
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="almacen">
+                   <mat-header-cell *matHeaderCellDef mat-sort-header >  Almacén </mat-header-cell>
+                   <mat-cell *matCellDef="let producto"> {{producto.almacen}} </mat-cell>
+                 </ng-container>
+ 
+ 
+                <ng-container matColumnDef="cliente">
+                 <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente</mat-header-cell>
+                 <mat-cell *matCellDef="let producto"> {{producto.cliente}} </mat-cell>
+               </ng-container>
+         
+           
+                 <ng-container matColumnDef="familia">
+                     <mat-header-cell *matHeaderCellDef mat-sort-header >  Familia </mat-header-cell>
+                     <mat-cell *matCellDef="let producto"> {{producto.familia}} </mat-cell>
+                   </ng-container>
+           
+           
+                
+ 
+                      <ng-container matColumnDef="codigo">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header >  Código </mat-header-cell>
+                          <mat-cell *matCellDef="let producto"> {{producto.codigo}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="descripcionLarga">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header >  Descripción  </mat-header-cell>
+                            <mat-cell *matCellDef="let producto"> {{producto.descripcionLarga}} </mat-cell>
+                          </ng-container>
+
+                          <!-- <ng-container matColumnDef="largo">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header >  Largo </mat-header-cell>
+                              <mat-cell *matCellDef="let producto"> {{producto.largo}} </mat-cell>
+                            </ng-container> 
+
+                        <ng-container matColumnDef="alto">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header >  Alto </mat-header-cell>
+                            <mat-cell *matCellDef="let producto"> {{producto.alto}} </mat-cell>
+                          </ng-container>
+ 
+ 
+                          <ng-container matColumnDef="ancho">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header >  Ancho </mat-header-cell>
+                              <mat-cell *matCellDef="let producto"> {{producto.ancho}} </mat-cell>
+                            </ng-container> -->
+ 
+            
+                   <ng-container matColumnDef="actionsColumn">
+                       <mat-header-cell *matHeaderCellDef>
+                          <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/mantenimiento/nuevoproducto"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> 
+
+                       </mat-header-cell>
+                       <mat-cell *matCellDef="let row">
+                        <button class="btn  btn-outline-primary" (click)="verHuellas(row.id)" ngbTooltip="Huellas"  type="button"><i class="fas fa-box-open"></i></button>
+                          <button class="btn btn-space btn-outline-primary" ngbTooltip="Editar Usuario" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
+                          <button class="btn  btn-outline-primary" (click)="open(row)" ngbTooltip="Eliminar Usuario"  type="button"><i class="fa fa-trash"></i></button>
+                       </mat-cell>
+                   </ng-container>
+          
+           
+             <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
+             <mat-row *matRowDef="let row; columns: displayedColumns;" >
+             <!-- [ngClass]="{'highlight': selectedRowIndex == row.id}"
+             (click)="highlight(row)"> -->
+ 
+             </mat-row>
+           
+           
+             </mat-table>
+ 
+ 
+            <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+ 
+           </div>
+         
+     </div>
+    
+   </div>
+ </div>
+ </div>
+ 
+ 
+ <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

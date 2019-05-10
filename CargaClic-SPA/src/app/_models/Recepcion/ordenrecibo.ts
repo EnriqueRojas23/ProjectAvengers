@@ -1,14 +1,18 @@
+import { NumberSymbol } from "@angular/common";
+
 export interface OrdenRecibo {
-     OrdenReciboId	:  any ;
+     ordenReciboId	:  any ;
      numOrden	:  string ;
      propietarioId	:  number ;
      propietario	:  string ;
      AlmacenID	:  number ;
      Almacen	:  string ;
-     GuiaRemision	:  string ;
-     FechaEsperada	:  Date ;
-     FechaRegistro	:  Date ;
+     guiaRemision	:  string ;
+     fechaEsperada	:  Date ;
+     horaEsperada: string;
+     fechaRegistro	:  Date ;
      EstadoID	:  number ;
+     equipotransporte: string;
      NombreEstado:  string ;
      ubicacion: string;
      detalles: OrdenReciboDetalle[];
@@ -21,10 +25,15 @@ export interface OrdenReciboDetalle {
      ProductoId: any;
      producto: string;
      Lote: string;
-     HuellaId: number;
+     HuellaId?: number;
      FechaRegistro?: Date;
      EstadoId: number;
      cantidad: number;
+     cantidadRecibida: number;
+     cantidadFaltante: number;
+     cantidadSobrante: number;
+     fechaExpire?: Date;
+     propietarioId: number;
 
 }
 

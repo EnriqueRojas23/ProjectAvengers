@@ -1,0 +1,27 @@
+.mat-column-untQty {
+    flex: 0 0 100px;
+    }
+.mat-column-lodNum {
+    flex: 0 0 125px;
+    }
+.mat-column-descripcionlarga {
+    flex: 0 0 250px;
+    }
+.mat-column-select {
+    flex: 0 0 70px;
+}
+.mat-column-proximaubicacion {
+    flex: 0 0 140px;
+}
+.mat-column-ubicacion {
+    flex: 0 0 140px;
+}
+
+
+
+.mat-column-actionsColumn {
+    flex: 0 0 100px;
+}
+.mat-row {
+    cursor: pointer;
+  }

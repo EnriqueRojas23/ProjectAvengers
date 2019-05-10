@@ -1,0 +1,102 @@
+<div class="page-head">
+    <h2 class="page-head-title">Mantenimiento de Producto del Sistema</h2>
+    <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/mantenimiento/listadoproducto']" routerLinkActive="router-link-active" >Listado de Productos</a></li>
+        <li class="breadcrumb-item active">Nuevo Producto</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="main-content container-fluid">
+  
+    
+      <div class="col-md-12">
+        <div class="card card-border-color card-border-color-primary">
+          <div class="card-header card-header-divider">Datos de Producto<span class="card-subtitle">Nuevo Producto de sistema</span></div>
+          <div class="card-body ">
+            <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+
+            <div class="input-div">
+               <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cliente">Cliente</label>
+                <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                    <mat-select [formControl]="ClientesCtrl" [(value)]="model.ClienteId" >
+                      <mat-option>
+                          <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
+                          {{pow.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+              </div>
+              <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="familia">Familia</label>
+                   <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                       <mat-select  [(value)]="model.FamiliaId" >
+                         <mat-option  *ngFor="let pow of familia"  [value]="pow.val">
+                             {{pow.viewValue}}
+                         </mat-option>
+                       </mat-select>
+                     </mat-form-field>
+                 </div>
+              <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Código</label>
+                <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput autocomplete="off"  minlength="5" maxlength="10" required [(ngModel)]="model.codigo"  #codigo="ngModel" placeholder="SKU - Código de producto"  name="codigo" type="text">
+                </mat-form-field>
+                <!-- <div class="alert alert-danger" *ngIf="codigo.errors.minlength"> 
+                    <div *ngIf="codigo.errors.minlength">
+                    Usuario debe tener mas de 5 caracteres.
+                  </div>
+                 </div>	 -->
+              </div>
+              <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="descripcion">Descripción</label>
+                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput autocomplete="off"  minlength="3" maxlength="40"  required [(ngModel)]="model.DescripcionLarga"  #descripcion="ngModel" name="descripcion" placeholder="Descripción del producto" type="text">
+                </mat-form-field>
+                <!-- <div class="alert alert-danger" *ngIf="descripcion.errors.minlength"> 
+                    <div *ngIf="descripcion.errors.minlength">
+                    password debe tener mas de 5 caracteres.
+                </div>
+              </div> -->
+              </div>
+              <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Peso</label>
+                  <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput autocomplete="off"   required [(ngModel)]="model.peso"  #peso="ngModel"   name="peso" type="text">
+                  </mat-form-field>
+                </div>
+                <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="unidadmedida">Unidad Medida</label>
+                     <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                         <mat-select  [(value)]="model.UnidadMedidaId" >
+                           <mat-option  *ngFor="let pow of unidadMedida"  [value]="pow.val">
+                               {{pow.viewValue}}
+                           </mat-option>
+                         </mat-select>
+                       </mat-form-field>
+                   </div>
+ 
+                <div class="row pt-2 pt-sm-5 mt-1">
+                      <div class="col-sm-6 pl-0">
+                        <p class="text-right">
+                          <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                           <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button> 
+                    
+                        </p>
+                      </div>
+                    </div>
+       
+             
+            </form>
+          </div>
+          </div>
+        </div>
+      
+    </div>
+  
+  
+  
+  
