@@ -11,6 +11,8 @@ using CargaClic.Contracts.Results.Prerecibo;
 using CargaClic.Data.Interface;
 using CargaClic.Domain.Inventario;
 using CargaClic.Domain.Mantenimiento;
+using CargaClic.ReadRepository.Contracts.Inventario.Parameters;
+using CargaClic.ReadRepository.Interface.Inventario;
 using CargaClic.Repository.Contracts.Inventario;
 using CargaClic.Repository.Interface;
 using Common.QueryHandlers;
@@ -27,16 +29,19 @@ namespace CargaClic.API.Controllers.Mantenimiento
         private readonly IInventarioRepository _repoInventario;
         private readonly IMapper _mapper;
         private readonly IRepository<InventarioGeneral> _repo;
+        private readonly IInventarioReadRepository _repoReadInventario;
         private readonly IQueryHandler<ListarInventarioParameter> _handler;
 
         public InventarioController(IInventarioRepository repoInventario
         ,IMapper mapper 
         ,IRepository<InventarioGeneral> repo
+        ,IInventarioReadRepository repoReadInventario
         ,IQueryHandler<ListarInventarioParameter> handler )
         {
             _repoInventario = repoInventario;
             _mapper = mapper;
             _repo = repo;
+            _repoReadInventario = repoReadInventario;
             _handler = handler;
         }
         [HttpPost("register_inventario")]
@@ -44,6 +49,13 @@ namespace CargaClic.API.Controllers.Mantenimiento
         {
             //InventarioForRegister inventarioGeneral
             var createdInventario = await _repoInventario.RegistrarInventario(inventarioGeneral);
+            return Ok(createdInventario);
+        }
+        [HttpPost("registrar_ajuste")]
+        public async Task<IActionResult> RegisterAjuste(AjusteForRegister ajusteForRegister)
+        {
+            //InventarioForRegister inventarioGeneral
+            var createdInventario = await _repoInventario.RegistrarAjuste(ajusteForRegister);
             return Ok(createdInventario);
         }
         [HttpPost("asignar_ubicacion")]
@@ -56,6 +68,12 @@ namespace CargaClic.API.Controllers.Mantenimiento
         public async Task<IActionResult> terminar_acomodo(InventarioForFinishRecive inventarioForFinish)
         {
             var createdInventario = await _repoInventario.FinalizarRecibo(inventarioForFinish);
+            return Ok();
+        }
+        [HttpPost("merge_ajuste")]
+        public async Task<IActionResult> merge_ajuste(MergeInventarioRegister mergeInventarioRegister)
+        {
+            var createdInventario = await _repoInventario.MergeInventario(mergeInventarioRegister);
             return Ok();
         }
          [HttpPost("almacenamiento")]
@@ -79,6 +97,34 @@ namespace CargaClic.API.Controllers.Mantenimiento
         {
             var result = await _repo.Get(x=>x.Id == Id);
             return Ok(result);
+        }
+  
+        [HttpGet("GetAllInvetarioAjuste")]
+        public async Task<IActionResult> GetAllInvetarioAjuste(Guid ProductoId , 
+         int ClienteId, string FechaInicio, int EstadoId)
+        {
+            
+            var param = new GetAllInventarioParameters {
+                ClientId = ClienteId,
+                ProductoId = ProductoId,
+                EstadoId = EstadoId
+            };
+            
+            var resp = await  _repoReadInventario.GetAllInventario(param);
+            return Ok(resp);
+        }
+        [HttpGet("GetAllInvetarioAjusteDetalle")]
+        public async Task<IActionResult> GetAllInvetarioAjusteDetalle(long Id)
+        {
+            var resp = await  _repoReadInventario.GetAllInventarioDetalle(Id);
+            return Ok(resp);
+        }
+
+        [HttpPost("actualizar_inventario")]
+        public async Task<IActionResult> ActualizarInventario(InventarioForEdit inventarioGeneral)
+        {
+            var editedInventario = await _repoInventario.ActualizarInventario(inventarioGeneral);
+            return Ok(editedInventario);
         }
     }
 }

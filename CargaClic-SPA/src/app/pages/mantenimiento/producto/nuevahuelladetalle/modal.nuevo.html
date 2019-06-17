@@ -1,0 +1,114 @@
+
+
+
+<div class="modal-header">
+        <!-- <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true"><span class="mdi mdi-close"></span></button> -->
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h3>Nuevo detalle de huella</h3>
+        
+</div>
+<div class="modal-body">
+        <div class="container">
+            <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="huella">Unidad Medida</label>
+                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <mat-select   [(value)]="data.unidadMedidaId"    placeholder="Selección" required>
+                      <mat-option   *ngFor="let hue of UnidadMedida"  [value]="hue.val">
+                          {{hue.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+   
+                  <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidad">Cantidad</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">  
+                      <input matInput autocomplete="off" minlength="1" maxlength="2" (keypress)="numberOnly($event)" required [(ngModel)]="data.UntQty"  #cantidad="ngModel" name="cantidad" placeholder="Cantidad" type="text">
+                    </mat-form-field>
+                    <div *ngIf="cantidad.invalid && (cantidad.dirty || cantidad.touched)"  class="alert alert-danger">
+                      <div *ngIf="cantidad.errors.required">
+                        Debe ingresar la cantidad .
+                      </div>
+                    </div>
+                  </div>  
+                  <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="pesoneto">Peso Neto</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput autocomplete="off"  appTwoDigitDecimaNumber required  [(ngModel)]="data.Netwgt" #pesoneto="ngModel"  name="pesoneto" type="number">
+                      </mat-form-field>
+                      <div *ngIf="pesoneto.invalid && (pesoneto.dirty || pesoneto.touched)"  class="alert alert-danger">
+                      <div *ngIf="pesoneto.errors.required">
+                        Debe ingresar el peso.
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="pesobruto">Peso Bruto</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput autocomplete="off"  appTwoDigitDecimaNumber required  [(ngModel)]="data.Grswgt" #pesobruto="ngModel"  name="pesobruto" type="number">
+                      </mat-form-field>
+                      <div *ngIf="pesobruto.invalid && (pesobruto.dirty || pesobruto.touched)"  class="alert alert-danger">
+                      <div *ngIf="pesobruto.errors.required">
+                        Debe ingresar el peso.
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="alto">Alto</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput autocomplete="off"  appTwoDigitDecimaNumber required  [(ngModel)]="data.Height" #alto="ngModel"  name="alto" type="number">
+                      </mat-form-field>
+                      <div *ngIf="alto.invalid && (alto.dirty || alto.touched)"  class="alert alert-danger">
+                      <div *ngIf="alto.errors.required">
+                        Debe ingresar el peso.
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="largo">Largo</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput autocomplete="off"  appTwoDigitDecimaNumber required  [(ngModel)]="data.Length" #largo="ngModel"  name="largo" type="number">
+                      </mat-form-field>
+                      <div *ngIf="largo.invalid && (largo.dirty || largo.touched)"  class="alert alert-danger">
+                      <div *ngIf="largo.errors.required">
+                        Debe ingresar el peso.
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="ancho">Ancho</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput autocomplete="off"  appTwoDigitDecimaNumber required  [(ngModel)]="data.Width" #ancho="ngModel"  name="ancho" type="number">
+                      </mat-form-field>
+                      <div *ngIf="ancho.invalid && (ancho.dirty || ancho.touched)"  class="alert alert-danger">
+                      <div *ngIf="ancho.errors.required">
+                        Debe ingresar el peso.
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="row pt-2 pt-sm-5 mt-1">
+                      <div class="col-sm-6 pl-0">
+                        <p class="text-right">
+                          <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                          <button  (click)="onNoClick()"  class="btn btn-space btn-secondary">Cancel</button>
+                        </p>
+                      </div>
+                    </div>
+           
+               
+              </form>
+        </div>
+ </div>
+
+<div class="modal-footer">
+  <!-- <div class="input-div">
+    <button class="btn btn-success btn-space" type="button" (click)="Save(data.id)">Guardar</button>
+    <button class="btn btn-secondary btn-space"  type="button" (click)="onNoClick()">Cancel</button>
+ </div> -->
+</div>
+
+

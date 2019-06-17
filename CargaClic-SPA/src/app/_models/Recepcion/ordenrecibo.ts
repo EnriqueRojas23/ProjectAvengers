@@ -29,9 +29,9 @@ export interface OrdenReciboDetalle {
      FechaRegistro?: Date;
      EstadoId: number;
      cantidad: number;
-     cantidadRecibida: number;
-     cantidadFaltante: number;
-     cantidadSobrante: number;
+     cantidadRecibida?: number;
+     cantidadFaltante?: number;
+     cantidadSobrante?: number;
      fechaExpire?: Date;
      propietarioId: number;
 

@@ -33,6 +33,20 @@ registrar_inventario(model: any) {
       } 
     )
 )}
+actualizar_inventario(model: any) {
+  return this.http.post(this.baseUrl + 'actualizar_inventario', model,httpOptions)
+  .pipe(
+    map((response: any) => {
+    } 
+  )
+)}
+merge_inventario(model: any) {
+return this.http.post(this.baseUrl + 'merge_ajuste', model,httpOptions)
+  .pipe(
+    map((response: any) => {
+    } 
+  )
+)}
 asignar_ubicacion (Id:number, UbicacionId: number ){
   //RegisterInventario
   let model: any = {};
@@ -70,15 +84,37 @@ asignar_ubicacion (Id:number, UbicacionId: number ){
     )};
     
 
-  getAll(LineaId: number): Observable<Ubicacion[]> {
+  getAll(LineaId: number): Observable<InventarioGeneral[]> {
       let params = "Id=" + LineaId ;
       
-      return this.http.get<Ubicacion[]>(this.baseUrl +"GetAll?" + params, httpOptions);
+      return this.http.get<InventarioGeneral[]>(this.baseUrl +"GetAll?" + params, httpOptions);
   }
 
   get(InventarioId: number): Observable<InventarioGeneral[]> {
     let params = "Id=" + InventarioId ;
     return this.http.get<InventarioGeneral[]>(this.baseUrl +"get?" + params, httpOptions);
   }
-
+  getAllInventarioAjusteDetalle(Id: number
+   ): Observable<InventarioGeneral[]> {
+    let params = "Id=" + Id;
+    
+    return this.http.get<InventarioGeneral[]>(this.baseUrl +"GetAllInvetarioAjusteDetalle?" + params, httpOptions);
+  }
+  getAllInventarioAjuste(ClienteId: number
+    ,ProductoId: any
+    ,EstadoId: number
+   ): Observable<InventarioGeneral[]> {
+    let params = "ClienteId=" + ClienteId +
+    "&ProductoId=" + ProductoId +  
+    "&EstadoId=" + EstadoId ;
+    
+    return this.http.get<InventarioGeneral[]>(this.baseUrl +"GetAllInvetarioAjuste?" + params, httpOptions);
+  }
+registrar_ajuste(model: any) {
+  return this.http.post(this.baseUrl + 'register_ajuste', model,httpOptions)
+  .pipe(
+    map((response: any) => {
+    } 
+  )
+)}
 }

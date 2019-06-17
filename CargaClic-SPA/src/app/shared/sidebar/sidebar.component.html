@@ -5,10 +5,11 @@
 
         <div class="left-sidebar-content">
         <ul class="sidebar-elements">
-          <li class="divider">Menu</li> 
-          <li><a  [routerLink]="['/dashboard']"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
+          <!-- <li class="divider"></li>  -->
+          <li ><a  [routerLink]="['/dashboard']"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
           </li>
           <li  [ngClass]="{active: activeRouteMenu(menu.link)}"  *ngFor="let menu of _sidebar.menu" >
+              <!--  -->
               <a><i [class]="menu.icono"></i><span> {{ menu.descripcion }} </span></a>
             <ul class="sub-menu">
                <li    [ngClass]="{active: activeRoute(submenu.link)}" *ngFor='let submenu of menu.submenu'>

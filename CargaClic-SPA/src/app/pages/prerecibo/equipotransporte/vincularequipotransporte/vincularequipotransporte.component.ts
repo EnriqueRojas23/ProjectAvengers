@@ -326,7 +326,7 @@ marcaVehiculo: Dropdownlist[] = [
       new Promise( resolve => setTimeout(resolve, 300) );
 
       this.alertify.success("Se creo el equipo de transporte correctamente.");
-      this.router.navigate(['/listaordenrecibo']);
+      this.router.navigate(['/recibo/listaordenrecibo']);
     });
 
 

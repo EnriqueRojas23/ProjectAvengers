@@ -1,0 +1,30 @@
+.mat-row {
+    cursor: pointer;
+  }
+  .mat-column-lodNum {
+    flex: 0 0 90px;
+    text-align: right;
+    
+  }
+  .mat-column-descripcionLarga {
+    flex: 0 0 280px;
+    text-align: right;
+    
+  }
+  /* .mat-column-lotNum {
+    flex: 0 0 80px;
+    text-align: right;
+    
+  } */
+  .mat-column-select {
+    flex: 0 0 60px;
+    text-align: right;
+    
+  }
+  .mat-column-actionsColumn {
+    flex: 0 0 100px;
+    text-align: right;
+    
+  }
+  
+  

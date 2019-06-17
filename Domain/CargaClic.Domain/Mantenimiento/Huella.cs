@@ -9,6 +9,7 @@ namespace CargaClic.Domain.Mantenimiento
         public Guid ProductoId {get;set;}
         public string CodigoHuella {get;set;}
         public int Caslvl {get;set;}
+        public DateTime FechaRegistro {get;set;}
        
 
     }
@@ -16,6 +17,9 @@ namespace CargaClic.Domain.Mantenimiento
     {
         public int Id {get;set;}
         public int HuellaId {get;set;}
+        public int? Nivel {get;set;}
+        public bool Pallet { get;set; }
+        public bool Cas { get;set; } // unidad de medida mínimo
         public decimal Height {get;set;}
         public decimal Length {get;set;}
         public decimal Width {get;set;}

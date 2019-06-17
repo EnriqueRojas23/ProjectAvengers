@@ -1,0 +1,403 @@
+
+<div class="page-head">
+    <h2 class="page-head-title">Planificar Carga</h2>
+    <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a href="#">Ordenes de Salida</a></li>
+        <!-- <li class="breadcrumb-item">Listado de Órdenes de Recibo</li>
+        <li class="breadcrumb-item active">Identificar Pallets</li> -->
+      </ol>
+    </nav>
+  </div>
+  
+  <div class="main-content container-fluid">
+  
+      <div class="col-md-12">
+      <div class="card card-border-color card-border-color-danger">
+          <div class="card-header">
+          
+              
+                    <b> Filtro de búsqueda  </b>  
+                  
+              </div>
+          <div class="card-body">
+              <div class="row">
+            
+                  <div class="col-md-3">
+                      <label class="col-form-label text-sm-right" for="username">Propietario:</label>
+                      
+                      <mat-form-field class="input-form-field  col-sm-8 ">
+                          <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
+                           <mat-option>
+                               <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
+                                {{pow.viewValue}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+                      <div class="col-md-3">
+                        <label class="control-label" for="username">Intervalo:</label>
+                         <mat-form-field class="input-form-field  col-sm-8 ">
+                            <mat-select  [(value)]="model.intervalo" >
+                              <mat-option  *ngFor="let pow of intervalo"  [value]="pow.val">
+                                  {{pow.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <!-- <div class="col-md-3">
+                          <label class="control-label" for="username">Estado:</label>
+                          <mat-form-field class="input-form-field  col-sm-8 ">
+                              <mat-select  [(value)]="model.estadoIdfiltro" >
+                                <mat-option  *ngFor="let pow of estados"  [value]="pow.val">
+                                    {{pow.viewValue}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div> -->
+    
+                  <div class="col-md-3">
+                      
+                        <button class="btn btn-block btn-danger"  (click)="buscar()"  type="button">Buscar</button>
+                      
+                  </div>
+               
+                </div>
+          </div>
+      </div>
+  
+    </div>
+  <div class="col-md-12">
+    <div class="card card-border-color card-border-color-danger">
+      <div class="card-header">
+        <div  [hidden]="!checkSelects()">
+               <b> Órdenes de Salida   </b>  <span class="card-subtitle">   Listado de ordenes de salida del sistema</span>
+            </div>
+            <div  [hidden]="checkSelects()" >
+                <b> Órdenes seleccionadas  :  {{selection.selected.length}} </b>  <span class="card-subtitle">   Listado de ordenes de salida del sistema</span>
+            </div>
+        </div>
+       
+      <div class="row">
+          <div class="col-md-1">
+              
+          </div>
+          <div [hidden]="checkSelects()" class="col-md-3">
+              <button type="button" ngbTooltip="Agregar Ordenes"  (click)="agregarorden()" class="btn btn-block btn-primary"><i class="fa fa-folder"></i> Agregar Ordenes </button>
+          </div>
+          <div [hidden]="checkSelects()" class="col-md-4">
+          </div>
+          <div [hidden]="!checkSelects()" class="col-md-7">
+          </div>
+          <div  class="col-md-4" >
+              <div class="input-container">
+                  <i class="fa fa-search"></i>
+                  <mat-form-field class="search-form-field" >
+                    <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" (keyup)="applyFilter()">
+                  </mat-form-field>
+                  </div>
+            </div>
+      </div>
+  
+   
+      <div class="card-body">
+          
+          <div  class="example-container">
+              <mat-table #table [dataSource] = "listData" matSort >
+  
+  
+                  <ng-container matColumnDef="select">
+                      <mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                      [checked]="selection.hasValue() && isAllSelected()"
+                                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                      [aria-label]="checkboxLabel()">
+                        </mat-checkbox>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                                      (change)="$event ? selection.toggle(row) : null"
+                                      [checked]="selection.isSelected(row)"
+                                      [aria-label]="checkboxLabel(row)">
+                        </mat-checkbox>
+                      </mat-cell>
+                  </ng-container>
+                 <!-- Checkbox Column -->
+                 <!-- <ng-container matColumnDef="almacen">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >  Almacén </mat-header-cell>
+                    <mat-cell *matCellDef="let user"> {{user.almacen}} </mat-cell>
+                  </ng-container> -->
+  
+  
+                 <ng-container matColumnDef="numOrden" sticky>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> N° Orden</mat-header-cell>
+                  <mat-cell  *matCellDef="let orden" > 
+                      
+                        <span class="label label-info pull-xs-center">{{orden.numOrden}}</span>
+                      
+              
+                  </mat-cell>
+                </ng-container>
+          
+            
+                  <ng-container matColumnDef="propietario" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header >  Propietario </mat-header-cell>
+                      <mat-cell *matCellDef="let user"> {{user.propietario}} </mat-cell>
+                    </ng-container>
+            
+                    
+            
+                 
+                  <ng-container matColumnDef="nombreEstado">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
+                        <mat-cell *matCellDef="let user"> 
+  
+                      <div *ngIf="user.nombreEstado == 'Planeado' then thenBlock else elseBlock"></div>
+                      <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.nombreEstado}}     </div>     </ng-template>
+                      <ng-template #elseBlock>   <div>{{user.nombreEstado}}     </div>   </ng-template>  
+                        </mat-cell>
+                  </ng-container>
+  
+                    <ng-container matColumnDef="guiaRemision">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header >  Guía Remisión </mat-header-cell>
+                        <mat-cell *matCellDef="let user"> {{user.guiaRemision}} </mat-cell>
+                      </ng-container>
+  
+  
+                <ng-container matColumnDef="equipotransporte">
+                  <mat-header-cell *matHeaderCellDef> Equipo de Transporte </mat-header-cell>
+                  <mat-cell *matCellDef="let user"> 
+                    <div *ngIf="user.equipotransporte then thenBlock else elseBlock"></div>
+                    <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.equipotransporte}}     </div>     </ng-template>
+                    <ng-template #elseBlock>  
+                       Sin equipo 
+                     </ng-template>  
+                  
+                    
+                  
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="placa">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >  Placa </mat-header-cell>
+                    <mat-cell *matCellDef="let user"> {{user.placa}} </mat-cell>
+                  </ng-container>
+  
+  
+                      <ng-container matColumnDef="fechaEsperada">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Esperada</mat-header-cell>
+                          <mat-cell *matCellDef="let user"> 
+                              {{user.fechaEsperada | date:'dd-MM-yyyy' }} 
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="horaEsperada">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header >  Hora Esperada </mat-header-cell>
+                            <mat-cell *matCellDef="let user"> {{user.horaEsperada}} </mat-cell>
+                          </ng-container>
+          
+  
+                        <ng-container matColumnDef="fechaRegistro">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro</mat-header-cell>
+                            <mat-cell *matCellDef="let user"> 
+                                {{user.fechaRegistro | date:'dd-MM-yyyy' }} 
+                            </mat-cell>
+                          </ng-container>
+  
+  
+             
+ 
+           
+            
+              <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" 
+              
+              [ngClass]="{ 'highlight': selectedRowIndex == row.id}"
+               (click)="highlight(row)"> 
+  
+              </mat-row>
+            
+            
+              </mat-table>
+  
+  
+             <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+  
+            </div>
+          
+      </div>
+     
+    </div>
+  </div>
+  
+
+<div class="col-md-12">
+    <div class="card card-border-color card-border-color-primary">
+      <div class="card-header">
+          <div>
+              <b> Órdenes por Planificar </b>  <span class="card-subtitle">  Pendientes de Planificación</span>
+           </div>
+        </div>
+       <div class="row">
+            <div class="col-md-1">
+                <button class="btn-buttons btn-outline-primary"> </button> 
+            </div>
+            <div  class="col-md-3">
+                <button type="button" ngbTooltip="Planificar Ordenes"  (click)="planificar()" class="btn btn-block btn-danger"><i class="fa fa-folder"></i> Planificar </button>
+            </div>
+            <div  class="col-md-4">
+            </div>
+   
+            <div  class="col-md-4" >
+                <div class="input-container">
+                    <i class="fa fa-search"></i>
+                    <mat-form-field class="search-form-field" >
+                      <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" (keyup)="applyFilter()">
+                    </mat-form-field>
+                    </div>
+              </div>
+        </div>
+   
+      <div class="card-body">
+          
+          <div  class="example-container">
+              <mat-table #table [dataSource] = "listData1" matSort >
+                 <!-- Checkbox Column -->
+              
+                 <ng-container matColumnDef="numOrden" sticky>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> N° Orden</mat-header-cell>
+                  <mat-cell  *matCellDef="let orden" > 
+                      
+                        <span class="label label-info pull-xs-center">{{orden.numOrden}}</span>
+                      
+              
+                  </mat-cell>
+                </ng-container>
+          
+            
+                  <ng-container matColumnDef="propietario" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header >  Propietario </mat-header-cell>
+                      <mat-cell *matCellDef="let user"> {{user.propietario}} </mat-cell>
+                    </ng-container>
+            
+                    
+            
+                 
+                  <ng-container matColumnDef="nombreEstado">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
+                        <mat-cell *matCellDef="let user"> 
+  
+                      <div *ngIf="user.nombreEstado == 'Planeado' then thenBlock else elseBlock"></div>
+                      <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.nombreEstado}}     </div>     </ng-template>
+                      <ng-template #elseBlock>   <div>{{user.nombreEstado}}     </div>   </ng-template>  
+                        </mat-cell>
+                  </ng-container>
+  
+                    <ng-container matColumnDef="guiaRemision">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header >  Guía Remisión </mat-header-cell>
+                        <mat-cell *matCellDef="let user"> {{user.guiaRemision}} </mat-cell>
+                      </ng-container>
+  
+  
+                <ng-container matColumnDef="equipotransporte">
+                  <mat-header-cell *matHeaderCellDef> Equipo de Transporte </mat-header-cell>
+                  <mat-cell *matCellDef="let user"> 
+                    <div *ngIf="user.equipotransporte then thenBlock else elseBlock"></div>
+                    <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.equipotransporte}}     </div>     </ng-template>
+                    <ng-template #elseBlock>  
+                       Sin equipo 
+                     </ng-template>  
+                  
+                    
+                  
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="placa">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >  Placa </mat-header-cell>
+                    <mat-cell *matCellDef="let user"> {{user.placa}} </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="fechaRequerida">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Requerida</mat-header-cell>
+                    <mat-cell *matCellDef="let user"> 
+                        {{user.fechaRequerida | date:'dd-MM-yyyy' }} 
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="horaRequerida">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header >  Hora Requerida </mat-header-cell>
+                      <mat-cell *matCellDef="let user"> {{user.horaRequerida}} </mat-cell>
+                    </ng-container>
+          
+  
+                        <ng-container matColumnDef="fechaRegistro">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro</mat-header-cell>
+                            <mat-cell *matCellDef="let user"> 
+                                {{user.fechaRegistro | date:'dd-MM-yyyy' }} 
+                            </mat-cell>
+                          </ng-container>
+  
+             
+                    <ng-container matColumnDef="actionsColumn">
+                        <mat-header-cell *matHeaderCellDef>
+                           <!-- <button mat-fab ngbTooltip="Nuevo Propietario" color="primary"  routerLink="/mantenimiento/nuevopropietario"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>  -->
+   
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                           <button class="btn btn-sm btn-outline-primary" (click)="eliminar(row)" ngbTooltip="Eliminar Cliente"  type="button"><i class="fa fa-trash"></i></button>
+                        </mat-cell>
+                    </ng-container>
+           
+            
+              <mat-header-row *matHeaderRowDef="displayedColumns1; " ></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns1;" >
+              <!-- [ngClass]="{'highlight': selectedRowIndex == row.id}"
+              (click)="highlight(row)"> -->
+   
+              </mat-row>
+            
+            
+              </mat-table>
+   
+   
+             <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+   
+            </div>
+          
+      </div>
+     
+    </div>
+   </div>
+   
+  
+
+  
+  
+  
+     
+    
+    
+    
+  
+  </div>
+  
+  <swal
+    #deleteSwal
+    title="Eliminar la Orden"
+    text="¿Esta seguro que desea eliminar la orden?"
+    type="question"
+    [showCancelButton]="true"
+    [focusCancel]="true"
+    [options]="{ confirmButtonText: 'Elminar' }"
+    >
+  </swal>
+  
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
+  
+  <!-- <mat-progress-bar
+            class="example-margin"
+            [color]="color"
+            [mode]="indeterminate"
+            [value]="value"
+            [bufferValue]="bufferValue">
+  </mat-progress-bar> -->
+  

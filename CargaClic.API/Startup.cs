@@ -43,6 +43,11 @@ using CargaClic.Domain.Inventario;
 using CargaClic.Repository.Interface.Mantenimiento;
 using CargaClic.Repository.Repository.Mantenimiento;
 using CargaClic.ReadRepository.Interface.Mantenimiento;
+using CargaClic.ReadRepository.Interface.Inventario;
+using CargaClic.ReadRepository.Repository.Inventario;
+using CargaClic.ReadRepository.Interface.Despacho;
+using CargaClic.ReadRepository.Repository.Despacho;
+using CargaClic.Domain.Despacho;
 
 namespace CargaClic.API
 {
@@ -88,6 +93,7 @@ namespace CargaClic.API
             services.AddScoped<IRepository<Chofer>, Repository<Chofer>>();
             services.AddScoped<IRepository<ValorTabla>, Repository<ValorTabla>>();
             services.AddScoped<IProductoRepository, ProductoRepository>();
+            services.AddScoped<IClienteRepository, ClienteRepository>();
 
 
             services.AddScoped<IQueryHandler<ListarProductosParameter>,ListarProductosQuery>();
@@ -99,6 +105,8 @@ namespace CargaClic.API
 
 
             services.AddScoped<IInventarioRepository,InventarioRepository>();
+            services.AddScoped<IInventarioReadRepository,InventarioReadRepository>();
+            
             
             
             services.AddScoped<IQueryHandler<ListarOrdenReciboParameter>,ListarOrdenReciboQuery>();
@@ -106,8 +114,14 @@ namespace CargaClic.API
             services.AddScoped<IQueryHandler<ObtenerOrdenReciboDetalleParameter>,ObtenerOrdenReciboDetalleQuery>();
             services.AddScoped<IQueryHandler<ListarUbicacionesParameter>,ListarUbicacionesQuery>();
             services.AddScoped<IRepository<OrdenRecibo>,Repository<OrdenRecibo>>();
+            services.AddScoped<IRepository<OrdenSalida>,Repository<OrdenSalida>>();
             services.AddScoped<IRepository<OrdenReciboDetalle>,Repository<OrdenReciboDetalle>>();
+            services.AddScoped<IRepository<OrdenSalidaDetalle>,Repository<OrdenSalidaDetalle>>();
             services.AddScoped<IOrdenReciboRepository,OrdenReciboRepository>();
+            services.AddScoped<IOrdenSalidaRepository,OrdenSalidaRepository>();
+            services.AddScoped<IDespachoReadRepository,DespachoReadRepository>();
+            
+            
             
 
             

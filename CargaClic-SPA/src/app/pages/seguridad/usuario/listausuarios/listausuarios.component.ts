@@ -13,12 +13,9 @@ import { AngularDualListBoxModule, DualListComponent } from 'angular-dual-listbo
 import { RolService } from 'src/app/_services/rol.service';
 import { RolUserForRegisterResult } from 'src/app/_models/paginarol';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { DialogData } from 'src/app/_models/Common/dialogdata';
 
-export interface DialogData {
-  id: number;
-  animal: string;
-  name: string;
-}
+
 
 
 @Component({

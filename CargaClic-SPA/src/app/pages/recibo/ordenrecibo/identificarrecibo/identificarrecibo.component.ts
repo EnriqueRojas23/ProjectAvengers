@@ -102,7 +102,7 @@ identificar(id){
    this.loading = true;
    
 
-   $("html,body").animate({ scrollTop: 500 }, "slow");
+   $("html,body").animate({ scrollTop: 300 }, "slow");
     this.ordenServicio.obtenerOrdenDetalle(id).subscribe(resp => {
       
       this.modeldetail =  resp;
@@ -219,11 +219,11 @@ terminar() {
         this.alertify.error(error);
     }, () => { 
       this.alertify.success("Se actualizó correctamente.");
-      this.router.navigate(['/listaordenrecibida',  this.EquipoTransporteId ]);
+      this.router.navigate(['/recibo/listaordenrecibida',  this.EquipoTransporteId ]);
     });
 }
 regresar(){
-  this.router.navigate(['/listaordenrecibida',  this.EquipoTransporteId ]);
+  this.router.navigate(['/recibo/listaordenrecibida',  this.EquipoTransporteId ]);
 }
 
 }

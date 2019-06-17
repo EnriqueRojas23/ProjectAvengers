@@ -21,11 +21,12 @@ namespace CargaClic.Handlers.Precibo
         }
         public QueryResult Execute(ObtenerOrdenReciboParameter parameters)
         {
+           var parametros = new DynamicParameters();
+           parametros.Add("Id", dbType: DbType.Guid, direction: ParameterDirection.Input, value: parameters.Id);
+
             using (var conn = new ConnectionFactory(_config).GetOpenConnection())
             {
-                 var parametros = new DynamicParameters();
-                 parametros.Add("Id", dbType: DbType.Guid, direction: ParameterDirection.Input, value: parameters.Id);
-
+   
 
                 var result = new ObtenerOrdenReciboResult();
                 var multiquery = conn.QueryMultiple

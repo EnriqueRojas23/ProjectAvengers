@@ -1,0 +1,67 @@
+<div class="page-head">
+  <h2 class="page-head-title">Mantenimiento de Cliente del Sistema</h2>
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb page-head-nav">
+      <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+      <li class="breadcrumb-item"><a [routerLink]="['/mantenimiento/listadocliente']" routerLinkActive="router-link-active" >Listado de Clientes</a></li>
+      <li class="breadcrumb-item active">Nuevo Cliente</li>
+    </ol>
+  </nav>
+</div>
+<div class="main-content container-fluid">
+
+  
+    <div class="col-md-12">
+      <div class="card card-border-color card-border-color-primary">
+        <div class="card-header card-header-divider">Datos de Cliente<span class="card-subtitle">Nuevo cliente de sistema</span></div>
+        <div class="card-body ">
+          <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+
+        
+        
+            <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="nombre">Razón Social o Nombre</label>
+              <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                <input matInput autocomplete="off"  minlength="3" maxlength="50" required [(ngModel)]="model.nombre"  #nombre="ngModel" placeholder="Nombre del cliente"  name="nombre" type="text">
+              </mat-form-field>
+            </div>
+
+            <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="nombreCorto">Nombre Corto</label>
+              <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                <input matInput autocomplete="off"  minlength="3" maxlength="10"  required [(ngModel)]="model.nombreCorto"  #nombreCorto="ngModel" name="nombreCorto" placeholder="Nombre Corto del Cliente" type="text">
+              </mat-form-field>
+            </div>
+            
+            
+            <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="tipodocumento">Tipo de Documento</label>
+               <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                   <mat-select  [(value)]="model.TipoDocumentoId">
+                     <mat-option  *ngFor="let pow of tipodocumento"  [value]="pow.val">
+                         {{pow.viewValue}}
+                     </mat-option>
+                   </mat-select>
+                 </mat-form-field>
+             </div>
+
+            <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="documento">Documento</label>
+                <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput autocomplete="off" maxlength="11" (keypress)="numberOnly($event)"  required [(ngModel)]="model.documento"  #peso="ngModel"   name="documento" type="text">
+                </mat-form-field>
+            </div>
+
+              <div class="row pt-2 pt-sm-5 mt-1">
+                    <div class="col-sm-6 pl-0">
+                      <p class="text-right">
+                        <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                        <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button> 
+                      </p>
+                    </div>
+                  </div>
+          </form>
+        </div>
+        </div>
+      </div>
+  </div>

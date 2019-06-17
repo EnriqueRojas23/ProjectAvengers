@@ -1,0 +1,120 @@
+
+<div class="page-head">
+  <h2 class="page-head-title">Mantenimiento de Producto del Sistema</h2>
+  <nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb page-head-nav">
+    <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+    <li class="breadcrumb-item"><a [routerLink]="['/mantenimiento/listadoproducto']" routerLinkActive="router-link-active" >Listado de Productos</a></li>
+    <li class="breadcrumb-item">Huellas Producto</li>
+    <li class="breadcrumb-item active">Listado de Detalle de Huellas</li>
+  </ol>
+</nav>
+</div>
+
+<div class="main-content container-fluid">
+
+<div class="col-md-12">
+
+
+ <div class="card card-border-color card-border-color-primary">
+   <div class="card-header card-header-divider">
+       
+
+     </div>
+
+     <div class="row">
+        <div class="offset-md-2 col-md-10">
+            <button (click)="regresar()" class="btn btn-space btn-secondary">Regresar</button>
+        </div>
+       
+     
+   
+    </div>
+
+   <div class="card-body">
+       
+       <div  class="mat-elevation-z8">
+           <mat-table #table [dataSource] = "listData" matSort >
+              <!-- Checkbox Column -->
+                <ng-container matColumnDef="unidadmedida">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Unidad de Medida </mat-header-cell>
+                  <mat-cell *matCellDef="let producto"> {{producto.unidadMedida}} </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="alto">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Altura</mat-header-cell>
+                <mat-cell *matCellDef="let producto"> {{producto.height}} </mat-cell>
+              </ng-container>
+       
+         
+               <ng-container matColumnDef="largo">
+                   <mat-header-cell *matHeaderCellDef mat-sort-header >  Largo </mat-header-cell>
+                   <mat-cell *matCellDef="let producto"> {{producto.length}} </mat-cell>
+                 </ng-container>
+                 <ng-container matColumnDef="ancho">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Ancho </mat-header-cell>
+                  <mat-cell *matCellDef="let producto"> {{producto.width}} </mat-cell>
+                </ng-container>
+         
+                <ng-container matColumnDef="pesobruto">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >  Peso Bruto  </mat-header-cell>
+                    <mat-cell *matCellDef="let producto"> {{producto.grswgt}} </mat-cell>
+                  </ng-container>
+                  
+                <ng-container matColumnDef="pesoneto">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Peso Neto  </mat-header-cell>
+                  <mat-cell *matCellDef="let producto"> {{producto.netwgt}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="cantidad">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Cantidad </mat-header-cell>
+                  <mat-cell *matCellDef="let producto"> {{producto.untQty}} </mat-cell>
+                </ng-container>
+
+          
+                 <ng-container matColumnDef="actionsColumn">
+                     <mat-header-cell *matHeaderCellDef>
+                        <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary" (click)="openDialog()"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> 
+
+                     </mat-header-cell>
+                     <mat-cell *matCellDef="let row">
+                        <button class="btn btn-space btn-outline-primary" ngbTooltip="Editar Usuario" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
+                        <button [swal]="deleteSwal"  class="btn  btn-outline-primary" (confirm)="delete(row.id)" ngbTooltip="Eliminar Detalle"  type="button"><i class="fa fa-trash"></i></button>
+                     </mat-cell>
+                 </ng-container>
+        
+         
+           <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
+           <mat-row *matRowDef="let row; columns: displayedColumns;" >
+           <!-- [ngClass]="{'highlight': selectedRowIndex == row.id}"
+           (click)="highlight(row)"> -->
+
+           </mat-row>
+         
+         
+           </mat-table>
+
+
+          <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+
+         </div>
+       
+   </div>
+  
+ </div>
+</div>
+</div>
+<swal
+  #deleteSwal
+  title="Eliminar detalle huella"
+  text="¿Esta seguro que desea eliminar la huella?"
+  type="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  [options]="{ confirmButtonText: 'Elminar' }"
+  >
+</swal>
+
+
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

@@ -13,7 +13,8 @@ namespace CargaClic.Repository.Interface
         Task<long> AssignarUbicacion(InventarioForAssingment inventarioGeneral);
         Task<Guid> FinalizarRecibo(InventarioForFinishRecive inventarioGeneral);
         Task<long> Almacenamiento(InventarioForStorage inventarioGeneral);
-
-        
+        Task<long> RegistrarAjuste(AjusteForRegister ajusteForRegister);
+        Task<long> MergeInventario(MergeInventarioRegister mergeInventarioRegister);
+        Task<InventarioGeneral> ActualizarInventario(InventarioForEdit inventarioGeneral);
     }
 }

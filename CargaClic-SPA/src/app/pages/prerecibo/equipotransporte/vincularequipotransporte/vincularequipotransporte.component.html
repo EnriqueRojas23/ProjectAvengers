@@ -24,12 +24,10 @@
                       <div [hidden]="!PlacaEncontrada()" > <button  class="btn btn-primary" (click)="openDialog(model.placa)" type="button"><i class="mdi mdi-search"></i></button> </div>
                       <!-- <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-plus"></i></button> -->
                     </div>
-                
-                  <div class="alert alert-danger" *ngIf="placa.errors "> 
-                      <div *ngIf="placa.errors.minlength">
+                   
+                  <mat-error class="alert alert-danger" *ngIf="placa.hasError('minlength')"> 
                       Debe tener mas de 5 caracteres.
-                    </div>
-                  </div>
+                  </mat-error>
                 
       
                 </div>
@@ -106,11 +104,10 @@
                           <button  class="btn btn-primary" (click)="openDialog_Dni(model.dni)" type="button"><i class="mdi mdi-search"></i></button>
                           <!-- <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-plus"></i></button> -->
                         </div>
-                      <div class="alert alert-danger" *ngIf="dni.errors  "> 
-                          <div *ngIf="dni.errors.minlength">
-                              Debe tener 8 caracteres.
-                        </div>
-                      </div>
+                        <mat-error class="alert alert-danger" *ngIf="dni.hasError('minlength')"> 
+                          Debe tener mas de 8 caracteres.
+                      </mat-error>
+                    
                   
                     
                     </div>
@@ -136,7 +133,7 @@
                         <div class="col-sm-6 pl-0">
                           <p class="text-right">
                             <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Vincular</button>
-                            <button  [routerLink]="['/listaordenrecibo']" routerLinkActive="router-link-active"  class="btn btn-space btn-secondary">Cancel</button>
+                            <button  [routerLink]="['/recibo/listaordenrecibo']" routerLinkActive="router-link-active"  class="btn btn-space btn-secondary">Cancel</button>
                           </p>
                         </div>
                       </div>

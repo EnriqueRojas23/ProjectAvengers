@@ -1,0 +1,95 @@
+
+<div class="page-head">
+  <h2 class="page-head-title">Ajuste de Inventario</h2>
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb page-head-nav">
+      <li class="breadcrumb-item"><a href="#">Inventario</a></li>
+      <li class="breadcrumb-item active">Nuevo Ajuste</li>
+    </ol>
+  </nav>
+</div>
+
+<div class="main-content container-fluid">
+
+  <div class="row">
+
+
+      <div class="col-md-12">
+          <div class="card card-border-color card-border-color-primary">
+            <!-- <div class="card-header card-header-divider">Identificar <span class="card-subtitle"> Datos para la identificación de la línea seleccionada </span></div> -->
+            <div class="card-body ">
+              <form #f="ngForm"  (ngSubmit)="actualizar(f)" >
+    
+                  <!-- <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="lodNum">LPN</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput readonly   autocomplete="off" [(ngModel)]="model.lodNum" name="lodNum" type="text">
+                      </mat-form-field>
+                    </div> -->
+
+                      <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="lotNum">Lote</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <input matInput   autocomplete="off" [(ngModel)]="model.lotNum" name="lotNum" type="text">
+                        </mat-form-field>
+                      </div>
+    
+                <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="fechaManufactura">Fecha de Manufactura</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <input matInput type="datetime" [matDatepicker]="fechaManufactura" autocomplete="off" [(ngModel)]="model.fechaManufactura" name="fechaManufactura " #fechaManufactura="ngModel" >
+                          <mat-datepicker-toggle matSuffix [for]="fechaManufactura"></mat-datepicker-toggle>
+                          <mat-datepicker #fechaManufactura></mat-datepicker>
+                        </mat-form-field>
+                 </div>
+
+                <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="fechaExpire">Fecha de Expiración</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <input matInput type="datetime" [matDatepicker]="fechaExpire" autocomplete="off" [(ngModel)]="model.fechaExpire" name="fechaExpire" #fechaExpiracion="ngModel" >
+                      <mat-datepicker-toggle matSuffix [for]="fechaExpire"></mat-datepicker-toggle>
+                      <mat-datepicker #fechaExpire></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+
+                 <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="estado">Estado de inventario</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <mat-select
+                        [(value)]="model.estadoId"  placeholder="Selección" required>
+                        <mat-option  *ngFor="let pow of estadoInventario"  [value]="pow.val">
+                            {{pow.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+      
+                </div>
+
+    
+    
+                     <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="untQty">Cantidad Recibida</label>
+                        <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <input matInput required type="text"  (keypress)="numberOnly($event)" maxlength="5"  [(ngModel)]="model.untQty"  #untQty="ngModel"  name="untQty" >
+                        </mat-form-field>
+                     </div>
+
+         
+                        <div class="row pt-2 pt-sm-5 mt-1">
+                          <div class="col-sm-6 pl-0">
+                            <p class="text-right">
+                              <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                              <button (click)="regresar()" class="btn btn-space btn-secondary">Regresar</button>
+                            </p>
+                          </div>
+                        </div>
+       
+            </form>
+
+          </div>
+        </div>
+    </div> 
+</div>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>

@@ -10,14 +10,34 @@ namespace CargaClic.Common
             PendienteAcomodo = 19,
             PendienteAlmacenamiento = 20,
             Terminado = 12,
-
+        }
+        
+        public enum EstadoOrdenSalida : int
+        {
+            Creado = 21,
+            Planificado = 22,
+            Asignado = 23,
+            Despachado = 24,
+        }
+        public enum EstadoCarga : int
+        {
+            Pendiente = 25,
+            Confirmado = 26,
+            Despachado = 27,
         }
         public enum EstadoEquipoTransporte : int
         {
             EnProceso = 13,
-            EnCola = 14,
+            Asignado = 14,
             EnDescarga = 15,
             Cerrado = 16,
+        }
+        public enum EstadoInventario : int
+        {
+            Disponible = 7,
+            NoDisponible = 8,
+            Merma = 18,
+            Eliminado = 21
         }
     }
 }

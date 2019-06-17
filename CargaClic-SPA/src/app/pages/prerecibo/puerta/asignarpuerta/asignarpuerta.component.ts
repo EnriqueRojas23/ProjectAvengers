@@ -66,7 +66,7 @@ export class AsignarpuertaComponent implements OnInit {
        this.alertify.error(error);
     }, () => { 
       this.alertify.success("Se registró correctamente.");
-      this.router.navigate(['/equipotransporteentrante']);
+      this.router.navigate(['/recibo/equipotransporteentrante']);
     });
   }
 

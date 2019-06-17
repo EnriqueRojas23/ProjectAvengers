@@ -112,10 +112,10 @@ export class ListaordenrecibidaComponent implements OnInit {
      }
 
      equipotransporte(){
-      this.router.navigate(['/equipotransporteentrante']);
+      this.router.navigate(['recibo//equipotransporteentrante']);
      }
      openDoor(id){
-      this.router.navigate(['/asignarpuerta',id]);
+      this.router.navigate(['recibo//asignarpuerta',id]);
      }
   
 }

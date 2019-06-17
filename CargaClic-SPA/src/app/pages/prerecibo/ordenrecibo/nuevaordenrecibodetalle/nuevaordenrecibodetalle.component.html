@@ -35,7 +35,7 @@
           <div class="input-div">
             <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">SKU</label>
             <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                  <input  [(ngModel)]="model.codigo" name="codigo" placeholder="TAB para buscar elemento" matInput (blur)="onBlurMethod($event.target.value)" type="text">
+                  <input matInput required  [(ngModel)]="model.codigo" name="codigo" placeholder="TAB para buscar elemento"  (blur)="onBlurMethod($event.target.value)" type="text">
             </mat-form-field>
             <div class="btn-group" role="group">
               <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-search"></i></button>
@@ -48,67 +48,29 @@
             <div class="input-div">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Descripción Larga</label>
                 <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                  <input matInput disabled required [(ngModel)]="model.descripcionLarga"  #username="ngModel"  name="descripcionLarga" type="text">
+                  <input matInput readonly required [(ngModel)]="model.descripcionLarga"  #username="ngModel"  name="descripcionLarga" type="text">
                 </mat-form-field>
              </div>
 
-              <div class="input-div">
-                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Lote</label>
-                  <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                    <input matInput minlength="5" maxlength="10"  [(ngModel)]="model.lote"  #lote="ngModel" placeholder="Lote / DAM"  name="lote" type="text">
-                  </mat-form-field>
-      
-                </div>
-                <!-- <div class="input-div">
-                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Código Origen</label>
-                    <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                      <input matInput  minlength="5" maxlength="10"  [(ngModel)]="model.codigoorigen"  #codigoorigen="ngModel" placeholder="Código de Origen"  name="codigoorigen" type="text">
-                    </mat-form-field>
-                    <div class="alert alert-danger" *ngIf="username.errors  "> 
-                        <div *ngIf="codigoorigen.errors.minlength">
-                        Usuario debe tener mas de 5 caracteres.
-                  </div>
-                      </div>	
-                  </div> -->
 
                   <div class="input-div">
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Estado del Recibo</label>
                       <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                          <mat-select required  [(value)]="model.estadoId"  placeholder="Selección">
+                          <mat-select  name="estado" [(ngModel)]="model.estadoId"  placeholder="Selección" required>
                             <mat-option  *ngFor="let pow of clientes"  [value]="pow.val">
                                 {{pow.viewValue}}
                             </mat-option>
                           </mat-select>
                         </mat-form-field>
-                      <!-- <div class="alert alert-danger" *ngIf="username.errors  "> 
-                          <div *ngIf="username.errors.minlength">
-                          Usuario debe tener mas de 5 caracteres.
-                           </div>
-                        </div>	 -->
+    
                     </div>
-                    <div class="input-div">
-                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Fecha Manufactura</label>
-                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                            <input matInput  type="datetime" [matDatepicker]="picker" autocomplete="off" [(ngModel)]="model.fechallegada" name="fechallegada" #fechallegada="ngModel" >
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                          </mat-form-field>
-                          <div class="alert alert-danger" *ngIf="fechallegada.errors  "> 
-                              <div *ngIf="fechallegada.errors.datetime">
-                              Email debe de tener una dirección válida
-                             </div>
-                        </div>
-                      </div>
+                   
                       <div class="input-div">
                           <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidad">Cantidad</label>
                           <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                            <input matInput type="text" (keypress)="numberOnly($event)" maxlength="5" required [(ngModel)]="model.cantidad"  #cantidad="ngModel"  name="cantidad" >
+                            <input matInput autocomplete="off" type="text" (keypress)="numberOnly($event)" maxlength="5" required [(ngModel)]="model.cantidad"  #cantidad="ngModel"  name="cantidad" >
                           </mat-form-field>
-                          <div class="alert alert-danger" *ngIf="cantidad.errors  "> 
-                              <div *ngIf="cantidad.errors.pattern">
-                              Usuario debe tener mas de 5 caracteres.
-                              </div>
-                            </div>	
+                         
                         </div>
              
                 

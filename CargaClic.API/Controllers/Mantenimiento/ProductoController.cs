@@ -23,6 +23,7 @@ namespace CargaClic.API.Controllers.Mantenimiento
         private readonly IRepository<Huella> _repositoryHuella;
         private readonly IMantenimientoRepository _repoMantenimiento;
         private readonly IProductoRepository _repoProducto;
+        
 
         public ProductoController(IQueryHandler<ListarProductosParameter> handler,
         IMantenimientoRepository repoMantenimiento,
@@ -44,6 +45,8 @@ namespace CargaClic.API.Controllers.Mantenimiento
         [HttpGet]
         public IActionResult GetAll(string criterio, int ClienteId)
         {
+            if(criterio == "undefined")
+            criterio = null;
             var param = new ListarProductosParameter 
             {
                 Criterio = criterio,
@@ -55,10 +58,18 @@ namespace CargaClic.API.Controllers.Mantenimiento
         [HttpGet("GetHuellas")]
         public async Task<IActionResult> GetHuellas(Guid ProductoId)
         {
-           var huellas = await _repositoryHuella.GetAll(x=>x.ProductoId == ProductoId);
+           var huellas   = await _repoMantenimiento.GetAllHuella(ProductoId);
+           //var huellas = await _repositoryHuella.GetAll(x=>x.ProductoId == ProductoId);
            return Ok(huellas);
-
         }
+        
+        [HttpGet("GetHuella")]
+        public async Task<IActionResult> GetHuella(int HuellaId)
+        {
+           var huellas   = await _repoMantenimiento.GetHuella(HuellaId);
+           return Ok(huellas);
+        }
+
         [HttpGet("GetHuellasDetalle")]
         public async Task<IActionResult> GetHuellasDetalle(int HuellaId)
         {
@@ -69,6 +80,24 @@ namespace CargaClic.API.Controllers.Mantenimiento
         public async Task<IActionResult> ProductRegister(ProductoForRegister productoForRegister)
         {
             var result = await _repoProducto.ProductRegister(productoForRegister) ;
+            return Ok(result);
+        }
+        [HttpPost("HuellaDetalleRegister")]
+        public async Task<IActionResult> HuellaDetalleRegister(HuellaDetalleForRegister huellaDetalleForRegister)
+        {
+            var result = await _repoProducto.HuellaDetalleRegister(huellaDetalleForRegister) ;
+            return Ok(result);
+        }
+        [HttpPost("HuellaRegister")]
+        public async Task<IActionResult> HuellaRegister(HuellaForRegister huellaForRegister)
+        {
+            var result = await _repoProducto.HuellaRegister(huellaForRegister) ;
+            return Ok(result);
+        }
+        [HttpDelete("HuellaDetalleDelete")]
+        public IActionResult HuellaDetalleDelete(int id)
+        {
+            var result =  _repoProducto.HuellaDetalleDelete(id) ;
             return Ok(result);
         }
     }

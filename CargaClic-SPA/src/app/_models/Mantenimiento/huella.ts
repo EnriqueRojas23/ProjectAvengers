@@ -3,6 +3,8 @@ export interface Huella {
     productoId: any;
     codigoHuella: string;
     caslvl : number;
+    cantidad: number;
+    fechaRegistro : string;
 
    
 }

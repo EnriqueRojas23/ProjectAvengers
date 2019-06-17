@@ -1,0 +1,115 @@
+<div class="page-head">
+
+  </div>
+  <div class="main-content container-fluid">
+  
+
+      <div class="row">
+         <div class="col-md-12">
+        <div class="card card-border-color card-border-color-danger">
+          <div class="card-header card-header-divider">Nueva Orden Detalle<span class="card-subtitle"> Datos de detalle de la orden de recibo</span></div>
+          <div class="card-body ">
+            <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+
+          <div class="input-div">
+              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="linea">Línea</label>
+              <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                <input matInput disabled required [(ngModel)]="model.linea" #linea="ngModel"  name="linea" type="text">
+              </mat-form-field>
+              <div class="alert alert-danger" *ngIf="linea.errors  "> 
+                  <div *ngIf="linea.errors.minlength">
+                  Usuario debe tener mas de 5 caracteres.
+                  </div>
+               </div>	
+            </div>
+                
+
+          <div class="input-div">
+            <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">SKU</label>
+            <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput required  [(ngModel)]="model.codigo" name="codigo" placeholder="TAB para buscar elemento"  (blur)="onBlurMethod($event.target.value)" type="text">
+            </mat-form-field>
+            <div class="btn-group" role="group">
+              <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-search"></i></button>
+              <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-plus"></i></button>
+            </div>
+          </div>
+
+                
+               
+            <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Descripción Larga</label>
+                <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput readonly required [(ngModel)]="model.descripcionLarga"  #username="ngModel"  name="descripcionLarga" type="text">
+                </mat-form-field>
+             </div>
+             <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="lote">Lote</label>
+                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                  <input matInput   autocomplete="off" [(ngModel)]="model.lote" name="lote" type="text">
+                </mat-form-field>
+              </div>
+
+              <!-- <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="fechaExpire">Fecha de Expiración</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <input matInput type="datetime" [matDatepicker]="fechaExpire" autocomplete="off" [(ngModel)]="model.fechaExpire" name="fechaExpire" #fechaExpiracion="ngModel" >
+                      <mat-datepicker-toggle matSuffix [for]="fechaExpire"></mat-datepicker-toggle>
+                      <mat-datepicker #fechaExpire></mat-datepicker>
+                    </mat-form-field>
+                </div> -->
+
+                  <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Estado del Pedido</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <mat-select  name="estado" [(ngModel)]="model.estadoId"  placeholder="Selección" required>
+                            <mat-option  *ngFor="let pow of clientes"  [value]="pow.val">
+                                {{pow.viewValue}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+    
+                    </div>
+                   
+                  
+                    <div class="input-div">
+                          <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidad">Cantidad</label>
+                          <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <input matInput autocomplete="off" type="text" (keypress)="numberOnly($event)" maxlength="5" required [(ngModel)]="model.cantidad"  #cantidad="ngModel"  name="cantidad" >
+                          </mat-form-field>
+                         
+                        </div>
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="huella">Huella</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <mat-select  [(ngModel)]="model.huellaId" name="huellaid" (selectionChange)="CambioHuella($event.value)"   placeholder="Selección" required>
+                              <mat-option  *ngFor="let hue of huellas"  [value]="hue.val">
+                                  {{hue.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="huella">Unidad Medida</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <mat-select   [(ngModel)]="model.unidadMedidaId"  name="unidadMedidaId"    placeholder="Selección" required>
+                              <mat-option   *ngFor="let hue of huellaDetalle"  [value]="hue.val">
+                                  {{hue.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                
+                        <div class="row pt-2 pt-sm-5 mt-1">
+                            <div class="col-sm-6 pl-0">
+                              <p class="text-right">
+                                <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                                <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button>
+                              </p>
+                            </div>
+                          </div>
+            </form>
+          </div>
+          </div>
+        </div>
+      </div>
+  </div>
+    

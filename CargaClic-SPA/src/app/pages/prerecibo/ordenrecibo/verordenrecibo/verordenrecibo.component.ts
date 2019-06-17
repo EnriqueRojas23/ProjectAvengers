@@ -86,7 +86,7 @@ export class VerordenreciboComponent implements OnInit {
   }
 
   nuevodetalle(){
-    this.router.navigate(['/nuevaordenrecibodetalle', this.id]);
+    this.router.navigate(['/recibo/nuevaordenrecibodetalle', this.id]);
   }
   delete(id){
     this.ordenServicio.deleteOrderDetail(id).subscribe(resp => {
@@ -141,6 +141,6 @@ export class VerordenreciboComponent implements OnInit {
     });
   }
   regresar(){
-    this.router.navigate(['/listaordenrecibo']);
+    this.router.navigate(['/recibo/listaordenrecibo']);
   }
 }

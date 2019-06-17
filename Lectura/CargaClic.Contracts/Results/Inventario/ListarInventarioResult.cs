@@ -12,6 +12,7 @@ namespace CargaClic.Contracts.Results.Inventario
     {
             public long Id	{get;set;}
             public string LodNum	{get;set;}
+            public long LodId {get;set;}
             public Guid ProductoId	{get;set;}
             public string DescripcionLarga	{get;set;}
             public int UbicacionId	{get;set;}

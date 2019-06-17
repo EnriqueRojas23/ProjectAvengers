@@ -148,7 +148,8 @@
                    <div class="input-div">
                     <label class="col-12 col-sm-3 col-form-label text-sm-right" for="estado">Estado de inventario</label>
                     <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                        <mat-select required  [(value)]="modeldetail.estadoId"  placeholder="Selección">
+                        <mat-select
+                          [(value)]="modeldetail.estadoId"  placeholder="Selección" required>
                           <mat-option  *ngFor="let pow of estadoInventario"  [value]="pow.val">
                               {{pow.viewValue}}
                           </mat-option>
@@ -160,7 +161,7 @@
 
                   <label class="col-12 col-sm-3 col-form-label text-sm-right" for="huella">Huella</label>
                   <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                      <mat-select  [(value)]="modeldetail.huellaId"  (selectionChange)="CambioHuella($event.value)"   placeholder="Selección" required>
+                      <mat-select  [(ngModel)]="modeldetail.huellaId" name="huellaid" (selectionChange)="CambioHuella($event.value)"   placeholder="Selección" required>
                         <mat-option  *ngFor="let hue of huellas"  [value]="hue.val">
                             {{hue.viewValue}}
                         </mat-option>
@@ -185,7 +186,7 @@
 
                         <label class="col-12 col-sm-3 col-form-label text-sm-right" for="huella">Unidad Medida</label>
                         <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                            <mat-select   [(value)]="modeldetail.unidadMedidaId"    placeholder="Selección" required>
+                            <mat-select   [(ngModel)]="modeldetail.unidadMedidaId"  name="unidadMedidaId"    placeholder="Selección" required>
                               <mat-option   *ngFor="let hue of huellaDetalle"  [value]="hue.val">
                                   {{hue.viewValue}}
                               </mat-option>
@@ -207,4 +208,4 @@
       </div> 
   </div>
 
-  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>

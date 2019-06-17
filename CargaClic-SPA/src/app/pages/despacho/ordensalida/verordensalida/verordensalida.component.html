@@ -1,0 +1,103 @@
+<div class="page-head">
+    <h2 class="page-head-title">Líneas de la Órden de Salida</h2>
+    <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a [routerLink]="['/recibo/listaordenrecibo']" routerLinkActive="router-link-active" >Ordenes de Recibo</a></li>
+        <li class="breadcrumb-item active">Detalle de la Orden de Salida</li>
+        
+      </ol>
+    </nav>
+  </div>
+
+<div class="main-content container-fluid">
+  <div  class="col-md-12">
+    <div class="card card-border-color card-border-color-danger">
+      <div class="card-header card-header-divider">Orden de Recibo N° {{model.numOrden}} </div>
+      <div class="row">
+          <div class="col-md-8">
+              <button class="btn-buttons btn-primary"   (click)="regresar()"  type="button"> << Regresar a la Orden</button>  
+          </div>
+        </div>
+      <div class="card-body ">
+          <div  class="mat-elevation-z8">
+
+
+              <mat-table #table [dataSource] = "listData" matSort >
+                
+                  
+                  <ng-container matColumnDef="Linea">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header > Línea  </mat-header-cell>
+                      <mat-cell *matCellDef="let orden"> {{orden.linea}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Codigo">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header > SKU  </mat-header-cell>
+                      <mat-cell *matCellDef="let orden"> {{orden.codigo}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Descripcion">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header > Descripción  </mat-header-cell>
+                      <mat-cell *matCellDef="let orden"> {{orden.producto}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cantidad">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header > Cantidad  </mat-header-cell>
+                      <mat-cell *matCellDef="let orden"> {{orden.cantidad}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Lote">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header > Lote  </mat-header-cell>
+                      <mat-cell *matCellDef="let orden"> {{orden.lote}} </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="actionsColumn">
+                        <mat-header-cell *matHeaderCellDef>
+                            <div class="example-button-row">
+                                <!-- routerLink="/nuevaordenrecibodetalle" -->
+                            <!-- <button mat-fab color="primary" (click)="nuevodetalle()"  > <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> -->
+                            </div>
+                            <button class="btn btn-space btn-primary" (click)="nuevodetalle()">Nueva Línea</button>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button [swal]='deleteSwal' class="btn  btn-outline-primary" (confirm)="delete(row.id)" type="button"><i class="fa fa-trash"></i></button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" 
+                         [ngClass]="{'highlight': selectedRowIndex == row.id}"
+                          (click)="highlight(row)">
+                    </mat-row>
+
+
+                </mat-table>
+              <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+          </div>
+            <!-- <div class="row pt-2 pt-sm-5 mt-1">
+                <div class="col-sm-6 pl-0">
+                  <p class="text-right">
+                    
+                    <button routerLink="/listaordenrecibo" class="btn btn-space btn-secondary">Regresar</button>
+                  </p>
+                </div>
+              </div> -->
+        
+</div>
+</div>
+
+</div>
+  <div class="row">
+
+
+</div>
+<swal
+  #deleteSwal
+  title="Eliminar la línea"
+  text="¿Esta seguro que desea eliminar la línea?"
+  type="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  [options]="{ confirmButtonText: 'Elminar' }"
+  >
+</swal>

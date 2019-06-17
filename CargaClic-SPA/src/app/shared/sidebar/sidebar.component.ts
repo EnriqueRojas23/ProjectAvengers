@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
   styles: []
 })
 export class SidebarComponent implements  AfterViewInit   {
+
+
+
   constructor(public _sidebar: SidebarService, private router: Router) { 
   }
 
@@ -16,7 +19,6 @@ export class SidebarComponent implements  AfterViewInit   {
   }
   activeRouteMenu(routename: string): boolean {
 //    console.log(this.router.url.includes(routename));
-            
     return this.router.url.includes(routename) == true;
  }
   activeRoute(routename: string): boolean {

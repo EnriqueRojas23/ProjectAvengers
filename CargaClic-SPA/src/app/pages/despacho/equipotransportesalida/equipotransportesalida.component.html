@@ -1,0 +1,154 @@
+<div class="page-head">
+    <h2 class="page-head-title">Vincular Equipo de Transporte</h2>
+  
+  </div>
+  <div class="main-content container-fluid">
+  
+  <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card card-border-color card-border-color-primary">
+              <div class="card-header card-header-divider">Vehículo<span class="card-subtitle"> Datos del vehículo y Empresa Transportista</span></div>
+              <div class="card-body ">
+        
+  
+                  <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Placa</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <!-- (blur)="onBlurMethod($event.target.value)" -->
+                      <input  minlength="5" maxlength="8" [(ngModel)]="model.placa" (blur)="onBlurMethod($event.target.value)" required name="placa" #placa="ngModel" placeholder="Placa del vehículo" matInput  type="text">
+                
+                    </mat-form-field>
+                    <div class="btn-group" role="group">
+                        <div [hidden]="PlacaEncontrada()" > <i class="fas fa-check"></i>  Placa encontrada  </div>
+                        <div [hidden]="!PlacaEncontrada()" > <button  class="btn btn-primary" (click)="openDialog(model.placa)" type="button"><i class="mdi mdi-search"></i></button> </div>
+                        <!-- <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-plus"></i></button> -->
+                      </div>
+                     
+                    <mat-error class="alert alert-danger" *ngIf="placa.hasError('minlength')"> 
+                        Debe tener mas de 5 caracteres.
+                    </mat-error>
+                  
+        
+                  </div>
+  
+  
+                  <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="tipocamion">Tipo de Vehículo</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <mat-select  [(value)]="model.tipoVehiculo" >
+                            <mat-option *ngFor="let pow of tipoVehiculo"  [value]="pow.val">
+                                {{pow.viewValue}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+            
+  
+  
+                    <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="tipocamion">Marca de Vehículo</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                            <mat-select  [(value)]="model.marcaVehiculo" >
+                              <mat-option  *ngFor="let pow of marcaVehiculo"  [value]="pow.val">
+                                  {{pow.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+        
+                  
+  
+  
+                      <div class="input-div">
+                          <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Empresa Transportista</label>
+                          <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                                <input  [(ngModel)]="model.razonSocial" name="razonSocial" placeholder="Razón Social" matInput  type="text">
+                          </mat-form-field>
+                          <input  [(ngModel)]="model.ruc" name="ruc"  type="hidden">
+                          <div class="btn-group" role="group">
+                            <button  class="btn btn-primary" (click)="openDialog_EmpTrans()" type="button"><i class="mdi mdi-search"></i></button>
+                            <!-- <button  class="btn btn-primary" (click)="openDialog_EmpTrans()" type="button"><i class="mdi mdi-plus"></i></button> -->
+                          </div>
+                        </div>
+  
+                  <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="pesobruto">RUC</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput maxlength="13" required autocomplete="off" [(ngModel)]="model.ruc" name="ruc" #ruc="ngModel" type="text">
+                      </mat-form-field>
+                  </div> 
+          
+            
+                  
+                  
+                </div>
+                </div>
+              </div>
+          
+  
+              <div class="col-md-12">
+                <div class="card card-border-color card-border-color-primary">
+                  <div class="card-header card-header-divider">Chofer <span class="card-subtitle"> Datos del chofer</span></div>
+                  <div class="card-body ">
+                    
+          
+                      <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="dni">DNI</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                              <input required (keypress)="numberOnly($event)" minlength="8" maxlength="8"  type="text"  [(ngModel)]="model.dni" name="dni" #dni="ngModel"  placeholder="DNI del chofer" matInput >
+                        </mat-form-field>
+                          
+  
+                        <div class="btn-group" role="group">
+                            <button  class="btn btn-primary" (click)="openDialog_Dni(model.dni)" type="button"><i class="mdi mdi-search"></i></button>
+                            <!-- <button  class="btn btn-primary" (click)="openDialog()" type="button"><i class="mdi mdi-plus"></i></button> -->
+                          </div>
+                          <mat-error class="alert alert-danger" *ngIf="dni.hasError('minlength')"> 
+                            Debe tener mas de 8 caracteres.
+                        </mat-error>
+                      
+                    
+                      
+                      </div>
+          
+                    
+          
+                    
+                      <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="nombreCompleto">Nombre Completo</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <input matInput required minlength="5" maxlength="22"  autocomplete="off" [(ngModel)]="model.nombreCompleto" name="nombreCompleto" #nombreCompleto="ngModel" type="text">
+                        </mat-form-field>
+                      
+                      </div>
+                      <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="brevete">Brevete</label>
+                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                          <input matInput required minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.brevete" name="brevete" #brevete="ngModel" type="text">
+                        </mat-form-field>
+                      
+                      </div>
+                      <div class="row pt-2 pt-sm-5 mt-1">
+                          <div class="col-sm-6 pl-0">
+                            <p class="text-right">
+                              <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Vincular</button>
+                              <button  [routerLink]="['/recibo/listaordenrecibo']" routerLinkActive="router-link-active"  class="btn btn-space btn-secondary">Cancel</button>
+                            </p>
+                          </div>
+                        </div>
+                        
+              
+                    
+                    
+                  </div>
+                  </div>
+                </div>
+        </div>
+  </form>       
+    
+      
+   
+  
+  </div>
+  

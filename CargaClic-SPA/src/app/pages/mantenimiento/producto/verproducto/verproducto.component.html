@@ -16,157 +16,112 @@
           <div class="card-header card-header-divider">Producto
                <span class="card-subtitle">Datos generales</span>
           </div> 
-        <div class="card-body ">
-          <form #f="ngForm"  (ngSubmit)="registrar(f)" >
-
-          <!-- <div class="input-div">
-             <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cliente">Cliente</label>
-              <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                  <mat-select [formControl]="ClientesCtrl" [(value)]="model.ClienteId" >
-                    <mat-option>
-                        <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
-                    </mat-option>
-                    <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
-                        {{pow.viewValue}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-            </div> -->
-            <div class="input-div">
-                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Código</label>
-                <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                  <input matInput autocomplete="off"  minlength="5" maxlength="10" required [(ngModel)]="model.familia"   name="familia" type="text">
-                </mat-form-field>
+        <div class="card-body">
+          <form #f="ngForm" >
+              <div class="timeline-avatar"><img class="circle" src="assets/img/Product_icon.png" alt="Avatar"></div>
+              <div class="timeline-header"><span class="timeline-autor"> {{ model.descripcionLarga }}  </span>
+                <p class="timeline-activity">Familia <a href="#">{{ model.familia }}</a>.</p><span class="timeline-time">SKU -  {{ model.codigo }}</span>
               </div>
-            <div class="input-div">
-              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Código</label>
-              <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                <input matInput autocomplete="off"  minlength="5" maxlength="10" required [(ngModel)]="model.codigo"  #codigo="ngModel" placeholder="SKU - Código de producto"  name="codigo" type="text">
-              </mat-form-field>
-            </div>
-            <div class="input-div">
-              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="descripcion">Descripción</label>
-              <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                <input matInput autocomplete="off"  minlength="3" maxlength="40"  required [(ngModel)]="model.DescripcionLarga"  #descripcion="ngModel" name="descripcion" placeholder="Descripción del producto" type="text">
-              </mat-form-field>
-              <!-- <div class="alert alert-danger" *ngIf="descripcion.errors.minlength"> 
-                  <div *ngIf="descripcion.errors.minlength">
-                  password debe tener mas de 5 caracteres.
-              </div>
-            </div> -->
-            </div>
-            <div class="input-div">
-                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Peso</label>
-                <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                  <input matInput autocomplete="off"   required [(ngModel)]="model.peso"  #peso="ngModel"   name="peso" type="text">
-                </mat-form-field>
-              </div>
-              <div class="input-div">
-                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Unidad de Medida</label>
-                  <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                    <input matInput autocomplete="off"   required [(ngModel)]="model.unidadMedida"  #peso="ngModel"   name="peso" type="text">
-                  </mat-form-field>
+        
+              <div class="be-booking-desc">
+                  <h4 class="be-booking-desc-title"> <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Editar</button></h4><span class="be-booking-desc-details">Puede editar los datos completos del producto en la sección de edición de la gestión del producto.</span>
                 </div>
-              <div class="row pt-2 pt-sm-5 mt-1">
-                    <div class="col-sm-6 pl-0">
-                      <p class="text-right">
-                        <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
-                         <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button> 
-                  
-                      </p>
-                    </div>
+              <div class="form-group pt-2">
+                  <label for="descripcion">Peso</label>
+                    <input class="form-control" readonly  [(ngModel)]="model.peso"   name="peso" type="text">
+                </div>
+                <div class="form-group pt-2">
+                    <label for="descripcion">Unidad de Medida</label>
+                      <input class="form-control" readonly  [(ngModel)]="model.unidadMedida"   name="UnidadMedida" type="text">
                   </div>
-     
-           
+              
           </form>
         </div>
         </div>
       </div>
       <div class="col-md-8">
         <div class="card card-border-color card-border-color-primary">
-          <div class="card-header card-header-divider">Datos de Producto<span class="card-subtitle">Nuevo Producto de sistema</span></div>
+          <div class="card-header card-header-divider">Huellas<span class="card-subtitle">Listado de Huellas registradas para el producto</span>  <div class="form-group pt-2">
+            <button class="btn btn-primary" (click)="nuevoDialog(id)" type="button"> Nueva Huella </button>
+          </div></div>
           <div class="card-body ">
-            <form #f="ngForm"  (ngSubmit)="registrar(f)" >
-  
-            <div class="input-div">
-               <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cliente">Cliente</label>
-                <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                    <mat-select [formControl]="ClientesCtrl" [(value)]="model.ClienteId" >
-                      <mat-option>
-                          <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
-                      </mat-option>
-                      <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
-                          {{pow.viewValue}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-              </div>
-              <div class="input-div">
-                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="familia">Familia</label>
-                   <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                       <mat-select  [(value)]="model.FamiliaId" >
-                         <mat-option  *ngFor="let pow of familia"  [value]="pow.val">
-                             {{pow.viewValue}}
-                         </mat-option>
-                       </mat-select>
-                     </mat-form-field>
-                 </div>
-              <div class="input-div">
-                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Código</label>
-                <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                  <input matInput autocomplete="off"  minlength="5" maxlength="10" required [(ngModel)]="model.codigo"  #codigo="ngModel" placeholder="SKU - Código de producto"  name="codigo" type="text">
-                </mat-form-field>
-                <!-- <div class="alert alert-danger" *ngIf="codigo.errors.minlength"> 
-                    <div *ngIf="codigo.errors.minlength">
-                    Usuario debe tener mas de 5 caracteres.
-                  </div>
-                 </div>	 -->
-              </div>
-              <div class="input-div">
-                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="descripcion">Descripción</label>
-                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                  <input matInput autocomplete="off"  minlength="3" maxlength="40"  required [(ngModel)]="model.DescripcionLarga"  #descripcion="ngModel" name="descripcion" placeholder="Descripción del producto" type="text">
-                </mat-form-field>
-                <!-- <div class="alert alert-danger" *ngIf="descripcion.errors.minlength"> 
-                    <div *ngIf="descripcion.errors.minlength">
-                    password debe tener mas de 5 caracteres.
-                </div>
-              </div> -->
-              </div>
-              <div class="input-div">
-                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Peso</label>
-                  <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                    <input matInput autocomplete="off"   required [(ngModel)]="model.peso"  #peso="ngModel"   name="peso" type="text">
-                  </mat-form-field>
-                </div>
-                <div class="input-div">
-                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="unidadmedida">Unidad Medida</label>
-                     <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                         <mat-select  [(value)]="model.UnidadMedidaId" >
-                           <mat-option  *ngFor="let pow of unidadMedida"  [value]="pow.val">
-                               {{pow.viewValue}}
-                           </mat-option>
-                         </mat-select>
-                       </mat-form-field>
-                   </div>
-  
-                <div class="row pt-2 pt-sm-5 mt-1">
-                      <div class="col-sm-6 pl-0">
-                        <p class="text-right">
-                          <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
-                           <button  (click)="cancel()" class="btn btn-space btn-secondary">Cancel</button> 
-                    
-                        </p>
+              <div class="main-content container-fluid">
+                  <div class="row">
+
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="card card-table">
+                        <div class="card-body">
+                          <div class="table-responsive noSwipe">
+                            <table class="table table-striped table-hover">
+                              <thead>
+                                <tr>
+                                  <th style="width:20%;">Huella</th>
+                                  <th style="width:40%;">Cama</th>
+                                  <th style="width:40%;">% Uso</th>
+                                  <th style="width:40%;">Código</th>
+                                  <th style="width:40%;">Creación</th>
+                                  <th style="width:20%;"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+
+                                <tr *ngFor="let huella of huellas">
+                          
+                                  <td class="user-avatar cell-detail user-info"><img src="assets/img/pallet.jpg" alt="Avatar"><span>{{huella.codigoHuella}}</span><span class="cell-detail-description">Huella</span></td>
+                                  <td class="cell-detail"> <span>{{huella.caslvl}}</span><span class="cell-detail-description">Base de pallet</span></td>
+                                  <td class="milestone"><span class="completed">{{huella.cantidad}} %</span><span class="version"> 0 </span>
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-primary" [style.width]="huella.cantidad+'%'"   ></div>
+                                    </div>
+                                  </td>
+                                  <td class="cell-detail"><span>master</span><span class="cell-detail-description">63e8ec3</span></td>
+                                  <td class="cell-detail"><span>{{huella.fechaRegistro}}</span><span class="cell-detail-description">8:30</span></td>
+                                  <td class="text-right">
+                                    <div class="btn-group btn-hspace">
+                                      <button class="btn btn-secondary" (click)="openDialog(huella.id)" type="button"> Editar </button>
+                                      <button class="btn btn-secondary" (click)="nuevahuella(huella.id)" type="button"> Ver </button>
+                                     
+                                    </div>
+                                  </td>
+                                </tr>
+                                <!-- <tr class="primary">
+                         
+                                  <td class="user-avatar cell-detail user-info"><img src="assets/img/pallet.jpg" alt="Avatar"><span>Benji Harper</span><span class="cell-detail-description">Designer</span></td>
+                                  <td class="cell-detail"> <span>Main structure markup</span><span class="cell-detail-description">CLI Connector</span></td>
+                                  <td class="milestone"><span class="completed">22 / 30</span><span class="version">v1.1.5</span>
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-primary" style="width: 75%;"></div>
+                                    </div>
+                                  </td>
+                                  <td class="cell-detail"><span>develop</span><span class="cell-detail-description">4cc1bc2</span></td>
+                                  <td class="cell-detail"><span>April 22, 2018</span><span class="cell-detail-description">14:45</span></td>
+                                  <td class="text-right">
+                                    <div class="btn-group btn-hspace">
+                                      <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Open <span class="icon-dropdown mdi mdi-chevron-down"></span></button>
+                                      <div class="dropdown-menu" role="menu"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Separated link</a>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr> -->
+              
+
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
                       </div>
                     </div>
-       
-             
-            </form>
+                  </div>
+                </div>
           </div>
           </div>
         </div>
       </div>
   </div>
+
 
 
 

@@ -18,7 +18,7 @@
             <form #f="ngForm"  (ngSubmit)="registrar(f)" >
 
                 <div class="input-div">
-                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="power">Cliente Propietario</label>
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="power">Propietario</label>
                   <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
             
                       <mat-select required [formControl]="ClientesCtrl" [(value)]="model.PropietarioControl"   placeholder="Selección" #singleSelect>
@@ -42,11 +42,7 @@
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                       </mat-form-field>
-                      <div class="alert alert-danger" *ngIf="FechaEsperada.errors  "> 
-                          <div *ngIf="FechaEsperada.errors.datetime">
-                          Email debe de tener una dirección válida
-                         </div>
-                    </div>
+                
                     
                </div>
 
@@ -63,7 +59,7 @@
                 <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                   <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.guiaremision" name="guiaremision" #guiaremision="ngModel" type="text">
                 </mat-form-field>
-                <div class="alert alert-danger" *ngIf="guiaremision.errors  "> 
+                <div class="alert alert-danger" *ngIf="guiaremision.errors"> 
                     <div *ngIf="guiaremision.errors.minlength">
                     Debe tener mas de 5 caracteres.
                   </div>
@@ -73,7 +69,7 @@
                   <div class="col-sm-6 pl-0">
                     <p class="text-right">
                       <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
-                      <button  [routerLink]="['/listaordenrecibo']" routerLinkActive="router-link-active"  class="btn btn-space btn-secondary">Cancel</button>
+                      <button  [routerLink]="['/recibo/listaordenrecibo']" routerLinkActive="router-link-active"  class="btn btn-space btn-secondary">Cancel</button>
                     </p>
                   </div>
                 </div>

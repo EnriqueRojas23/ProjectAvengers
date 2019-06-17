@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
 
 
     }, error => {
-      
+        
         if('Unauthorized' == error)
            this.alertify.error('usuario y/o contraseña incorrecta');
         else if('Bloqueado' == error)

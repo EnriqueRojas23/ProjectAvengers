@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using CargaClic.Data.Mappings.Prerecibo;
 using CargaClic.Domain.Prerecibo;
 using CargaClic.Domain.Inventario;
+using CargaClic.Domain.Despacho;
+using CargaClic.Data.Mappings.Despacho;
 
 namespace CargaClic.Data
 {
@@ -19,16 +21,32 @@ namespace CargaClic.Data
         public DbSet<Tabla> Tablas {get;set;}
         public DbSet<Estado> Estados {get;set;}
         public DbSet<RolPagina> RolPaginas {get;set;}
-        public DbSet<Cliente> Clientes {get;set;}
+        
+        
+        public DbSet<Propietario> Propietario {get;set;}
+        public DbSet<Cliente> Cliente {get;set;}
+        public DbSet<ClientePropietario> ClientePropietario {get;set;}
+        public DbSet<Direccion> Direccion {get;set;}
+        
+
         public DbSet<OrdenRecibo> OrdenesRecibo {get;set;}
+        public DbSet<Carga> Carga {get;set;}
+        public DbSet<CargaDetalle> CargaDetalle {get;set;}
+        public DbSet<Manifiesto> Manifiesto {get;set;}
         public DbSet<OrdenReciboDetalle> OrdenesReciboDetalle {get;set;}
+
+        public DbSet<OrdenSalida> OrdenSalida {get;set;}
+        public DbSet<OrdenSalidaDetalle> OrdenSalidaDetalle {get;set;}
 
         public DbSet<Proveedor> Proveedor {get;set;}
         public DbSet<Chofer> Chofer {get;set;}
         public DbSet<Vehiculo> Vehiculo {get;set;}
         public DbSet<EquipoTransporte> EquipoTransporte {get;set;}
         public DbSet<Ubicacion> Ubicacion {get;set;}
+
         public DbSet<InventarioGeneral> InventarioGeneral {get;set;}
+        public DbSet<InvLod> InvLod {get;set;}
+
         public DbSet<Huella> Huella {get;set;}
         public DbSet<HuellaDetalle> HuellaDetalle {get;set;}
         public DbSet<ValorTabla> ValorTabla {get;set;}
@@ -44,10 +62,30 @@ namespace CargaClic.Data
             builder.ApplyConfiguration(new RolPaginaConfiguration());
             builder.ApplyConfiguration(new EstadoConfiguration());
             builder.ApplyConfiguration(new TablaConfiguration());
+
             builder.ApplyConfiguration(new ClienteConfiguration());
+            builder.ApplyConfiguration(new PropietarioConfiguration());
+            builder.ApplyConfiguration(new ClientePropietarioConfiguration());
+            builder.ApplyConfiguration(new DireccionConfiguration());
+
             builder.ApplyConfiguration(new OrdenReciboConfiguration());
             builder.ApplyConfiguration(new OrdenReciboDetalleConfiguration());
+
+
+            builder.ApplyConfiguration(new OrdenSalidaConfiguration());
+            builder.ApplyConfiguration(new OrdenSalidaDetalleConfiguration());
+
+            builder.ApplyConfiguration(new CargaConfiguration());
+            builder.ApplyConfiguration(new CargaDetalleConfiguration());
+            builder.ApplyConfiguration(new ManifiestoConfiguration());
+            
+            
+            
             builder.ApplyConfiguration(new InventarioGeneralConfiguration());
+            builder.ApplyConfiguration(new AjusteInventarioConfiguration());
+            builder.ApplyConfiguration(new InvLodConfiguration());
+
+
             builder.ApplyConfiguration(new ValorTablaConfiguration());
 
             builder.ApplyConfiguration(new VehiculoConfiguration());

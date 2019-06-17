@@ -1,0 +1,193 @@
+
+<div class="page-head">
+  <h2 class="page-head-title">Mantenimiento de Propietarios del Sistema</h2>
+ <nav aria-label="breadcrumb" role="navigation">
+   <ol class="breadcrumb page-head-nav">
+    <ol class="breadcrumb page-head-nav">
+      <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
+      <li class="breadcrumb-item active">Listado de Propietarios</li>
+      <!-- <li class="breadcrumb-item active">Nuevo Producto</li>  -->
+    </ol>
+   </ol>
+ </nav>
+</div>
+
+<div class="main-content container-fluid">
+<div class="col-md-12">
+ <div class="card card-border-color card-border-color-primary">
+   <div class="card-header card-header-divider">
+    <div class="row">
+         <b> Propietarios |  </b>  <span class="card-subtitle">   Listado de propietario del sistema</span>
+       </div>
+     </div>
+     <div class="row">
+        <div class="col-md-1">
+            <button class="btn-buttons btn-outline-primary"> <i   class="fa-2x  fas fa-ellipsis-v"></i></button> 
+        </div>
+        <div  class="col-md-7">
+        </div>
+        <div  class="col-md-4" >
+            <div class="input-container">
+                <i class="fa fa-search"></i>
+                <mat-form-field class="search-form-field" >
+                  <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" >
+                </mat-form-field>
+                </div>
+          </div>
+    </div>
+   <div class="card-body">
+       
+       <div  class="mat-elevation-z8">
+           <mat-table #table [dataSource] = "listData" matSort >
+              <!-- Checkbox Column -->
+              <ng-container matColumnDef="razonSocial">
+                 <mat-header-cell *matHeaderCellDef mat-sort-header >  Razón Social </mat-header-cell>
+                 <mat-cell *matCellDef="let cliente"> {{cliente.razonSocial}} </mat-cell>
+               </ng-container>
+       
+         
+               <ng-container matColumnDef="nombreCorto">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >  Nombre Corto </mat-header-cell>
+                <mat-cell *matCellDef="let cliente"> {{cliente.nombreCorto}} </mat-cell>
+              </ng-container>
+
+
+               <ng-container matColumnDef="tipoDocumento">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Documento</mat-header-cell>
+                <mat-cell *matCellDef="let cliente"> {{cliente.tipoDocumento}} </mat-cell>
+              </ng-container>
+        
+
+              <ng-container matColumnDef="documento">
+               <mat-header-cell *matHeaderCellDef mat-sort-header> Documento</mat-header-cell>
+               <mat-cell *matCellDef="let cliente"> {{cliente.documento}} </mat-cell>
+             </ng-container>
+   
+         
+
+          
+              <ng-container matColumnDef="actionsColumn">
+                  <mat-header-cell *matHeaderCellDef>
+                    <button mat-fab ngbTooltip="Nuevo Propietario" color="primary"  routerLink="/mantenimiento/nuevopropietario"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> 
+
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <button class="btn  btn-outline-primary" (click)="verClientes(row.id)" ngbTooltip="Ver Clientes"  type="button"><i class="fa fa-search"></i></button>
+                    <button class="btn btn-space btn-outline-primary" ngbTooltip="Editar Cliente" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
+                    <button class="btn  btn-outline-primary" (click)="Vincular(row.id)" ngbTooltip="Vincular Clientes"  type="button"><i class="fa fa-plus"></i></button>
+                  </mat-cell>
+              </ng-container>
+        
+         
+           <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
+           <mat-row *matRowDef="let row; columns: displayedColumns;" >
+           <!-- [ngClass]="{'highlight': selectedRowIndex == row.id}"
+           (click)="highlight(row)"> -->
+
+           </mat-row>
+         
+         
+           </mat-table>
+
+
+          <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+
+         </div>
+       
+   </div>
+  
+ </div>
+</div>
+
+
+<div class="col-md-12">
+
+
+  <div class="card card-border-color card-border-color-primary">
+    <div class="card-header card-header-divider">
+        
+     <div class="row">
+          <b> Clientes vinculados |  </b>  <span class="card-subtitle">   Listado de clientes vinculados</span>
+        </div>
+      </div>
+ 
+      <div class="row">
+         <div class="col-md-1">
+             <button class="btn-buttons btn-outline-primary"> <i   class="fa-2x  fas fa-ellipsis-v"></i></button> 
+         </div>
+        
+         <div  class="col-md-7">
+         </div>
+         <div  class="col-md-4" >
+             <div class="input-container">
+                 <i class="fa fa-search"></i>
+                 <mat-form-field class="search-form-field" >
+                   <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" >
+                 </mat-form-field>
+                 </div>
+           </div>
+     </div>
+ 
+    <div class="card-body">
+        
+        <div  class="mat-elevation-z8">
+            <mat-table #table [dataSource] = "listData1" matSort >
+               <!-- Checkbox Column -->
+               <ng-container matColumnDef="razonSocial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Razón Social </mat-header-cell>
+                  <mat-cell *matCellDef="let cliente"> {{cliente.razonSocial}} </mat-cell>
+                </ng-container>
+        
+          
+ 
+                <ng-container matColumnDef="tipoDocumento">
+                 <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Documento</mat-header-cell>
+                 <mat-cell *matCellDef="let cliente"> {{cliente.tipoDocumento}} </mat-cell>
+               </ng-container>
+         
+ 
+               <ng-container matColumnDef="documento">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Documento</mat-header-cell>
+                <mat-cell *matCellDef="let cliente"> {{cliente.documento}} </mat-cell>
+              </ng-container>
+    
+          
+ 
+           
+                  <ng-container matColumnDef="actionsColumn">
+                      <mat-header-cell *matHeaderCellDef>
+                         <!-- <button mat-fab ngbTooltip="Nuevo Propietario" color="primary"  routerLink="/mantenimiento/nuevopropietario"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>  -->
+ 
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row">
+                         <button class="btn  btn-outline-primary" (click)="eliminar(row.id)" ngbTooltip="Eliminar Cliente"  type="button"><i class="fa fa-trash"></i></button>
+                      </mat-cell>
+                  </ng-container>
+         
+          
+            <mat-header-row *matHeaderRowDef="displayedColumns1; " ></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns1;" >
+            <!-- [ngClass]="{'highlight': selectedRowIndex == row.id}"
+            (click)="highlight(row)"> -->
+ 
+            </mat-row>
+          
+          
+            </mat-table>
+ 
+ 
+           <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+ 
+          </div>
+        
+    </div>
+   
+  </div>
+ </div>
+ 
+
+
+</div>
+
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

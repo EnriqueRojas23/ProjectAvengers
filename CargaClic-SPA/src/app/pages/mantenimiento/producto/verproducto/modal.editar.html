@@ -1,0 +1,59 @@
+
+
+
+<div class="modal-header">
+        <!-- <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true"><span class="mdi mdi-close"></span></button> -->
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h3>Modificar Huella</h3>
+        
+</div>
+<div class="modal-body">
+        <div class="container">
+            <form #f="ngForm"   >
+                  <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Huella</label>
+                    <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <input matInput autocomplete="off"  minlength="5" maxlength="10" required [(ngModel)]="data.CodigoHuella"  #codigo="ngModel" placeholder="Nombre de Huella"  name="codigo" type="text">
+                    </mat-form-field>
+                    <!-- <div class="alert alert-danger" *ngIf="codigo.errors.minlength"> 
+                        <div *ngIf="codigo.errors.minlength">
+                        Usuario debe tener mas de 5 caracteres.
+                      </div>
+                     </div>	 -->
+                  </div>
+                  <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cama">Cama</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <input matInput autocomplete="off" minlength="1" maxlength="2" (keypress)="numberOnly($event)" required [(ngModel)]="data.caslvl"  #cama="ngModel" name="cama" placeholder="Cama" type="text">
+                    </mat-form-field>
+                    <div *ngIf="cama.invalid && (cama.dirty || cama.touched)"  class="alert alert-danger">
+                      <div *ngIf="cama.errors.required">
+                        Debe ingresar la cantidad de productos en la cama.
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="peso">Peso</label>
+                      <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput autocomplete="off"  appTwoDigitDecimaNumber required  [(ngModel)]="data.peso" #peso="ngModel"  name="peso" type="number">
+                      </mat-form-field>
+                      <div *ngIf="peso.invalid && (peso.dirty || peso.touched)"  class="alert alert-danger">
+                      <div *ngIf="peso.errors.required">
+                        Debe ingresar el peso.
+                      </div>
+                      
+                    </div>
+                  </div> -->
+               
+              </form>
+        </div>
+ </div>
+
+<div class="modal-footer">
+  <div class="input-div">
+    <button class="btn btn-success btn-space" type="button" >Guardar</button>
+    <button class="btn btn-secondary btn-space"  type="button" (click)="onNoClick()">Cancel</button>
+ </div>
+</div>
+
+

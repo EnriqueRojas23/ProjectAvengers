@@ -30,6 +30,23 @@ import { EditarordenreciboComponent } from './prerecibo/ordenrecibo/editarordenr
 import { ListadoinventarioComponent } from './inventario/inventariogeneral/listadoinventario/listadoinventario.component';
 import { NuevoproductoComponent } from './mantenimiento/producto/nuevoproducto/nuevoproducto.component';
 import { VerproductoComponent } from './mantenimiento/producto/verproducto/verproducto.component';
+import { NuevahuelladetalleComponent } from './mantenimiento/producto/nuevahuelladetalle/nuevahuelladetalle.component';
+import { AjustesinventarioComponent } from './inventario/inventariogeneral/ajustesinventario/ajustesinventario.component';
+import { NuevoajusteComponent } from './inventario/inventariogeneral/nuevoajuste/nuevoajuste.component';
+import { AjusteinventariodetalleComponent } from './inventario/inventariogeneral/ajusteinventariodetalle/ajusteinventariodetalle.component';
+import { ListaordensalidaComponent } from './despacho/ordensalida/listaordensalida/listaordensalida.component';
+import { NuevaordensalidaComponent } from './despacho/ordensalida/nuevaordensalida/nuevaordensalida.component';
+import { ListadoclienteComponent } from './mantenimiento/cliente/listadocliente/listadocliente.component';
+import { NuevoclienteComponent } from './mantenimiento/cliente/nuevocliente/nuevocliente.component';
+import { VerdetalleclienteComponent } from './mantenimiento/cliente/verdetallecliente/verdetallecliente.component';
+import { ListadopropietarioComponent } from './mantenimiento/propietario/listadopropietario/listadopropietario.component';
+import { NuevopropietarioComponent } from './mantenimiento/propietario/nuevopropietario/nuevopropietario.component';
+import { NuevaordensalidadetalleComponent } from './despacho/ordensalida/nuevaordensalidadetalle/nuevaordensalidadetalle.component';
+import { VerordensalidaComponent } from './despacho/ordensalida/verordensalida/verordensalida.component';
+import { PlanificarcargaComponent } from './despacho/carga/planificarcarga/planificarcarga.component';
+import { ListadodespachoComponent } from './despacho/carga/listadodespacho/listadodespacho.component';
+import { ListadocargasComponent } from './despacho/carga/listadocargas/listadocargas.component';
+import { EquipotransportesalidaComponent } from './despacho/equipotransportesalida/equipotransportesalida.component';
 
 
 
@@ -61,17 +78,34 @@ const pagesRoutes: Routes = [
     {path : 'recibo/equipotransporteentrante', component : ListadoequipotransporteentranteComponent, canActivate: [AuthGuard]} ,
 
 
-    {path : 'listadovehiculo', component : ListadovehiculoComponent, canActivate: [AuthGuard]} ,
-    {path : 'listadoproveedor', component : ListadoproveedorComponent, canActivate: [AuthGuard]} ,
-    {path : 'listadochofer', component : ListadochoferComponent, canActivate: [AuthGuard]} ,
-
+    // {path : 'listadovehiculo', component : ListadovehiculoComponent, canActivate: [AuthGuard]} ,
+    // {path : 'listadoproveedor', component : ListadoproveedorComponent, canActivate: [AuthGuard]} ,
+    // {path : 'listadochofer', component : ListadochoferComponent, canActivate: [AuthGuard]} ,
+    {path : 'mantenimiento/listadopropietario', component : ListadopropietarioComponent, canActivate: [AuthGuard]} ,
+    {path : 'mantenimiento/nuevopropietario', component : NuevopropietarioComponent, canActivate: [AuthGuard]} ,
     {path : 'mantenimiento/listadoproducto', component : ListadoproductoComponent, canActivate: [AuthGuard]} ,
+    {path : 'mantenimiento/listadocliente', component : ListadoclienteComponent, canActivate: [AuthGuard]} ,
+    
+    {path : 'mantenimiento/nuevocliente', component : NuevoclienteComponent, canActivate: [AuthGuard]} ,
+    {path : 'mantenimiento/verdetallecliente/:uid', component : VerdetalleclienteComponent, canActivate: [AuthGuard]} ,
     {path : 'mantenimiento/nuevoproducto', component : NuevoproductoComponent, canActivate: [AuthGuard] } ,
-    {path : 'mantenimiento/verproducto', component : VerproductoComponent, canActivate: [AuthGuard]} ,
+    {path : 'mantenimiento/verproducto/:uid', component : VerproductoComponent, canActivate: [AuthGuard]} ,
+    {path : 'mantenimiento/nuevahuelladetalle/:uid/:uid2', component : NuevahuelladetalleComponent, canActivate: [AuthGuard]} ,
 
-    {path : 'inventariogeneral', component : ListadoinventarioComponent, canActivate: [AuthGuard]} ,
+    {path : 'inventario/inventariogeneral', component : ListadoinventarioComponent, canActivate: [AuthGuard]} ,
+    {path : 'inventario/ajusteinventario', component : AjustesinventarioComponent, canActivate: [AuthGuard]} ,
+    {path : 'inventario/ajusteinventariodetalle/:uid', component : AjusteinventariodetalleComponent, canActivate: [AuthGuard]} ,
+    {path : 'inventario/nuevoajuste/:uid/:uid2', component : NuevoajusteComponent, canActivate: [AuthGuard]} ,
 
-
+    {path : 'despacho/listaordensalida', component : ListaordensalidaComponent, canActivate: [AuthGuard]} ,
+    {path : 'despacho/nuevaordensalida', component : NuevaordensalidaComponent, canActivate: [AuthGuard]} ,
+    {path : 'despacho/nuevaordensalidadetalle/:uid', component : NuevaordensalidadetalleComponent, canActivate: [AuthGuard]} ,
+    {path : 'despacho/verordensalida/:uid', component : VerordensalidaComponent, canActivate: [AuthGuard]} ,
+    {path : 'despacho/planificarcarga', component : PlanificarcargaComponent, canActivate: [AuthGuard]} ,
+    {path : 'despacho/listadocargas', component : ListadocargasComponent, canActivate: [AuthGuard]} ,
+    {path : 'despacho/listadodespacho', component : ListadodespachoComponent, canActivate: [AuthGuard]} ,
+    {path : 'despacho/equipotransportesalida/:uid', component : EquipotransportesalidaComponent, canActivate: [AuthGuard]} ,
+                      
     {path : '', redirectTo : '/dashboard', pathMatch: 'full'},
 
 

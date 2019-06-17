@@ -3,8 +3,8 @@
     <h2 class="page-head-title">Paletizar</h2>
     <nav aria-label="breadcrumb" role="navigation">
       <ol class="breadcrumb page-head-nav">
-        <li class="breadcrumb-item"><a href="#">Equipos de Transporte</a></li>
-        <li class="breadcrumb-item active">Listado de Órdenes de Recibo</li>
+        <li class="breadcrumb-item"><a [routerLink]="['/recibo/listaordenrecibida', this.EquipoTransporteId]" routerLinkActive="router-link-active" >Equipos de Transporte</a></li>
+        <li class="breadcrumb-item ">Listado de Órdenes de Recibo</li>
         <li class="breadcrumb-item active">Identificar Pallets</li>
       </ol>
     </nav>

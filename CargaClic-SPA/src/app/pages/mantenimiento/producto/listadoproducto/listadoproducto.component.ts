@@ -56,7 +56,7 @@ export class ListadoproductoComponent implements OnInit {
 
   }
   verHuellas(id){
-    this.router.navigate(['mantenimiento/verproducto']);
+    this.router.navigate(['mantenimiento/verproducto', id]);
 
   }
 

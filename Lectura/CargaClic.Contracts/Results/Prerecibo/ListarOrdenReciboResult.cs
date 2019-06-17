@@ -21,7 +21,8 @@ namespace CargaClic.Contracts.Results.Prerecibo
         public DateTime  FechaRegistro	{get;set;}
         public int  EstadoID	{get;set;}
         public string  NombreEstado{get;set;}
-
+        
+        public string HoraEsperada {get;set;}
         public string transportista {get;set;}
         public string placa {get;set; }
         public string equipotransporte {get;set;}

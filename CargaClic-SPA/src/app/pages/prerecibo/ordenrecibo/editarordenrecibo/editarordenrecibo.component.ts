@@ -151,7 +151,7 @@ ngAfterViewInit() {
        this.alertify.error(error);
     }, () => { 
       this.alertify.success("Se actualizó correctamente.");
-      this.router.navigate(['/listaordenrecibo']);
+      this.router.navigate(['/recibo/listaordenrecibo']);
     });
 
   }

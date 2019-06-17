@@ -8,25 +8,23 @@ import { PAGES_ROUTES } from './pages.routes';
 import { CommonModule } from '@angular/common';
 import { AuthGuard } from '../_guards/auth.guard';
 import { ListausuariosComponent, NgbdModalConfirmAutofocus, DialogOverviewExampleDialog } from './seguridad/usuario/listausuarios/listausuarios.component';
-import { MatTableModule ,MatButtonModule, MatPaginatorModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSortModule, MatOptionModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatTreeModule, MatCheckboxModule, MatDialogModule } from '@angular/material';
+import { MatTableModule ,MatButtonModule, MatPaginatorModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSortModule, MatOptionModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatTreeModule, MatCheckboxModule, MatDialogModule, MatError } from '@angular/material';
 import { UserService } from '../_services/user.service';
 import { NuevousuarioComponent } from './seguridad/usuario/nuevousuario/nuevousuario.component';
 import { EditarusuarioComponent } from './seguridad/usuario/editarusuario/editarusuario.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
 import { ListarolesComponent } from './seguridad/rol/listaroles/listaroles.component';
 import { NuevorolComponent } from './seguridad/rol/nuevorol/nuevorol.component';
 import { AsignaropcionesComponent } from './seguridad/rol/asignaropciones/asignaropciones.component';
 import { TreeviewModule } from 'ngx-treeview';
 import { AngularDualListBoxModule } from 'angular-dual-listbox';
-import { NgxLoadingModule } from 'ngx-loading';
+import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 import { ListaordenreciboComponent } from './prerecibo/ordenrecibo/listaordenrecibo/listaordenrecibo.component';
 
 import { NuevaordenreciboComponent } from './prerecibo/ordenrecibo/nuevaordenrecibo/nuevaordenrecibo.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
-import { NuevaordenrecibodetalleComponent, DialogBuscarProducto } from './prerecibo/ordenrecibo/nuevaordenrecibodetalle/nuevaordenrecibodetalle.component';
+import { NuevaordenrecibodetalleComponent } from './prerecibo/ordenrecibo/nuevaordenrecibodetalle/nuevaordenrecibodetalle.component';
 import { VerordenreciboComponent } from './prerecibo/ordenrecibo/verordenrecibo/verordenrecibo.component';
 import { OrdenReciboService } from '../_services/Recepcion/ordenrecibo.service';
 import { GeneralService } from '../_services/Mantenimiento/general.service';
@@ -51,14 +49,33 @@ import { ApiXHRBackend } from '../_services/http.interceptor';
 import { ListadoinventarioComponent } from './inventario/inventariogeneral/listadoinventario/listadoinventario.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NuevoproductoComponent } from './mantenimiento/producto/nuevoproducto/nuevoproducto.component';
-import { VerproductoComponent } from './mantenimiento/producto/verproducto/verproducto.component';
+import { VerproductoComponent, DialogEditarHuella, DialogNuevoHuella } from './mantenimiento/producto/verproducto/verproducto.component';
 
 
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { TwoDigitDecimaNumberDirective } from '../_common/TwoDigitDecimaNumberDirective';
+import { NuevahuelladetalleComponent, DialogNuevaHuellaDetalle } from './mantenimiento/producto/nuevahuelladetalle/nuevahuelladetalle.component';
+import { AjustesinventarioComponent } from './inventario/inventariogeneral/ajustesinventario/ajustesinventario.component';
+import { NuevoajusteComponent } from './inventario/inventariogeneral/nuevoajuste/nuevoajuste.component';
+import { AjusteinventariodetalleComponent } from './inventario/inventariogeneral/ajusteinventariodetalle/ajusteinventariodetalle.component';
+import { ListaordensalidaComponent } from './despacho/ordensalida/listaordensalida/listaordensalida.component';
+import { NuevaordensalidaComponent } from './despacho/ordensalida/nuevaordensalida/nuevaordensalida.component';
+import { ListadoclienteComponent, DialogAgregarDireccion } from './mantenimiento/cliente/listadocliente/listadocliente.component';
+import { NuevoclienteComponent } from './mantenimiento/cliente/nuevocliente/nuevocliente.component';
+import { VerdetalleclienteComponent } from './mantenimiento/cliente/verdetallecliente/verdetallecliente.component';
+import { ListadopropietarioComponent, DialogNuevoCliente } from './mantenimiento/propietario/listadopropietario/listadopropietario.component';
+import { NuevopropietarioComponent } from './mantenimiento/propietario/nuevopropietario/nuevopropietario.component';
+import { NuevaordensalidadetalleComponent } from './despacho/ordensalida/nuevaordensalidadetalle/nuevaordensalidadetalle.component';
+import { VerordensalidaComponent } from './despacho/ordensalida/verordensalida/verordensalida.component';
+import { DialogBuscarProducto } from './modal/ModalBuscarProducto/ModalBuscarProducto.component';
+import { PlanificarcargaComponent } from './despacho/carga/planificarcarga/planificarcarga.component';
+import { ListadodespachoComponent } from './despacho/carga/listadodespacho/listadodespacho.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { EditButtonRendererComponent } from './modal/Edit-button-renderer/Edit-button-renderer.component';
+import { ListadocargasComponent } from './despacho/carga/listadocargas/listadocargas.component';
+import { EquipotransportesalidaComponent } from './despacho/equipotransportesalida/equipotransportesalida.component';
 
 
-
-
- 
 
 
 
@@ -103,17 +120,36 @@ import { VerproductoComponent } from './mantenimiento/producto/verproducto/verpr
     EditarordenreciboComponent,
     ListadoinventarioComponent,
     NuevoproductoComponent,
-    VerproductoComponent
-    
-    
-  
+    VerproductoComponent,
+    DialogEditarHuella,
+    TwoDigitDecimaNumberDirective,
+    NuevahuelladetalleComponent,
+    DialogNuevoHuella,
+    DialogNuevaHuellaDetalle,
+    AjustesinventarioComponent,
+    AjusteinventariodetalleComponent,
+    NuevoajusteComponent ,
+    ListaordensalidaComponent,
+    NuevaordensalidaComponent,
+    ListadoclienteComponent,
+    NuevoclienteComponent,
+    VerdetalleclienteComponent,
+    DialogNuevoCliente,
+    ListadopropietarioComponent,
+    NuevopropietarioComponent,
+    DialogAgregarDireccion,
+    NuevaordensalidadetalleComponent,
+    VerordensalidaComponent,
+    PlanificarcargaComponent,
+    ListadodespachoComponent,
+    EditButtonRendererComponent,
+    ListadocargasComponent,
+    EquipotransportesalidaComponent
 
   ],
   exports: [
       DashboardComponent,
       ProgressComponent,
-      
-      
   ],
   imports: [
     SharedModule,
@@ -137,19 +173,22 @@ import { VerproductoComponent } from './mantenimiento/producto/verproducto/verpr
     MatCheckboxModule,
     NgbModule,
     TreeviewModule.forRoot(),
-    NgxLoadingModule.forRoot({}),
+    NgxLoadingModule.forRoot({
+      animationType: ngxLoadingAnimationTypes.wanderingCubes,
+      backdropBackgroundColour: 'rgba(0,0,0,0.1)', 
+      backdropBorderRadius: '4px',
+      primaryColour: '#ffffff', 
+      secondaryColour: '#ffffff', 
+      tertiaryColour: '#ffffff'
+  }),
     NgxMaterialTimepickerModule.forRoot(),
     AngularDualListBoxModule ,
     AngularDateTimePickerModule,
     NgxMatSelectSearchModule,
     MatSelectModule,
-    MatFormFieldModule,
-    SweetAlert2Module
-  
-    
-    
-    
-    
+    SweetAlert2Module,
+    MatProgressBarModule,
+    AgGridModule.withComponents([])
     
   ],
   providers: [
@@ -168,7 +207,13 @@ import { VerproductoComponent } from './mantenimiento/producto/verproducto/verpr
     DialogBuscarEmpTransporte,
     DialogBuscarChofer,
     NgbdModalConfirmAlmacenamiento,
-    DialogExcepciones
+    DialogExcepciones,
+    DialogEditarHuella,
+    DialogNuevoHuella,
+    DialogNuevaHuellaDetalle,
+    DialogNuevoCliente,
+    DialogAgregarDireccion,
+    EditButtonRendererComponent
   ],
   
 })

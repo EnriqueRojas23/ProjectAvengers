@@ -21,14 +21,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatTableModule, MatPaginatorModule, MatSortModule,  } from '@angular/material';
 
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { XHRBackend } from '@angular/http';
 import { ApiXHRBackend } from './_services/http.interceptor';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-
+import { AgGridModule } from 'ag-grid-angular';
 
 
 
@@ -40,8 +40,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
    declarations: [
       AppComponent,
       LoginComponent,
-      PagesComponent,
-      
+      PagesComponent
       
       
       

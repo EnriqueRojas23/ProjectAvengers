@@ -16,9 +16,9 @@ namespace CargaClic.Domain.Prerecibo
         public DateTime? FechaExpire {get;set;}
         public int EstadoID {get;set;}
         public int Cantidad {get;set;}
-        public int CantidadRecibida {get;set;}
-        public int CantidadFaltante {get;set;}
-        public int CantidadSobrante {get;set;}
+        public int? CantidadRecibida {get;set;}
+        public int? CantidadFaltante {get;set;}
+        public int? CantidadSobrante {get;set;}
         public bool Completo {get;set;}
     }
 }

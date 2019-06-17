@@ -7,8 +7,9 @@ import { NgbActiveModal, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-
 import { Ubicacion } from 'src/app/_models/Mantenimiento/ubicacion';
 import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
 import { Dropdownlist } from 'src/app/_models/Constantes';
+import { DialogData } from 'src/app/_models/Common/dialogdata';
 
-import { DialogData } from 'src/app/pages/seguridad/usuario/listausuarios/listausuarios.component';
+
 
 
 
@@ -285,6 +286,6 @@ excepcion(id): void {
   }
   regresar(){
     
-    this.router.navigate(['/listaordenrecibida',  this.activatedRoute.snapshot.params["uid2"] ]);
+    this.router.navigate(['/recibo/listaordenrecibida',  this.activatedRoute.snapshot.params["uid2"] ]);
   }
 }

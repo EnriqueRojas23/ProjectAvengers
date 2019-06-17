@@ -1,0 +1,11 @@
+.colored-header-primary .modal-content .modal-header{
+    background-color: #5f99f5;
+  }
+
+  .mat-column-DescripcionLarga {
+    flex: 0 0 405px;
+    }
+
+    .mat-column-Codigo {
+      flex: 0 0 95px;
+      }

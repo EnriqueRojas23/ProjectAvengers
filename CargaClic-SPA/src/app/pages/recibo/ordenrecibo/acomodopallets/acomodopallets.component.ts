@@ -17,6 +17,9 @@ declare var $: any;
   templateUrl: './acomodopallets.component.html',
   styleUrls: ['./acomodopallets.component.css']
 })
+
+
+
 export class AcomodopalletsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -71,7 +74,8 @@ export class AcomodopalletsComponent implements OnInit {
     this.EquipoTransporteId = this.activatedRoute.snapshot.params["uid2"];
 
     this.inventarioServicio.getAll(this.id).subscribe(resp => { 
-       
+       console.log(resp);
+
         this.model = resp;
         this.listData = new MatTableDataSource(this.model);
         this.listData.paginator = this.paginator;
@@ -132,17 +136,20 @@ identificar(id){
 
 }
 asignarUbicacion(id){
-  //let ordenReciboId = this.activatedRoute.snapshot.params["uid"];
+  
   let ids = '';
   if(this.selection.selected.length > 1){
     this.modeldetail.lodNum = "Seleccionados";
     this.selection.selected.forEach(ele => 
-      ids = ids + ele.id.toString() + ','
+      ids = ids + ele.lodId.toString() + ','
     )
 
     ids = ids.substring(0,ids.length -1);
     this.modeldetail.id = ids;
     this.masterToggle();
+    }
+    else {
+      this.modeldetail.id = this.modeldetail.lodId;
     }
  
   this.inventarioServicio.asignar_ubicacion(this.modeldetail.id,id).subscribe(resp => { 
@@ -204,7 +211,7 @@ asignarUbicacion(id){
 terminar() {
   this.inventarioServicio.terminar_acomodo(this.id).subscribe(resp => { 
     this.alertify.success("Se ha realizado el acomodo de las pallets con éxito.");
-    this.router.navigate(['/listaordenrecibida', this.EquipoTransporteId ]);
+    this.router.navigate(['/recibo/listaordenrecibida', this.EquipoTransporteId ]);
 
   }, error => {
      if(error= "Err101") {

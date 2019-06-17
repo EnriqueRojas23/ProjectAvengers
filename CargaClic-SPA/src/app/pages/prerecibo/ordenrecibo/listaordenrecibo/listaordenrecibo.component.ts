@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatSort, MatPaginator, MatTableDataSource, MatProgressBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrdenReciboService } from 'src/app/_services/Recepcion/ordenrecibo.service';
 import { Router } from '@angular/router';
@@ -11,8 +11,8 @@ import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service'
 import { ReplaySubject, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
-import swal from'sweetalert2';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+
 
 
 
@@ -27,12 +27,13 @@ export class ListaordenreciboComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   searchKey: string;
   pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = [ 'select','almacen', 'numOrden' ,'propietario','nombreEstado','ubicacion' ,'equipotransporte','fechaEsperada','fechaRegistro','actionsColumn' ];
+  displayedColumns: string[] = [ 'select', 'numOrden' ,'propietario','nombreEstado','guiaRemision' ,'equipotransporte', 'placa','fechaEsperada','horaEsperada','fechaRegistro','actionsColumn' ];
   
   listData: MatTableDataSource<OrdenRecibo>;
   public loading = false;
   ordenes: OrdenRecibo[] = [];
   model: any;
+  EstadoId : number;
 
   clientes: Dropdownlist[] = [];
 
@@ -46,9 +47,9 @@ export class ListaordenreciboComponent implements OnInit {
     {val: 31, viewValue: 'Hace un mes '},
   ];
   estados: Dropdownlist[] = [
-    {val: 4, viewValue: 'Planeado'},
-    {val: 5, viewValue: 'Asignado'},
-    {val: 6, viewValue: 'Recibiendo'},
+      {val: 4, viewValue: 'Planeado'},
+      {val: 5, viewValue: 'Asignado'},
+      {val: 6, viewValue: 'Recibiendo'},
     {val: 12, viewValue: 'Almacenado'},
     
   ];
@@ -62,16 +63,21 @@ export class ListaordenreciboComponent implements OnInit {
     private clienteService: ClienteService,
     private data: Data,
     private alertify: AlertifyService
+    
 
    ) { }
 
   ngOnInit() {
     this.loading = true;
+    
+    
     this.model = {
     };
     this.model.intervalo = 3;
     this.model.estadoIdfiltro = 4;
     this.model.PropietarioId = "";
+    
+    this.EstadoId =this.model.estadoIdfiltro;
 
     this.ordenreciboService.getAll(this.model).subscribe(list => {
       
@@ -82,9 +88,9 @@ export class ListaordenreciboComponent implements OnInit {
     this.listData.sort = this.sort;
 
 
-    this.clienteService.getAll().subscribe(resp => { 
+    this.clienteService.getAllPropietarios('').subscribe(resp => { 
       resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.nombre});
+        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
       });
       this.filteredClientes.next(this.clientes.slice());
       this.ClientesFilterCtrl.valueChanges
@@ -149,11 +155,11 @@ export class ListaordenreciboComponent implements OnInit {
   }
 
    ver(id){
-    this.router.navigate(['/verordenrecibo',id]);
+    this.router.navigate(['/recibo/verordenrecibo',id]);
    }
    edit(id){
      
-     this.router.navigate(['/editarordenrecibo',id]);
+     this.router.navigate(['/recibo/editarordenrecibo',id]);
    }
    delete(id){
      
@@ -200,19 +206,20 @@ export class ListaordenreciboComponent implements OnInit {
    equipotransporte(){
     let Id = this.selection.selected ;
     this.data.storage = Id;
-    this.router.navigate(['/vincularequipotransporte', ""] );
+    this.router.navigate(['/recibo/vincularequipotransporte', ""] );
    }
    openDoor(id){
-    this.router.navigate(['/asignarpuerta',id]);
+    this.router.navigate(['/recibo/asignarpuerta',id]);
    }
    buscar(){
-
+   this.EstadoId =this.model.estadoIdfiltro;
+   
 
     this.ordenreciboService.getAll(this.model).subscribe(list => {
     this.ordenes = list;
 
     
-     
+    
     this.loading = false;
     this.listData = new MatTableDataSource(this.ordenes);
     this.listData.paginator = this.paginator;

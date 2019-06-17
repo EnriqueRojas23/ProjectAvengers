@@ -1,0 +1,231 @@
+
+<div class="page-head">
+  <h2 class="page-head-title">Ajustes de Inventario</h2>
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb page-head-nav">
+      <li class="breadcrumb-item"><a href="#">Listado de Inventario</a></li>
+      <!-- <li class="breadcrumb-item">Listado de Órdenes de Recibo</li>
+      <li class="breadcrumb-item active">Identificar Pallets</li> -->
+    </ol>
+  </nav>
+</div>
+
+<div class="main-content container-fluid">
+    <div class="row">
+  
+  <div class="col-md-4">
+    <div class="card card-border-color card-border-color-primary">
+        <div class="card-header card-header-divider">LPN
+             <span class="card-subtitle">Datos generales</span>
+        </div> 
+      <div class="card-body">
+        <form #f="ngForm" >
+            <div class="timeline-avatar"><img class="circle" src="assets/img/pallet.jpg" alt="Avatar"></div>
+            <div class="timeline-header"><span class="timeline-autor"> {{ model.descripcionLarga }}  </span>
+              <p class="timeline-activity">LPN - <a href="#">{{ model.lodNum }}</a>.</p><span class="timeline-time">  {{ model.codigo }}</span>
+            </div>
+      
+            <div class="be-booking-desc">
+                <h4 class="be-booking-desc-title">  <button  class="btn btn-space btn-primary" type="submit">Editar</button></h4>
+                <h4 class="be-booking-desc-title">  <button  class="btn btn-space btn-secondary" (click)="regresar()" type="submit">Regresar</button></h4>
+                  
+                  <span class="be-booking-desc-details">Datos de la ubicación.</span>
+              </div>
+            <div class="form-group pt-2">
+                <label for="descripcion">Área</label>
+                  <input class="form-control" readonly  [(ngModel)]="model.area"   name="peso" type="text">
+              </div>
+              <div class="form-group pt-2">
+                  <label for="descripcion">Ubicación</label>
+                    <input class="form-control" readonly  [(ngModel)]="model.ubicacion"   name="UnidadMedida" type="text">
+                </div>
+            
+        </form>
+      </div>
+      </div>
+    </div>
+<div class="col-md-8">
+
+
+  <div class="card card-border-color card-border-color-primary">
+    <div class="card-header">
+
+     
+    <div class="row">
+        <div class="col-md-1">
+            <button class="btn-buttons btn-outline-primary"  > <i   class="fa-2x  fas fa-ellipsis-v"></i></button> 
+        </div>
+ 
+        <div  class="col-md-7">
+        </div>
+        <div  class="col-md-4" >
+            <div class="input-container">
+                <i class="fa fa-search"></i>
+                <mat-form-field class="search-form-field" >
+                  <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" (keyup)="applyFilter()">
+                </mat-form-field>
+                </div>
+          </div>
+    </div>
+
+ 
+    <div class="card-body">
+
+        
+        <div  class="example-container mat-elevation-z8">
+            <mat-table #table [dataSource] = "listData" matSort >
+
+
+                <!-- <ng-container matColumnDef="select">
+                    <mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                      </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)"
+                                    [aria-label]="checkboxLabel(row)">
+                      </mat-checkbox>
+                    </mat-cell>
+                </ng-container> -->
+
+                <!-- <ng-container matColumnDef="lodNum">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> LodNum</mat-header-cell>
+                    <mat-cell  *matCellDef="let inventario" > 
+                      <span class="label label-info pull-xs-center">{{inventario.lodNum}}</span>
+                    </mat-cell>
+                </ng-container>
+        
+          
+                <ng-container matColumnDef="descripcionLarga" >
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >  Producto </mat-header-cell>
+                    <mat-cell *matCellDef="let inventario"> {{inventario.descripcionLarga}} </mat-cell>
+                </ng-container>
+           -->
+                  
+                  <ng-container matColumnDef="lotNum" >
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> N° Lote</mat-header-cell>
+                    <mat-cell  *matCellDef="let inventario" > 
+                          <span class="label label-info pull-xs-center">{{inventario.lotNum}}</span>
+                    </mat-cell>
+                  </ng-container> 
+
+                         
+                <!-- <ng-container matColumnDef="area" >
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Área </mat-header-cell>
+                  <mat-cell *matCellDef="let inventario"> {{inventario.area}} </mat-cell>
+               </ng-container>
+               
+                <ng-container matColumnDef="ubicacion" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header >  Ubicación </mat-header-cell>
+                      <mat-cell *matCellDef="let inventario"> {{inventario.ubicacion}} </mat-cell>
+                </ng-container> -->
+
+                  <ng-container matColumnDef="fechaExpire">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header >  Fecha Expiración </mat-header-cell>
+                      <mat-cell *matCellDef="let inventario"> 
+                        {{inventario.fechaExpire | date:'dd-MM-yyyy' }} 
+                    </mat-cell>
+                  </ng-container>
+
+
+                    <ng-container matColumnDef="untQty">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header >  Cantidad </mat-header-cell>
+                      <mat-cell *matCellDef="let inventario"> {{inventario.untQty}} </mat-cell>
+                    </ng-container>
+
+  
+                    <ng-container matColumnDef="fechaEsperada">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Esperada</mat-header-cell>
+                        <mat-cell *matCellDef="let user"> 
+                            {{user.fechaEsperada | date:'dd-MM-yyyy' }} 
+                        </mat-cell>
+                      </ng-container>
+           
+        
+
+                      <ng-container matColumnDef="fechaRegistro">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro</mat-header-cell>
+                          <mat-cell *matCellDef="let user"> 
+                              {{user.fechaRegistro | date:'dd-MM-yyyy' }} 
+                          </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="codigoHuella">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header> Código Huella</mat-header-cell>
+                          <mat-cell *matCellDef="let user"> 
+                              {{user.codigoHuella }} 
+                          </mat-cell>
+                        </ng-container>
+
+
+           
+                  <ng-container matColumnDef="actionsColumn">
+                      <mat-header-cell *matHeaderCellDef>
+                           <!-- <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/recibo/nuevaordenrecibo"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>  -->
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row">
+                          <button   class="btn btn-space btn-outline-primary" ngbTooltip="Editar Orden" (click)="edit(row.id)" type="button"><i class="fas fa-edit"></i></button>
+                          
+                        </mat-cell>
+                  </ng-container>
+         
+          
+            <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" 
+            
+            [ngClass]="{ 'highlight': selectedRowIndex == row.id}"
+             (click)="highlight(row)"> 
+
+            </mat-row>
+          
+          
+            </mat-table>
+
+
+           <mat-paginator [pageSizeOptions]="[ 60, 120, 180, 240]" [pageSize]="60" showFirstLastButtons></mat-paginator>
+
+          </div>
+        
+    </div>
+   
+  </div>
+</div>
+</div>
+</div>
+
+<swal
+  #deleteSwal
+  title="Eliminar la Orden"
+  text="¿Esta seguro que desea eliminar la orden?"
+  type="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  [options]="{ confirmButtonText: 'Elminar' }"
+  >
+</swal>
+
+<swal
+#mergeSwal
+title="Merge Inventario"
+text="¿Esta seguro que desea realizar el merge de los pallets seleccioandos?"
+type="question"
+[showCancelButton]="true"
+[focusCancel]="true"
+[options]="{ confirmButtonText: 'Elminar' }"
+>
+</swal>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
+
+<!-- <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="indeterminate"
+          [value]="value"
+          [bufferValue]="bufferValue">
+</mat-progress-bar> -->

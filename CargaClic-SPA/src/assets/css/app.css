@@ -118,7 +118,7 @@ body {
   line-height: 1.428571;
   color: #676a6c;
   text-align: left;
-  background-color: #2f4050;
+  background-color: #eeeeee !important;
 }
 
 [tabindex="-1"]:focus {
@@ -649,6 +649,7 @@ pre code {
       flex-wrap: wrap;
   margin-right: -15px;
   margin-left: 15px;
+  margin-top: 12px;
 }
 
 .no-gutters {
@@ -2904,7 +2905,7 @@ fieldset:disabled a.btn {
   color: #0000008a;
   background-color: transparent;
   background-image: none;
-  border-color: #4285f4;
+  /* border-color: #4285f4; */
 }
 
 .btn-outline-primary:hover {
@@ -4365,7 +4366,7 @@ input[type="button"].btn-block {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding: 0.5rem 1rem;
+  padding: 0rem 0rem !important;
 }
 
 .navbar > .container,
@@ -4815,8 +4816,10 @@ input[type="button"].btn-block {
   word-wrap: break-word;
   background-color: #FFFFFF;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  /* border: 0px solid rgba(0, 0, 0, 0.125) !Important; */
+  border-top-color: #4285f4 !important;
   border-radius: 3px;
+  border-top: 3px solid #4285f4!important;
 }
 
 .card > hr {
@@ -4862,12 +4865,6 @@ input[type="button"].btn-block {
   margin-left: 1.538rem;
 }
 
-/* .card-header {
-  padding: 0.7692rem 0.538rem;
-  margin-bottom: 0;
-  background-color: rgb(107, 55, 55);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-} */
 
 .card-header:first-child {
   border-radius: calc(3px - 1px) calc(3px - 1px) 0 0;
@@ -12274,7 +12271,7 @@ canvas {
 */
 .be-left-sidebar {
   background-color: #f5f5f5;
-  width: 230px;
+  width: 210px;
   left: 0;
   position: absolute;
   border-right: 1px solid #e3e3e3;
@@ -13593,7 +13590,7 @@ canvas {
 .be-content {
   position: relative;
   left: 0;
-  margin-left: 230px;
+  margin-left: 210px;
   min-height: 100%;
 }
 .be-content-login{
@@ -13684,8 +13681,9 @@ canvas {
   [Page head]
 */
 .page-head {
-  padding: 10px 15px 5px;
+  padding: 5px 10px 0px ;
   position: relative;
+  background-color: white;
 }
 
 @media print {
@@ -19538,7 +19536,7 @@ fieldset[disabled] .btn-color.btn-evernote.active {
 */
 .card {
   background-color: #FFFFFF;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.04);
           box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.04);
   border-width: 0;
@@ -19590,15 +19588,15 @@ fieldset[disabled] .btn-color.btn-evernote.active {
 }
 
 .card-header {
-  font-size: 18px;
-  font-weight: 300;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 1.5384rem;
-  margin: 0 1.538rem;
-  border-bottom-width: 0;
-  border-radius: 3px 3px 0 0;
-  background-color: transparent;
+  font-size: 15px !important;
+  font-weight: 200 !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  /* padding-top: 1.5384rem !important; */
+  /* margin: 0 1.538rem !important; */
+  border-bottom-width: 1 !important;
+  border-radius: 3px 3px 0 0 !important;
+  background-color: rgba(241, 234, 234, 0.12) !important ;
 }
 
 .card-header .tools {
@@ -19649,7 +19647,7 @@ fieldset[disabled] .btn-color.btn-evernote.active {
   margin: 0 1.538rem 8px;
   padding-left: 0;
   padding-right: 0;
-  padding-bottom: 1.2307rem;
+  /* padding-bottom: 1.2307rem; */
 }
 
 .card-header-divider .card-subtitle {
@@ -19709,11 +19707,11 @@ fieldset[disabled] .btn-color.btn-evernote.active {
 }
 
 .card-border-color-danger {
-  border-top-color: #ea4335;
+  border-top-color: #ea4335 !important;
 }
 
 .card-border-color-warning {
-  border-top-color: #fbbc05;
+  border-top-color: #fbbc05 !important;
 }
 
 .card-border-color-success {
@@ -22328,7 +22326,7 @@ address {
   -webkit-box-shadow: none;
           box-shadow: none;
   padding: 10px 12px;
-  font-size: 1.1538rem;
+  /* font-size: 1.1538rem; */
   -webkit-transition: none;
   transition: none;
   height: 2.692rem;

@@ -29,6 +29,9 @@ get(ProductoId: number) : Observable<Producto[]> {
 getHuellas(ProductoId: any){
   return this.http.get<Huella[]>(this.baseUrl + "GetHuellas?ProductoId=" + ProductoId, httpOptions)
 };
+getHuella(HuellaId: number){
+  return this.http.get<Huella[]>(this.baseUrl + "GetHuella?HuellaId=" + HuellaId, httpOptions)
+};
 getHuellasDetalle(HuellaId: number){
   return this.http.get<HuellaDetalle[]>(this.baseUrl + "GetHuellasDetalle?HuellaId=" + HuellaId, httpOptions)
 };
@@ -38,5 +41,28 @@ registrarProducto(model: any){
      console.log(response);
     
   }))  
+};
+registrarHuellaDetalle(model: any){
+  return this.http.post(this.baseUrl + 'HuellaDetalleRegister', model, httpOptions)
+  .pipe(map((response: any) => {
+     console.log(response);
+    
+  }));  
+};
+registrarHuella(model: any){
+  console.log(model);
+  return this.http.post(this.baseUrl + 'HuellaRegister', model, httpOptions)
+  .pipe(map((response: any) => {
+     console.log(response);
+    
+  }));  
+};
+deleteHuellaDetalle(id: number){
+  return this.http.delete(this.baseUrl + 'HuellaDetalleDelete?id=' + id, httpOptions)
+  .pipe(map((response: any) => {
+
+  }))
 }
+
+
 }

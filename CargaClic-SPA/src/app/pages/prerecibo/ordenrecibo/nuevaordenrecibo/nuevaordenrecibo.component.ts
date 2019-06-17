@@ -60,9 +60,9 @@ export class NuevaordenreciboComponent implements OnInit,OnDestroy,AfterViewInit
      , private alertify: AlertifyService ) { }
 
   ngOnInit() {
-      this.clienteService.getAll().subscribe(resp => { 
+      this.clienteService.getAllPropietarios('').subscribe(resp => { 
         resp.forEach(element => {
-          this.clientes.push({ val: element.id , viewValue: element.nombre});
+          this.clientes.push({ val: element.id , viewValue: element.razonSocial});
         });
         this.filteredClientes.next(this.clientes.slice());
         this.ClientesFilterCtrl.valueChanges
@@ -124,7 +124,7 @@ ngAfterViewInit() {
        this.alertify.error(error);
     }, () => { 
       this.alertify.success("Se registró correctamente.");
-      this.router.navigate(['/verordenrecibo',  this.model.id ]);
+      this.router.navigate(['/recibo/verordenrecibo',  this.model.id ]);
     });
 
   }

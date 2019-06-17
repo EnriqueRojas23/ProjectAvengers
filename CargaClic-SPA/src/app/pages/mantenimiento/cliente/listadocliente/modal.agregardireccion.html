@@ -1,0 +1,83 @@
+
+ 
+    <div class="modal-header modal-header-colored">
+        <h3 class="modal-title" aria-level="2">Agregar Dirección</h3>
+        
+      </div>
+    
+
+<div class="modal-body">
+    
+    <div class="col-md-12">
+        <div class="card card-border-color card-border-color-primary">
+          
+            <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+  
+        
+  
+              
+              <div class="input-div">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="clienteId">Departamento</label>
+                 <mat-form-field  class="input-form-field  col-sm-8 col-lg-6">
+                     <mat-select (selectionChange)="onChangeDepartamento($event)" [(value)]="model.DepartamentoId">
+                       <mat-option  *ngFor="let pow of departamentos"  [value]="pow.val">
+                           {{pow.viewValue}}
+                       </mat-option>
+                     </mat-select>
+                   </mat-form-field>
+               </div>
+  
+               <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="clienteId">Provincia</label>
+                   <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                       <mat-select (selectionChange)="onChangeProvincias($event)" [(value)]="model.ProvinciaId">
+                         <mat-option  *ngFor="let pow of provincias"  [value]="pow.val">
+                             {{pow.viewValue}}
+                         </mat-option>
+                       </mat-select>
+                     </mat-form-field>
+                 </div>
+
+                 
+                 <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="clienteId">Distrito</label>
+                     <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
+                         <mat-select  [(value)]="model.DistritoId">
+                           <mat-option  *ngFor="let pow of distritos"  [value]="pow.val">
+                               {{pow.viewValue}}
+                           </mat-option>
+                         </mat-select>
+                       </mat-form-field>
+                   </div>
+
+                   <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Código</label>
+                      <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput autocomplete="off"  minlength="3" maxlength="50" required [(ngModel)]="model.codigo"  #codigo="ngModel" placeholder="Código de la dirección"  name="nombre" type="text">
+                      </mat-form-field>
+                    </div>
+      
+                   <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="direccion">Dirección</label>
+                      <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput autocomplete="off"  minlength="3" maxlength="50" required [(ngModel)]="model.direccion"  #direccion="ngModel" placeholder="Dirección completa "  name="nombre" type="text">
+                      </mat-form-field>
+                    </div>
+        
+    
+             
+                <div class="row pt-2 pt-sm-5 m  t-1">
+                      <div class="col-sm-6 pl-0">
+                        <p class="text-right">
+                          <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                          <button  (click)="close()" class="btn btn-space btn-secondary">Cancel</button> 
+                        </p>
+                      </div>
+                    </div>
+            </form>
+          
+        </div>
+    </div>
+ </div>
+
+
