@@ -16,21 +16,30 @@ namespace CargaClic.API.Controllers.Mantenimiento
     public class ClienteController : ControllerBase
     {
         private readonly IRepository<Cliente> _repo;
+        private readonly IRepository<Propietario> _repo_propietario;
         private readonly IMantenimientoRepository _repository;
         private readonly IClienteRepository _repository_Cliente;
 
         public ClienteController(IRepository<Cliente> repo,
          IMantenimientoRepository repository ,
+         IRepository<Propietario> repo_propietario,
          IClienteRepository repository_cliente)
         {
             _repo = repo;
             _repository = repository;
             _repository_Cliente = repository_cliente;
+            _repo_propietario = repo_propietario;
         }
         [HttpGet("Get")]
         public async Task<IActionResult> Get(int id)
         {
             var usuario = await  _repo.Get(x=> x.Id == id);
+            return Ok(usuario);
+        }
+        [HttpGet("GetPropietario")]
+        public async Task<IActionResult> GetPropietario(int id)
+        {
+            var usuario = await  _repo_propietario.Get(x=> x.Id == id);
             return Ok(usuario);
         }
         [HttpGet]

@@ -37,7 +37,6 @@
             
                   <ng-container matColumnDef="Id">
                        <mat-header-cell *matHeaderCellDef> Id </mat-header-cell> 
-                      
                       <mat-cell *matCellDef="let user"> {{user.id}} </mat-cell>
                     </ng-container>
             
@@ -95,8 +94,6 @@
                           <div *ngIf="user.enLinea then thenBlock else elseBlock"></div>
                           <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">Online     </div>     </ng-template>
                           <ng-template #elseBlock>Offline</ng-template>  
-                        
-                      
                       </mat-cell>
                     </ng-container>
             
@@ -104,7 +101,7 @@
                     <ng-container matColumnDef="actionsColumn">
                         <mat-header-cell *matHeaderCellDef>
                             <div class="example-button-row">
-                            <button mat-fab color="primary" ngbTooltip="Nuevo Usuario del Sistema" routerLink="/nuevousuario"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
+                            <button mat-fab color="primary" ngbTooltip="Nuevo Usuario del Sistema" routerLink="/seguridad/nuevousuario"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
                             </div>
                             <!-- <button class="btn btn-space btn-primary" routerLink="/nuevousuario">Nuevo Usuario</button> -->
                         </mat-header-cell>

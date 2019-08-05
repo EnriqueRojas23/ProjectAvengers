@@ -1,0 +1,43 @@
+
+.mat-row {
+    cursor: pointer;
+  }
+  
+  .mat-column-propietario {
+    flex: 0 0 80px;
+    text-align: right;
+    
+  }
+  .mat-column-workNum {
+    flex: 0 0 100px;
+    text-align: center;
+  }
+  .mat-column-propietario {
+    flex:-1 0 150px;
+    
+    
+  }
+  .mat-column-FechaRegistro {
+    flex: 0 0 80px;
+    
+  }
+  .mat-column-Estado {
+    flex: 0 0 80px;
+    
+  }
+  .mat-column-select {
+    flex: 0 0 38px;
+    display:inherit;
+  
+    
+  }
+  .mat-column-Direccion {
+    flex: 0 0 200px;
+    
+  }
+  
+  .mat-column-actionsColumn {
+    flex: 0 0 120px;
+    
+  }
+  

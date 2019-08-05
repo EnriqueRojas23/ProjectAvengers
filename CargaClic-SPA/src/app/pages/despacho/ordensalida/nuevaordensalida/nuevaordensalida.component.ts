@@ -200,7 +200,7 @@ export class NuevaordensalidaComponent implements OnInit {
          this.alertify.error(error);
       }, () => { 
         this.alertify.success("Se registró correctamente.");
-        this.router.navigate(['/despacho/verordensalida',  this.model ]);
+        this.router.navigate(['/picking/verordensalida',  this.model ]);
       });
     
 

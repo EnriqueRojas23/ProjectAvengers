@@ -9,6 +9,7 @@ namespace CargaClic.Domain.Mantenimiento
         public string NombreCorto {get;set;}
         public int TipoDocumentoId {get;set;}
         public string Documento {get;set;}
+        public string Direccion {get;set;}
         public bool Activo {get;set;}
     }
 }

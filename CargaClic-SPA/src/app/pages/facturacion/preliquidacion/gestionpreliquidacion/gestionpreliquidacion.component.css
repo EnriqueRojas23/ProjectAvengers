@@ -1,0 +1,34 @@
+.mat-row {
+    cursor: pointer;
+  }
+  
+  .mat-column-select {
+    flex: 0 0 30px;
+    text-align: right;
+    
+  }
+  .mat-column-descripcionLarga {
+    flex: 0 0 310px;
+    justify-content: left;
+  }
+  .mat-column-ultimaLiquidacion {
+    flex: 0 0 140px;
+    
+  }
+  .mat-column-cantidad {
+    flex: 0 0  70px;
+  }
+  .mat-column-paletas {
+    flex: 0 0  70px;
+  }
+  .mat-column-fechaIngreso {
+    flex: 0 0 80px;
+    
+  }
+  .mat-column-posTotal {
+    flex: 0 0 100px;
+    
+  }
+
+  
+ 

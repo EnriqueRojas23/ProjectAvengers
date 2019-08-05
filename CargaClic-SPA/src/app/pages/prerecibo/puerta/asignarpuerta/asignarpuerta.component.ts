@@ -19,11 +19,11 @@ export class AsignarpuertaComponent implements OnInit {
   displayedColumns: string[] = [ 'ubicacion', 'almacen' ,'area','estado' ,'actionsColumn' ];
   listData: MatTableDataSource<Ubicacion>;
 
-
+  
 
   public loading = false;
   ubicaciones: Ubicacion[];
-  model: any;
+  model: any = {};
 
 
 
@@ -33,29 +33,28 @@ export class AsignarpuertaComponent implements OnInit {
     private activatedRoute: ActivatedRoute,private alertify: AlertifyService) { }
 
   ngOnInit() {
+
+    this.model.EquipoTransporteId =  this.activatedRoute.snapshot.params["uid"];
+
     this.generalService.getAllUbicaciones(1,1).subscribe(list => {
-      this.ubicaciones = list;
-      
-    this.loading = false;
-    this.listData = new MatTableDataSource(this.ubicaciones);
-    this.listData.paginator = this.paginator;
-    this.listData.sort = this.sort;
+        this.ubicaciones = list;
+        this.loading = false;
+        this.listData = new MatTableDataSource(this.ubicaciones);
+        this.listData.paginator = this.paginator;
+        this.listData.sort = this.sort;
 
 
-    this.listData.filterPredicate = (data,filter) => {
-      return this.displayedColumns.some(ele => {
-        
-        if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-           {
-              return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-         
-           }
-        })
-       }
+        this.listData.filterPredicate = (data,filter) => {
+          return this.displayedColumns.some(ele => {
+            
+            if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
+              {
+                  return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+            
+              }
+            })
+          }
     });
-
-
-
   }
 
   asignarPuerta(id){

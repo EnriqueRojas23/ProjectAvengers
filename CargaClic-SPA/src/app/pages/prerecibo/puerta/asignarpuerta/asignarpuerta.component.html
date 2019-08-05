@@ -1,13 +1,14 @@
   
-<div class="page-head">
-  <h2 class="page-head-title">Asignar Puerta</h2>
- <!-- <nav aria-label="breadcrumb" role="navigation">
-   <ol class="breadcrumb page-head-nav">
-     <li class="breadcrumb-item"><a href="#">Home</a></li>
-     <li class="breadcrumb-item active">Listado de Usuarios</li>
-   </ol>
- </nav> -->
-</div>
+
+  <h2 class="page-head-title">Operaciones de Equipo de Transporte</h2>
+  <div class="light-font">
+      <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb primary-color">
+              <li class="breadcrumb-item" [routerLink]="['/recibo/equipotransporteentrante']" >Listado de Equipos de Transporte</li>
+              <li class="breadcrumb-item  active" [routerLink]="['/recibo/Asignarpuerta' , this.model.EquipoTransporteId ]" routerLinkActive="router-link-active" >Asignar Puerta</li>
+            </ol>
+      </nav>
+    </div>
 
 <div class="main-content container-fluid">
 

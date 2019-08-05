@@ -28,7 +28,7 @@ export class NuevoajusteComponent implements OnInit {
   id2 : any;
   estadoInventario: Dropdownlist[] = [];
   
-
+  public loading = false;
 
   constructor(
     private inventarioService: InventarioService,

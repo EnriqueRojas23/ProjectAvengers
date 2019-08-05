@@ -29,7 +29,6 @@ export class DialogBuscarProducto {
     private productoService: ProductoService ,
     private ordenReciboService: OrdenReciboService ) {
       this.buscar();
-      
 
     }
     onNoClick(): void {
@@ -43,19 +42,12 @@ export class DialogBuscarProducto {
 
   buscar(){
     
-    
-
         this.model.propietarioId =    this.data.codigo;
-        
         this.productoService.getAll(this.model.codigo,this.model.propietarioId).subscribe(list => {
-
         this.productos = list;
-        //this.loading = false;
         this.listData = new MatTableDataSource(this.productos);
         this.listData.paginator = this.paginator;
         this.listData.sort = this.sort;
-        
-        
 
         this.listData.filterPredicate = (data,filter) => {
           return this.displayedColumns.some(ele => {

@@ -1,12 +1,19 @@
-<div class="page-head">
 
-</div>
+    <h2 class="page-head-title"> Orden de Recibo</h2> 
+    <div class="light-font">
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb primary-color">
+       <li class="breadcrumb-item" [routerLink]="['/recibo/listaordenrecibo']">Listado de órdenes</li>
+       <li class="breadcrumb-item active">Editar Orden de Recibo</li>
+     </ol>
+   </nav> 
+ </div>
 <div class="main-content container-fluid">
 
 
     <div class="col-md-12">
       <div class="card card-border-color card-border-color-primary">
-        <div class="card-header card-header-divider">Editar Orden de Recibo<span class="card-subtitle"> Datos de cabecera de la orden de recibo</span></div>
+        <div class="card-header">Editar Orden de Recibo<span class="card-subtitle"> Datos de cabecera de la orden de recibo</span></div>
         <div class="card-body ">
           <form #f="ngForm"  (ngSubmit)="registrar(f)" >
 

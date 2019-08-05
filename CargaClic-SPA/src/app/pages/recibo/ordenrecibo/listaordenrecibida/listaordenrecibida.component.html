@@ -1,13 +1,14 @@
 
-<div class="page-head">
-    <h2 class="page-head-title">Listado de Órdenes de Recibo</h2>
-   <nav aria-label="breadcrumb" role="navigation">
-     <ol class="breadcrumb page-head-nav">
-       <li class="breadcrumb-item"><a href="#">Equipos de Transporte</a></li>
-       <li class="breadcrumb-item active">Listado de Órdenes de Recibo de {{model.equipotransporte}}</li>
-     </ol>
-   </nav>
- </div>
+
+    <h2 class="page-head-title">Recepción de Órdenes</h2>
+    <div class="light-font">
+        <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb primary-color">
+                <li class="breadcrumb-item" [routerLink]="['/recibo/equipotransporteentrante']" routerLinkActive="router-link-active" >Listado de órdenes de recibo</li>
+                
+              </ol>
+        </nav>
+      </div>
  
  <div class="main-content container-fluid">
 
@@ -27,7 +28,7 @@
             <button class="btn-buttons btn-outline-primary"  > <i   class="fa-2x  fas fa-ellipsis-v"></i></button> 
         </div>
         <div class="col-md-8">
-            <button class="btn-buttons btn-primary"   (click)="equipotransporte()"  type="button"><< Regresar al listado</button>  
+            <button class="btn-buttons btn-primary"   (click)="equipotransporte()"  type="button"> Regresar al listado de transportes</button>  
             
         </div>
 

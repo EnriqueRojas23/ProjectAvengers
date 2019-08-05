@@ -15,6 +15,21 @@
 @import "../node_modules/ag-grid/dist/styles/ag-theme-balham.css";
 
 
+
+@import "../node_modules/flatpickr/dist/flatpickr.css";
+@import "../node_modules/angular-slickgrid/lib/multiple-select/multiple-select.css";
+@import "../node_modules/angular-slickgrid/styles/css/slickgrid-theme-bootstrap.css";
+
+
+.slickgrid-container .slick-header-columns .slick-header-column{
+  font-weight: 100 !important;
+  font-size: 10px;
+
+}
+
+
+
+
 .mat-header-cell{
   font-size: 10px !important;
   background-color: #F9F9F9;
@@ -232,3 +247,41 @@ div.dual-list div.listbox div.button-bar {
 
 }
 
+button.edit {
+  opacity: 0;
+} 
+
+button.edit:hover {
+  opacity: 1;
+}
+.mat-row:hover button.edit { 
+  opacity: 1;
+}
+/* table#mytableofrows tr td a.button { display:none;}
+table#mytableofrows tr:hover td a.button { display:inline-block;} */
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  padding: .75rem 1rem;
+  margin-bottom: 1rem;
+  list-style: none;
+  background-color: #3a6998;
+  border-radius: .25rem;
+  cursor: pointer;
+  
+}
+.breadcrumb-item.active {
+  color: #74afef;
+}
+.breadcrumb-item {
+  color: white;
+}
+
+.rappi-credits-total {
+  text-align: center;
+  padding: 20px;
+  margin: 20px 20px 0;
+  border-radius: 4px;
+  background-image: linear-gradient(262deg,#1ec69f,#45d482);
+}

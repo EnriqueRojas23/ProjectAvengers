@@ -1,9 +1,10 @@
 
-<div class="page-head">
-  <h2 class="page-head-title">Listado de Órdenes de Recibo</h2>
+
+  <h2 class="page-head-title"> Orden de Recibo</h2>
+  <div class="light-font">
   <nav aria-label="breadcrumb" role="navigation">
-    <ol class="breadcrumb page-head-nav">
-      <li class="breadcrumb-item"><a href="#">Órdenes de Recibo</a></li>
+    <ol class="breadcrumb primary-color">
+      <li class="breadcrumb-item active">Listado de órdenes</li>
     </ol>
   </nav>
 </div>
@@ -22,7 +23,7 @@
                     <label class="col-form-label text-sm-right" for="username">Propietario:</label>
                     
                     <mat-form-field class="input-form-field  col-sm-8 ">
-                        <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
+                        <mat-select  [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" placeholder="Propietario" #singleSelect>
                          <mat-option>
                              <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
                           </mat-option>

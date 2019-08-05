@@ -1,0 +1,110 @@
+
+ 
+    <div class="modal-header modal-header-colored">
+        <h3 class="modal-title" aria-level="2">Facturar</h3>
+        
+      </div>
+    
+
+<div class="modal-body">
+    <div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label col-md-6" for="fechaEmision">Fecha de emisión:</label>
+              <input class="form-control"  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.fechaEmision" name="fechaEmision" #fechaEmision="ngModel" type="text">
+          </div>
+  
+        <div class="form-group">
+            <label class="control-label col-md-6" for="Propietario">Dirección:</label>
+              <input  class="form-control" minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.direccion" name="direccion" #direccion="ngModel" type="text">
+          </div>
+     </div>
+     <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label col-md-6" for="Propietario">Señor(es):</label>
+              <input class="form-control"  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.nombre" name="propietario" #propietario="ngModel" type="text">
+          </div>
+  
+          <div class="form-group">
+              <label class="control-label col-md-6" for="serie">Serie:</label>
+               <mat-form-field class="input-form-field col-6 col-sm-4 col-lg-3">
+                  <mat-select  [(value)]="model.serie">
+                    <mat-option  *ngFor="let pow of series" [value]="pow.val">
+                        {{ pow.viewValue }}
+                    </mat-option>
+                  </mat-select>
+               </mat-form-field>
+          </div>
+     </div>
+    </div>
+    
+    
+    <div class="col-md-12">
+        <div class="card card-border-color card-border-color-primary">
+          
+            <div class="card-body">
+                <div  class="mat-elevation-z8">
+                    <mat-table #table [dataSource] = "listData" matSort >
+                  
+                        <ng-container matColumnDef="Codigo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header > Código </mat-header-cell>
+                            <mat-cell *matCellDef="let user"> {{user.cantidad}} </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="Descripcion">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Descripcion Larga </mat-header-cell>
+                              <mat-cell *matCellDef="let user"> {{user.descripcion}} </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="subtotal">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > SubTotal </mat-header-cell>
+                              <mat-cell *matCellDef="let user"> S/. {{user.subtotal| number:'1.0-2'}} </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="igv">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > IGV </mat-header-cell>
+                              <mat-cell *matCellDef="let user"> S/. {{user.igv| number:'1.0-2'}} </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="total">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header > Total </mat-header-cell>
+                              <mat-cell *matCellDef="let user"> S/. {{user.total| number:'1.0-2'}} </mat-cell>
+                          </ng-container>
+                  
+                        
+        
+                 
+                  
+                    <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" 
+                    [ngClass]="{'highlight': selectedRowIndex == row.id}"
+                    (click)="highlight(row)">
+        
+                    </mat-row>
+                    
+                    </mat-table>
+                   <mat-paginator [pageSizeOptions]="[ 10, 25, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+                  </div>
+                  
+                </div>
+              </div>
+                <div class="row">
+                  <div class="col-md-3">
+                  </div>
+                  <div  class="col-md-3">
+                      <button type="button" [swal]='confirmarSwal' ngbTooltip="Generar Factura"  (confirm)="generar()" class="btn btn-block btn-primary"><i class="fa fa-folder"></i> Generar Factura</button>
+                  </div>
+                  <div  class="col-md-3">
+                      <button type="button"  ngbTooltip="Cancelar"  (click)="cerrar()" class="btn btn-block btn-danger"> Cerrar </button>
+                  </div>
+               </div> 
+     
+    </div>
+ </div>
+ <swal
+ #confirmarSwal
+ title="Confirmar generación Factura"
+ text="¿Esta seguro que desea generar la factura?"
+ type="question"
+ [showCancelButton]="true"
+ [focusCancel]="true"
+ [options]="{ confirmButtonText: 'Facturar' }"
+ >
+</swal>
+

@@ -89,6 +89,9 @@ export class DialogAgregarDireccion {
     }
     return true;
   }
+  close(){
+    
+  }
 
 
 }
@@ -184,6 +187,9 @@ export class ListadoclienteComponent implements OnInit {
         })
        }
     });
+  }
+  close(){
+
   }
 
 }

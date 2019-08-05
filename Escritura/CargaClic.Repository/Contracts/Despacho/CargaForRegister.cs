@@ -1,11 +1,11 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace CargaClic.API.Dtos.Recepcion
+namespace CargaClic.Repository.Contracts.Despacho
 {
-   public class CargaForRegister
-   {
-       public string ids {get;set;}
+    public class CargaForRegister
+    {
+        public int? UsuarioRegistroId { get; set; }
+        public string ids {get;set;}
         
-   }
+    }
 }

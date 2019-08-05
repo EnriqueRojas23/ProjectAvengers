@@ -29,13 +29,14 @@ import { XHRBackend } from '@angular/http';
 import { ApiXHRBackend } from './_services/http.interceptor';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { AgGridModule } from 'ag-grid-angular';
+import { AngularSlickgridModule } from 'angular-slickgrid';
 
 
 
 
 
 
-
+// @dynamic
 @NgModule({
    declarations: [
       AppComponent,
@@ -62,7 +63,8 @@ import { AgGridModule } from 'ag-grid-angular';
          customClass: 'modal-content',
          confirmButtonClass: 'btn btn-primary',
          cancelButtonClass: 'btn'
-     })
+     }),
+     AngularSlickgridModule.forRoot(),
       
    
       

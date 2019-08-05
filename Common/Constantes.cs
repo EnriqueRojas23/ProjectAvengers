@@ -19,6 +19,18 @@ namespace CargaClic.Common
             Asignado = 23,
             Despachado = 24,
         }
+        public enum EstadoWrk : int
+        {
+            Pendiente = 30,
+            Asignado = 31,
+            Iniciado = 32,
+            Terminado = 33,
+        }
+        public enum EstadoPreliquidacion: int
+        {
+            Pendiente = 28,
+            Facturado = 29,
+        }
         public enum EstadoCarga : int
         {
             Pendiente = 25,
@@ -38,6 +50,17 @@ namespace CargaClic.Common
             NoDisponible = 8,
             Merma = 18,
             Eliminado = 21
+        }
+
+        public enum Motivo : int
+        {
+            Devolucion = 146,
+            ImportacionAduanera = 147,
+        }
+        public enum Movimiento : int
+        {
+            Entrada = 148,
+            Salida = 149,
         }
     }
 }

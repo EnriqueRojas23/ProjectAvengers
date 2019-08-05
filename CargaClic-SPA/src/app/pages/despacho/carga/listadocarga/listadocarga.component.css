@@ -1,0 +1,43 @@
+
+.mat-row {
+    cursor: pointer;
+  }
+  
+  .mat-column-numCarga {
+    flex: 0 0 180px;
+    text-align: right;
+    
+  }
+  .mat-column-fechaRegistro {
+    flex: 0 0 120px;
+    text-align: center;
+  }
+  .mat-column-equipoTransporte {
+    flex:-1 0 80px;
+    
+    
+  }
+  .mat-column-FechaRegistro {
+    flex: 0 0 80px;
+    
+  }
+  .mat-column-estado {
+    flex: 0 0 80px;
+    
+  }
+  .mat-column-select {
+    flex: 0 0 38px;
+    display:inherit;
+  
+    
+  }
+  .mat-column-placa {
+    flex: 0 0 80px;
+    
+  }
+  
+  .mat-column-actionsColumn {
+    flex: 0 0 120px;
+    
+  }
+  

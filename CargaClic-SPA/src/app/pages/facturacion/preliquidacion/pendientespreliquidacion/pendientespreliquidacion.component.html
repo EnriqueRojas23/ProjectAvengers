@@ -1,0 +1,122 @@
+
+<div class="page-head">
+  <h2 class="page-head-title">Pendientes de Preliquidación </h2>
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb page-head-nav">
+      <li class="breadcrumb-item"><a href="#">Preliquidación por Cliente</a></li>
+      <!-- <li class="breadcrumb-item">Listado de Órdenes de Recibo</li>
+      <li class="breadcrumb-item active">Identificar Pallets</li> -->
+    </ol>
+  </nav>
+</div>
+
+<div class="main-content container-fluid">
+
+      <div class="col-md-12">
+    <div class="card card-border-color card-border-color-warning">
+        <div class="card-header">
+                  <b> Filtro de búsqueda  </b>  
+            </div>
+        <div class="card-body">
+            <div class="row">
+          
+                <div class="col-md-3">
+                    <label class="col-form-label text-sm-right" for="username">Propietario:</label>
+                    
+                    <mat-form-field class="input-form-field  col-sm-8 ">
+                        <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
+                         <mat-option>
+                             <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
+                              {{pow.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+                   
+                 
+  
+                <div class="col-md-3">
+                   <button class="btn btn-block btn-warning"  (click)="buscar()"  type="button">Buscar</button>
+                </div>
+             
+              </div>
+        </div>
+    </div>
+
+  </div>
+<div class="col-md-12">
+   
+
+
+  <div class="card card-border-color card-border-color-warning">
+    <div class="card-header">
+          <div>
+              <b> Preliquidación  </b> <span class="card-subtitle">  Productos pendientes de preliquidación  </span>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-1">
+              
+            </div>
+        <div  class="col-md-3">
+            <button type="button" [swal]='confirmarSwal' ngbTooltip="Agregar Ordenes"  (confirm)="generar()" class="btn btn-block btn-primary"><i class="fa fa-folder"></i> Generar Preliquidación</button>
+        </div>
+      </div>
+      <div class="card-body">
+          
+          <div  class="example-container">
+    <div class="container">
+        <angular-slickgrid gridId="grid1"
+            gridHeight="800" gridWidth="100%"
+            [columnDefinitions]="columnDefinitions"
+            [gridOptions]="gridOptions"
+            [dataset]="dataset"
+            
+            (onAngularGridCreated)="angularGridReady($event)">
+        </angular-slickgrid>
+        </div>
+ 
+      </div> 
+    </div>
+   
+  </div>
+</div>
+
+
+</div>
+
+<swal
+  #confirmarSwal
+  title="Confirmar Generación"
+  text="¿Esta seguro que desea generar la preliquidación?"
+  type="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  [options]="{ confirmButtonText: 'Generar' }"
+  >
+</swal>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
+
+<!-- <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="indeterminate"
+          [value]="value"
+          [bufferValue]="bufferValue">
+</mat-progress-bar> -->
+
+       <!-- <ag-grid-angular 
+            #agGrid
+            style="width: 500px; height: 500px;"
+            id="myGrid" 
+            class="ag-theme-balham"
+            [rowData]="rowData" 
+            [columnDefs]="columnDefs"
+            [context]="context"
+            [frameworkComponents]="frameworkComponents"
+            (gridReady)="onGridReady($event)"
+            >
+            </ag-grid-angular> -->

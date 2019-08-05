@@ -5,14 +5,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using CargaClic.API.Dtos.Despacho;
 using CargaClic.API.Dtos.Recepcion;
 using CargaClic.Common;
 using CargaClic.Data;
 using CargaClic.Domain.Despacho;
 using CargaClic.Domain.Inventario;
-using CargaClic.Domain.Mantenimiento;
-using CargaClic.Domain.Prerecibo;
 using CargaClic.Repository.Contracts.Despacho;
+using CargaClic.Repository.Contracts.Inventario;
 using CargaClic.Repository.Interface;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
@@ -49,34 +49,138 @@ namespace CargaClic.Repository
             }
         }
 
-        public async Task<long> matchTransporteCarga(long CargaId, long EquipoTransporteId)
+        public async Task<long> matchTransporteCarga(string CargasId, long EquipoTransporteId)
         {
-             using(var transaction = _context.Database.BeginTransaction())
+            string[] prm = CargasId.Split(',');
+            using(var transaction = _context.Database.BeginTransaction())
             {
-                var ordenDb = await _context.Carga.SingleOrDefaultAsync(x=>x.Id == CargaId);
-                ordenDb.EquipoTransporteId = EquipoTransporteId;
-                ordenDb.EstadoId = (int) Constantes.EstadoCarga.Pendiente;
-                await _context.SaveChangesAsync();
-
-                
+                try
+                {
+                    foreach (var item in prm)
+                    {
+                        var cargaDb = await _context.Carga.SingleOrDefaultAsync(x=>x.Id == Int64.Parse(item));
+                        cargaDb.EquipoTransporteId = EquipoTransporteId;
+                        cargaDb.EstadoId = (int) Constantes.EstadoCarga.Confirmado;
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                catch(Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
                 transaction.Commit();
-               // transaction.Dispose();
-                
-
-                return CargaId;
+                return 1;
             }
         }
+        public async Task<long> MovimientoSalida(InventarioForStorage command)
+        {
+            KardexGeneral kardex ;
+           
+            using(var transaction = _context.Database.BeginTransaction())
+            {
+                var pckrk = await _context.Pckwrk.Where(x=>x.Id == command.Id).SingleOrDefaultAsync();
+                var wrk = await _context.Wrk.Where(x=>x.Id == pckrk.WrkId).SingleOrDefaultAsync();
+                var dominio = await _context.InventarioGeneral.Where(x=>x.Id == pckrk.InventarioId).Include(z=>z.InvLod).SingleOrDefaultAsync();
+               
+                try
+                {
+                       
+                         pckrk.Confirmado = true;
+                         dominio.InvLod.UbicacionId =   wrk.DestinoId.Value;
+                         dominio.InvLod.UbicacionProxId = null;
 
-        public async Task<long> RegisterCarga(CargaForRegister cargaForRegister)
+                         pckrk.DestinoId = null;
+                         pckrk.UbicacionId =  wrk.DestinoId.Value;
+                         
+
+                        /// Lógica para cerrar pedido
+                        var detalles = await _context.Pckwrk.Where(x=>x.WrkId == wrk.Id).ToListAsync();
+                                    
+                        if(detalles.Where(x=>x.Confirmado == true).ToList().Count > 0)
+                            wrk.FechaInicio = DateTime.Now;
+
+                            foreach (var item in detalles)
+                            {
+                                if(item.Confirmado == false){
+                                    wrk.EstadoId  = (Int32)Constantes.EstadoWrk.Iniciado;
+                                }
+                                else wrk.EstadoId = (Int32)Constantes.EstadoWrk.Terminado;
+                            }
+
+                         await _context.SaveChangesAsync();
+
+
+                         //Registrar el movimiento en el kardex
+                        kardex = new KardexGeneral();
+                        kardex.Almacenado = false;
+                        kardex.EstadoId = dominio.EstadoId;
+                        kardex.FechaExpire = dominio.FechaExpire;
+                        kardex.FechaManufactura = dominio.FechaManufactura;
+                        kardex.FechaRegistro = DateTime.Now;
+                        kardex.HuellaId = dominio.HuellaId;
+                        kardex.LineaId = dominio.LineaId;
+                        kardex.LodId = dominio.LodId;
+                        kardex.LotNum = dominio.LotNum;
+                        kardex.Movimiento = "S";
+                        kardex.OrdenReciboId = dominio.OrdenReciboId;
+                        kardex.Peso = dominio.Peso;
+                        kardex.ProductoId = dominio.ProductoId;
+                        kardex.PropietarioId = dominio.ClienteId;
+                        kardex.ShipmentLine = null;
+                        kardex.UntQty = pckrk.CantidadRetiro * -1 ; //dominio.UntQty * -1;
+                        kardex.UsuarioIngreso = 1;
+                        kardex.InventarioId = dominio.Id;
+                        
+                        _context.KardexGeneral.Add(kardex);
+
+                         //Eliminar el inventario
+
+                          if(pckrk.CantidadRetiro == pckrk.CantidadPallet)
+                          {
+                                var eliminar = await _context.InventarioGeneral.Where(x=>x.Id == dominio.Id).SingleAsync();
+                                _context.InventarioGeneral.Remove(eliminar);
+                          }
+                          else
+                          { 
+                                dominio.Almacenado = true;
+                                dominio.UntQty = pckrk.CantidadPallet - pckrk.CantidadRetiro;
+
+                          }
+
+                         await _context.SaveChangesAsync();
+
+
+                        transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();  
+                    throw ex; 
+                }
+                return command.Id;
+            }
+
+            
+        }
+        public async Task<long> PlanificarPicking(PickingPlan cargaForRegister)
         {
             cargaForRegister.ids = cargaForRegister.ids.Substring(1, cargaForRegister.ids.Length -1);
+
             string[] prm = cargaForRegister.ids.Split(',');
-            Carga dominio  ;
-            CargaDetalle cargasDetalle;
+            List<long> ids= new List<long>(); ;
+
+            Shipment dominio  ;
+            ShipmentLine shipmentline;
+            Pckwrk pckwrk;
+            Wrk wrk;
+
             OrdenSalida ordenSalida ;
-            OrdenSalidaDetalle ordenSalidaDetalle;
             List<OrdenSalida> ordenesSalida ;
-            
+            List<List<OrdenSalida>> grupos ;
+            List<long> agrupado = new List<long>();
+
+            int recaudado_individual ;
             List<OrdenSalidaDetalle> ordenesSalidaDetalle;
            
 
@@ -86,97 +190,206 @@ namespace CargaClic.Repository
 
                 ordenesSalidaDetalle = new List<OrdenSalidaDetalle>();     
                 ordenesSalida = new List<OrdenSalida>();
-                
-
-                #region Obtener Listado de Ordenes
-
-                // var parametros = new DynamicParameters();
-                // parametros.Add("Id", dbType: DbType.Int64, direction: ParameterDirection.Input, value: Convert.ToInt64(prm[0]));
-                // var result = new AuxOrden();
-
-                // using (IDbConnection conn = Connection)
-                // {
-                //     var multiquery = await conn.QueryMultipleAsync
-                //     (
-                //         commandType: CommandType.StoredProcedure,
-                //         sql: "Despacho.pa_obtener_ordensalida",
-                //         param: parametros
-                //     );
-
-                //     result = multiquery.Read<AuxOrden>().LastOrDefault();
-                //     if (result != null)
-                //     {
-                //         var detalleOrdenRecibo = multiquery.Read<AuxOrdenDetalle>().ToList();
-                //         result.Detalles = detalleOrdenRecibo;
-                //     }
-                // }
-                #endregion
-
-                
-                dominio = new Carga();
-                dominio.EquipoTransporteId = null;
-                dominio.EstadoId = (Int16)  Constantes.EstadoCarga.Pendiente;
-                dominio.FechaConfirmacion = null;
-                dominio.FechaRegistro = DateTime.Now;
-                dominio.FechaSalida = null;
-                dominio.ManifiestoId = null;
-                dominio.NumCarga = "";
-                dominio.Observacion = "";
-                
-                dominio.UsuarioAsignado = 1;
-                dominio.UsuarioRegistro = 1;
-
                 foreach (var item in prm)
                 {
                     ordenSalida = await _context.OrdenSalida.Where(x=>x.Id == Convert.ToInt64(item)).SingleOrDefaultAsync();
-                    dominio.PropietarioId = ordenSalida.PropietarioId;
-                    dominio.ClienteId =  ordenSalida.ClienteId;
-                    dominio.DireccionId = ordenSalida.DireccionId;
-                    
                     ordenesSalida.Add(ordenSalida);
                     ordenesSalidaDetalle.AddRange(await _context.OrdenSalidaDetalle.Where(x=>x.OrdenSalidaId == ordenSalida.Id).ToListAsync());
-     
+                } 
+                //Agrupar por cliente y destino
+                grupos = new List<List<OrdenSalida>>();
+                foreach (var item in ordenesSalida)
+                {
+                   
+                    if(agrupado.Where(x=>x == item.Id).Count() > 0){
+                        continue;
+                    }
+                    
+                    var resp = ordenesSalida.Where(x=>x.PropietarioId == item.PropietarioId
+                                             && x.DireccionId == item.DireccionId).ToList();
+                    resp.ForEach(x=> {
+                        agrupado.Add(x.Id);
+                    });
+                    grupos.Add(resp);
                 }
+
                 try
                 {
-                     await _context.Carga.AddAsync(dominio);
-                     await _context.SaveChangesAsync();
-                     dominio.NumCarga = dominio.Id.ToString().PadLeft(7,'0');
+                   foreach (var grupo in grupos)
+                   {
 
-                     ordenesSalida.ForEach(x=> {
-                         x.CargaId = dominio.Id;
-                         x.EstadoId = (Int16)  Constantes.EstadoOrdenSalida.Planificado;
-                     });
-                     
-                     foreach (var item in ordenesSalidaDetalle)
-                     {
-                         cargasDetalle = new CargaDetalle();
-                         cargasDetalle.EstadoId = (Int16)  Constantes.EstadoCarga.Pendiente;
-                         cargasDetalle.HuellaId = item.HuellaId;
-                         cargasDetalle.LineaId = item.Id;
-                         cargasDetalle.Lote = item.Lote;
-                         cargasDetalle.Metodo = "FIFO";
-                         cargasDetalle.ProductoId = item.ProductoId;
-                         cargasDetalle.UnidadMedidaId = item.UnidadMedidaId;
-                         cargasDetalle.CargaId = dominio.Id;
-                         cargasDetalle.Cantidad = item.Cantidad;
-                         
-                         await _context.CargaDetalle.AddAsync(cargasDetalle);
-                     }
+                    //Crear Trabajo
+                    wrk = new Wrk();
+                    wrk.EstadoId =(int) Constantes.EstadoWrk.Pendiente;
+                    wrk.FechaRegistro = DateTime.Now;
+                    wrk.UsuarioId =  1;
+                    wrk.PropietarioId = grupo[0].PropietarioId;
+                    wrk.DireccionId = grupo[0].DireccionId;
+                
+                    await _context.Wrk.AddAsync(wrk);
+                    await _context.SaveChangesAsync();
 
-                     await _context.SaveChangesAsync();
+                    wrk.WorkNum = wrk.Id.ToString().PadLeft(7,'0');
+                    await _context.SaveChangesAsync();
+
+                    foreach (var item in grupo)
+                    {
+                        // agrupar por cliente y por destino
+
+                        #region CabeceraShipment
+
+                        dominio = new Shipment();
+                        //dominio.EquipoTransporteId = null;
+                        dominio.EstadoId = (Int16)  Constantes.EstadoCarga.Pendiente;
+                        dominio.FechaConfirmacion = null;
+                        dominio.FechaRegistro = DateTime.Now;
+                        dominio.FechaSalida = null;
+                        dominio.ManifiestoId = null;
+                        dominio.ShipmentNumber = "";
+                        dominio.Observacion = "";
+                        dominio.PropietarioId = item.PropietarioId;
+                        dominio.ClienteId =  item.ClienteId;
+                        dominio.DireccionId = item.DireccionId;
+                        dominio.UsuarioAsignado = 1;
+                        dominio.UsuarioRegistro = 1;
+
+                        await _context.Shipment.AddAsync(dominio);
+                        await _context.SaveChangesAsync();
+
+                        dominio.ShipmentNumber = dominio.Id.ToString().PadLeft(7,'0');
+                        item.EstadoId = (Int16)  Constantes.EstadoOrdenSalida.Planificado;
+                        item.CargaId = dominio.Id;
+ 
+                        await _context.SaveChangesAsync();
+
+                        #endregion
+
+                       
+
+                        var detalles =  ordenesSalidaDetalle.Where(x=>x.OrdenSalidaId == item.Id).ToList();
+                        foreach (var item2 in detalles)
+                        {
+
+                            shipmentline = new ShipmentLine();
+                            shipmentline.EstadoId = (Int16)  Constantes.EstadoCarga.Pendiente;
+                            shipmentline.HuellaId = item2.HuellaId;
+                            shipmentline.LineaId = item2.Id;
+                            shipmentline.Lote = item2.Lote;
+                            shipmentline.ProductoId = item2.ProductoId;
+                            shipmentline.UnidadMedidaId = item2.UnidadMedidaId;
+                            shipmentline.ShipmentId = dominio.Id;
+                            shipmentline.Cantidad = item2.Cantidad;
+                            await _context.ShipmentLine.AddAsync(shipmentline);
+                          
+
+                            await _context.SaveChangesAsync();
+
+                            //aca bifurca si es se hace por vencimiento o si no tiene el pedido por lote.
+
+                            var result = (from a in _context.InventarioGeneral 
+                                        .Include(z=>z.InvLod)
+                                        where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
+                                                    a.Almacenado == true &
+                                                    a.ShipmentLine == null &
+                                                    a.LotNum == item2.Lote)
+                                                    select a)
+                                        .OrderBy(x=>x.FechaExpire)
+                                        .OrderByDescending(x=>x.UntQty)
+                                        .OrderBy(x=> x.InvLod.LodNum).ToList();
+
+
+
+                                    recaudado_individual = 0;
+                                    foreach (var inventario in result)
+                                    {
+                                        recaudado_individual = recaudado_individual + inventario.UntQty;
+
+                                        if(ids.Where(x=>x == inventario.Id).Count() > 0)
+                                               continue;
+
+                                        if(recaudado_individual <= item2.Cantidad) {
+                                        
+                                            
+                                            pckwrk = new Pckwrk();
+                                            pckwrk.CantidadPallet = inventario.UntQty;
+                                            pckwrk.CantidadRetiro = inventario.UntQty;
+                                            pckwrk.Completo = false;
+                                            pckwrk.FechaExpire = inventario.FechaExpire;
+                                            pckwrk.HuellaDetalleId = inventario.HuellaId;
+                                            pckwrk.OrdenSalidaId = item2.OrdenSalidaId;
+                                            pckwrk.ProductoId = inventario.ProductoId;
+                                            pckwrk.PropietarioId = item.PropietarioId;
+                                            pckwrk.ShipmentLineId = shipmentline.Id;
+                                            pckwrk.UbicacionId = inventario.InvLod.UbicacionId;
+                                            pckwrk.WrkId = wrk.Id;
+                                            pckwrk.LodNum = inventario.InvLod.LodNum;
+                                            pckwrk.InventarioId = inventario.Id;
+                                            pckwrk.Completo = true;
+                                            pckwrk.Confirmado = false;
+                                            pckwrk.OrdenReciboId = inventario.OrdenReciboId;
+                                            pckwrk.LineaId = inventario.LineaId;
+                                            pckwrk.FechaIngreso =  inventario.FechaRegistro;
+                                            pckwrk.LotNum = inventario.LotNum;
+
+                                            
+                                            await _context.Pckwrk.AddAsync(pckwrk);
+                                        
+                                            ids.Add(inventario.Id);
+
+                                            inventario.Almacenado = false;
+                                            inventario.ShipmentLine = shipmentline.Id;
+
+                                            await _context.SaveChangesAsync();
+                                        }
+                                        else {
+
+
+                                            pckwrk = new Pckwrk();
+                                            pckwrk.CantidadPallet = inventario.UntQty;
+                                            pckwrk.CantidadRetiro =item2.Cantidad-  (recaudado_individual - inventario.UntQty);
+                                            if(pckwrk.CantidadRetiro == 0) 
+                                                break;
+                                            pckwrk.Completo = false;
+                                            //pckwrk.DestinoId = 1;
+                                            pckwrk.FechaExpire = inventario.FechaExpire;
+                                            pckwrk.HuellaDetalleId = inventario.HuellaId;
+                                            pckwrk.OrdenSalidaId = item2.OrdenSalidaId;
+                                            pckwrk.ProductoId = inventario.ProductoId;
+                                            pckwrk.PropietarioId = item.PropietarioId;
+                                            pckwrk.ShipmentLineId = shipmentline.Id;
+                                            pckwrk.UbicacionId = inventario.InvLod.UbicacionId;
+                                            pckwrk.WrkId = wrk.Id;
+                                            pckwrk.LodNum = inventario.InvLod.LodNum;
+                                            pckwrk.InventarioId = inventario.Id;
+                                            pckwrk.Confirmado = false;
+                                            pckwrk.OrdenReciboId = inventario.OrdenReciboId;
+                                            pckwrk.LineaId = inventario.LineaId;
+                                            pckwrk.FechaIngreso =  inventario.FechaRegistro;
+                                            pckwrk.LotNum = inventario.LotNum;
+
+                                            await _context.Pckwrk.AddAsync(pckwrk);
+                                        
+                                            ids.Add(inventario.Id);
+
+                                            inventario.Almacenado = false;
+                                            inventario.ShipmentLine = shipmentline.Id;
+
+                                            await _context.SaveChangesAsync();
+                                            break;
+                                        }
+                                    }
+                        }
+                    }
+                   }
+                  transaction.Commit();
                 }
                 catch (System.Exception)
                 {
                     transaction.Rollback();
                     throw;
                 }
-                transaction.Commit();
-
-              
             }
-                 
-                return dominio.Id;
+            return 1;
         }
 
         public async Task<long> RegisterOrdenSalida(OrdenSalidaForRegister ordenSalidaForRegister)
@@ -224,7 +437,7 @@ namespace CargaClic.Repository
         {
             OrdenSalidaDetalle dominio ;
             string linea = "";
-            int cantidadTotal = 0;
+            //int cantidadTotal = 0;
 
             var detalles =  _context.OrdenSalidaDetalle.Where(x=>x.OrdenSalidaId == command.OrdenSalidaId);
 
@@ -236,28 +449,10 @@ namespace CargaClic.Repository
             }
 
 
-           var huelladetalle = await _context.HuellaDetalle.SingleOrDefaultAsync(x=>x.HuellaId == command.HuellaId 
-            && x.UnidadMedidaId == command.UnidadMedidaId);
-
-           var huelladetalle_aux = await _context.HuellaDetalle.Where(x=>x.HuellaId == command.HuellaId).ToListAsync();
-
-
-
-            if(huelladetalle.Pallet) // pallet 
-            {
-                cantidadTotal =   huelladetalle.UntQty  * command.Cantidad;
-                command.Cantidad = cantidadTotal;
-            }
-            // else
-            // {
-            //     cantidadTotal = huelladetalle.UntQty * command.Cantidad;
-            // }   
-
-
             dominio = new OrdenSalidaDetalle();
             dominio.Cantidad = command.Cantidad;
             dominio.Completo = command.Completo;
-            dominio.EstadoID = command.EstadoID; 
+            dominio.EstadoId = command.EstadoID; 
             dominio.HuellaId = command.HuellaId;
             dominio.Linea = linea;
             dominio.Lote = command.Lote;
@@ -278,6 +473,114 @@ namespace CargaClic.Repository
             }
 
 
+        }
+        public async Task<long> assignmentOfDoor(AsignarPuertaSalida asignarPuertaSalida)
+        {
+
+            string[] prm = asignarPuertaSalida.ids.Split(',');
+            Wrk wrk ;
+
+            using(var transaction = _context.Database.BeginTransaction())
+            {
+                foreach (var item in prm)
+                {
+                    wrk = await _context.Wrk.SingleOrDefaultAsync(x=>x.Id == Convert.ToInt64(item));
+                    wrk.DestinoId = asignarPuertaSalida.PuertaId;
+                    var WrkDetail = await _context.Pckwrk.Where(x=>x.WrkId == wrk.Id).ToListAsync();
+                    foreach (var detail in WrkDetail)
+                    {
+                          var dominio = await _context.InventarioGeneral.Where(x=>x.Id == detail.InventarioId).Include(z=>z.InvLod).SingleOrDefaultAsync();
+                          dominio.InvLod.UbicacionProxId = wrk.DestinoId.Value;
+
+                          detail.DestinoId =  wrk.DestinoId.Value;
+                    }
+                    await _context.SaveChangesAsync();
+                }
+                var ubicacionDb = await _context.Ubicacion.SingleOrDefaultAsync(x=>x.Id == asignarPuertaSalida.PuertaId);
+                ubicacionDb.EstadoId =  9; //Lleno
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
+
+                return ubicacionDb.Id;
+            }
+        }
+
+        public async Task<long> assignmentOfUser(AsignarUsuarioSalida asignarPuertaSalida)
+        {
+            string[] prm = asignarPuertaSalida.ids.Split(',');
+             Wrk wrk ;
+
+            using(var transaction = _context.Database.BeginTransaction())
+            {
+                foreach (var item in prm)
+                {
+                    wrk = await _context.Wrk.SingleOrDefaultAsync(x=>x.Id == Convert.ToInt64(item));
+                    
+                    wrk.UsuarioId = asignarPuertaSalida.UserId;
+                    wrk.FechaAsignacion = DateTime.Now;
+                    wrk.EstadoId = (int) Constantes.EstadoWrk.Asignado;
+                    await _context.SaveChangesAsync();
+
+
+                    var detalles  =  await _context.Pckwrk.Where(x=>x.WrkId == wrk.Id).ToListAsync();
+                    foreach (var item2 in detalles)
+                    {
+                        var orden =  await _context.OrdenSalida.Where(x=>x.Id == item2.OrdenSalidaId).SingleOrDefaultAsync();
+                        orden.EstadoId = (Int16) Constantes.EstadoOrdenSalida.Asignado;
+                         await _context.SaveChangesAsync();
+                    }
+
+                }
+                transaction.Commit();
+
+                return 1;
+            }
+        }
+
+        public async Task<long> RegisterCarga(CargaForRegister command)
+        {
+            command.ids  = command.ids.Substring(1,command.ids.Length - 1);
+            string[] prm = command.ids.Split(',');
+
+            ShipmentLine sl ;
+           
+
+            Carga carga  ;
+            
+            
+            carga = new Carga();
+            carga.EstadoId = (int) Constantes.EstadoCarga.Pendiente;
+            carga.FechaRegistro = DateTime.Now;
+            carga.NumCarga = "";
+            //carga.Peso = command.Peso;
+            carga.UsuarioRegistroId = command.UsuarioRegistroId;
+            //carga.Volumen = command.Volumen;
+
+
+            using(var transaction = _context.Database.BeginTransaction())
+            {
+        
+
+                await _context.Carga.AddAsync(carga);
+                await _context.SaveChangesAsync();
+
+
+                carga.NumCarga = "OC0-" + (carga.Id).ToString().PadLeft(6,'0');
+                await _context.SaveChangesAsync();
+
+                 foreach (var item in prm)
+                 {
+                     sl = 
+                        await _context.ShipmentLine.Where(x=>x.Id == Convert.ToInt64(item)).SingleOrDefaultAsync();
+
+                    //sl.CargaId = carga.Id;
+                    
+                 }
+                await _context.SaveChangesAsync();
+                transaction.Commit();
+                return carga.Id;
+            }
         }
     }
 }

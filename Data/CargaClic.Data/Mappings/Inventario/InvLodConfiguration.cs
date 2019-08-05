@@ -3,7 +3,7 @@ using CargaClic.Domain.Mantenimiento;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CargaClic.Data.Mappings.Mantenimiento
+namespace CargaClic.Data.Mappings.Inventario
 {
     public class InvLodConfiguration : IEntityTypeConfiguration<InvLod>
     {

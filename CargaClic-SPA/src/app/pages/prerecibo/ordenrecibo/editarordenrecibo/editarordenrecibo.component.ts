@@ -60,9 +60,9 @@ export class EditarordenreciboComponent implements OnInit {
   
        this.model.Id = this.activatedRoute.snapshot.params["uid"];
 
-      this.clienteService.getAll().subscribe(resp => { 
+      this.clienteService.getAllPropietarios('').subscribe(resp => { 
         resp.forEach(element => {
-          this.clientes.push({ val: element.id , viewValue: element.nombre});
+          this.clientes.push({ val: element.id , viewValue: element.razonSocial});
         });
         
         this.filteredClientes.next(this.clientes.slice());

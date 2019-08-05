@@ -305,9 +305,6 @@ marcaVehiculo: Dropdownlist[] = [
     }, () => { 
 
       this.data.storage.forEach(element => {
-        
-  
-        
         this.model.OrdenReciboId =element.ordenReciboId;
         this.model.Id = this.transporte.id;
 

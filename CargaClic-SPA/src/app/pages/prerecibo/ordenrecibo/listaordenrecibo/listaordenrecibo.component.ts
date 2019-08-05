@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource, MatProgressBar } from '@angular/material';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { MatSort, MatPaginator, MatTableDataSource, MatProgressBar, MatSelect } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrdenReciboService } from 'src/app/_services/Recepcion/ordenrecibo.service';
 import { Router } from '@angular/router';
@@ -10,8 +10,9 @@ import { Data } from 'src/app/_providers/data';
 import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { Cliente } from 'src/app/_models/Mantenimiento/cliente';
 
 
 
@@ -22,7 +23,8 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
   templateUrl: './listaordenrecibo.component.html',
   styleUrls: ['./listaordenrecibo.component.css']
 })
-export class ListaordenreciboComponent implements OnInit {
+export class ListaordenreciboComponent implements OnInit , AfterViewInit, OnDestroy {
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   searchKey: string;
@@ -34,8 +36,8 @@ export class ListaordenreciboComponent implements OnInit {
   ordenes: OrdenRecibo[] = [];
   model: any;
   EstadoId : number;
-
-  clientes: Dropdownlist[] = [];
+  
+  protected clientes: Dropdownlist[] = [];
 
   titularAlerta: string = '';
 
@@ -57,6 +59,8 @@ export class ListaordenreciboComponent implements OnInit {
   public ClientesCtrl: FormControl = new FormControl();
   public ClientesFilterCtrl: FormControl = new FormControl();
   protected _onDestroy = new Subject<void>();
+  
+  @ViewChild('singleSelect') singleSelect: MatSelect;
 
   constructor(private ordenreciboService: OrdenReciboService,
     private router: Router,
@@ -67,15 +71,69 @@ export class ListaordenreciboComponent implements OnInit {
 
    ) { }
 
+
+
+   compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
+
+   compareByValue(f1: any, f2: any) { 
+     return f1 && f2 && f1.value === f2.value; 
+   }
+
+   
   ngOnInit() {
     this.loading = true;
     
+    this.clienteService.getAllPropietarios('').subscribe(resp => { 
+      resp.forEach(element => {
+        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+      });
+
+        
+
+        this.ClientesCtrl.setValue(this.clientes[0]);
+
+        this.filteredClientes.next(this.clientes.slice());
+
+        this.ClientesFilterCtrl.valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+              this.filterBanks();
+            });
+    });
+
+
+
     
+
     this.model = {
     };
-    this.model.intervalo = 3;
-    this.model.estadoIdfiltro = 4;
-    this.model.PropietarioId = "";
+
+    if(localStorage.getItem('Estado') == null || localStorage.getItem('Estado') == 'undefined')
+       this.model.estadoIdfiltro = 4;
+    else
+      this.model.estadoIdfiltro = parseInt(localStorage.getItem('Estado'));
+
+    
+      
+    if(localStorage.getItem('PropietarioId') == "" || localStorage.getItem('PropietarioId') == null )
+    {
+      this.model.PropietarioId = 1;
+      
+    }
+    else
+      this.model.PropietarioId = parseInt(localStorage.getItem('PropietarioId'));
+   
+      
+
+      
+    if(localStorage.getItem('Intervalo') == null || localStorage.getItem('Intervalo') == 'undefined')
+      this.model.intervalo = 3;
+    else
+      this.model.intervalo = parseInt(localStorage.getItem('Intervalo'));
+
+    
+    
+    
     
     this.EstadoId =this.model.estadoIdfiltro;
 
@@ -88,19 +146,7 @@ export class ListaordenreciboComponent implements OnInit {
     this.listData.sort = this.sort;
 
 
-    this.clienteService.getAllPropietarios('').subscribe(resp => { 
-      resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
-      });
-      this.filteredClientes.next(this.clientes.slice());
-      this.ClientesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterBanks();
-          });
 
-
-    });
   
     this.listData.filterPredicate = (data,filter) => {
       return this.displayedColumns.some(ele => {
@@ -126,6 +172,22 @@ export class ListaordenreciboComponent implements OnInit {
     const numRows =  this.ordenes.length;
     return numSelected === numRows;
   }
+  ngAfterViewInit(): void {
+    this.setInitialValue();
+  }
+  ngOnDestroy(): void {
+    this._onDestroy.next();
+    this._onDestroy.complete();
+  }
+
+  protected setInitialValue() {
+
+    this.filteredClientes
+      .pipe(take(1), takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.singleSelect.compareWith = (a: Dropdownlist, b: Dropdownlist) => a && b && a.val === b.val;
+      });
+  }
   protected filterBanks() {
     if (!this.clientes) {
       return;
@@ -141,7 +203,8 @@ export class ListaordenreciboComponent implements OnInit {
       this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
     );
     
-  }
+  
+    }
   
   masterToggle() {
     this.isAllSelected() ?
@@ -153,6 +216,7 @@ export class ListaordenreciboComponent implements OnInit {
     
     this.listData.filter = this.searchKey.trim().toLowerCase();
   }
+
 
    ver(id){
     this.router.navigate(['/recibo/verordenrecibo',id]);
@@ -194,12 +258,7 @@ export class ListaordenreciboComponent implements OnInit {
                }
             })
            };
-
-
-        
-    });
-     
-
+      });
    }
 
 
@@ -214,6 +273,11 @@ export class ListaordenreciboComponent implements OnInit {
    buscar(){
    this.EstadoId =this.model.estadoIdfiltro;
    
+    localStorage.setItem('PropietarioId', this.model.PropietarioId);
+    localStorage.setItem('Intervalo', this.model.intervalo);
+    localStorage.setItem('Estado', this.model.estadoIdfiltro);
+
+
 
     this.ordenreciboService.getAll(this.model).subscribe(list => {
     this.ordenes = list;
@@ -281,7 +345,7 @@ export class ListaordenreciboComponent implements OnInit {
   SelectsCount(){
     
     return  this.selection.selected.length;
-  }
 
+  }
 
 }

@@ -13,7 +13,7 @@ namespace CargaClic.Domain.Despacho
         public Guid ProductoId {get;set;}
         public string Lote {get;set;}
         public int? HuellaId {get;set;}
-        public int EstadoID {get;set;}
+        public int EstadoId {get;set;}
         public int Cantidad {get;set;}
         public bool? Completo {get;set;}
         public int UnidadMedidaId {get;set;}

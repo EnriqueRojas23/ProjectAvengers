@@ -1,0 +1,31 @@
+.mat-column-cantidadPallet {
+    flex: 0 0 70px;
+    }
+    .mat-column-cantidadRetiro {
+        flex: 0 0 70px;
+        }
+.mat-column-lodNum {
+    flex: 0 0 95px;
+    }
+.mat-column-descripcionlarga {
+    flex: 0 0 590px;
+    }
+
+.mat-column-ubicacion {
+flex: 0 0 145px;
+}
+
+.mat-column-proximaubicacion {
+    flex: 0 0 145px;
+}
+.mat-column-lotnum {
+    flex: 0 0 95px;
+}
+.mat-column-actionsColumn {
+    flex: 0 0 135px;
+}
+
+
+
+
+        

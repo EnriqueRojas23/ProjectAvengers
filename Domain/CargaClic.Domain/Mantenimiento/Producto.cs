@@ -13,7 +13,7 @@ namespace CargaClic.Domain.Mantenimiento
         public string DescripcionLarga {get;set;}
         public int UnidadMedidaId {get;set;}
         public decimal Peso {get;set;}
-
+        public string Metodo {get;set;}
 
     }
 }

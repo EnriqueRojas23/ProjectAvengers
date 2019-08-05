@@ -59,11 +59,10 @@ export class VerordensalidaComponent implements OnInit {
          }
       
     }, error => {
-       
-    }, () => { 
-          
-    });
 
+    }, () => { 
+      
+    });
    
   }
   applyFilter() {
@@ -78,14 +77,13 @@ export class VerordensalidaComponent implements OnInit {
   }
 
   nuevodetalle(){
-    this.router.navigate(['/despacho/nuevaordensalidadetalle', this.id]);
+    this.router.navigate(['/picking/nuevaordensalidadetalle', this.id]);
   }
   delete(id){
     this.ordenServicio.deleteOrderDetail(id).subscribe(resp => {
 
     this.ordenServicio.obtenerOrden(this.id).subscribe(resp => { 
       this.model = resp;
-      
       
       this.listData = new MatTableDataSource(this.model.detalles);
       this.listData.paginator = this.paginator;
@@ -133,7 +131,7 @@ export class VerordensalidaComponent implements OnInit {
     });
   }
   regresar(){
-    this.router.navigate(['/despacho/listaordensalida']);
+    this.router.navigate(['/picking/listaordensalida']);
   }
 
 }

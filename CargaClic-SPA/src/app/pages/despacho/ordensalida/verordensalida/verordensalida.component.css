@@ -1,0 +1,39 @@
+
+.mat-row {
+    cursor: pointer;
+  }
+  
+  .mat-column-Linea {
+    flex: 0 0 80px;
+    text-align: right;
+    
+  }
+  .mat-column-Sku {
+    flex: 0 0 100px;
+    text-align: center;
+  }
+  .mat-column-Codigo {
+    flex:-1 0 100px;
+    
+    
+  }
+  .mat-column-Descripcion {
+    flex: 0 0 380px;
+    
+  }
+  .mat-column-select {
+    flex: 0 0 38px;
+    display:inherit;
+  
+    
+  }
+  .mat-column-EquipoTransporte {
+    flex: 0 0 160px;
+    
+  }
+  
+  .mat-column-actionsColumn {
+    flex: 0 0 120px;
+    
+  }
+  

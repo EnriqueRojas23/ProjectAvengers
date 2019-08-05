@@ -8,5 +8,6 @@ namespace CargaClic.Domain.Mantenimiento
         public string Nombre {get;set;}
         public int TipoDocumentoId {get;set;}
         public string Documento {get;set;}
+   
     }
 }

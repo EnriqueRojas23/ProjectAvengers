@@ -40,7 +40,7 @@ export class EquipotransportesalidaComponent implements OnInit {
  
    ngOnInit() {
      
-    this.id  = this.activatedRoute.snapshot.params["uid"];
+     this.id  = this.activatedRoute.snapshot.params["uid"];
  
      this.general.getValorTabla(4).subscribe(resp=> 
        {
@@ -108,11 +108,8 @@ export class EquipotransportesalidaComponent implements OnInit {
      }, error => {
         this.alertify.error(error);
      }, () => { 
-      
-      
-      
     
-         this.model.CargaId = this.id;
+         this.model.CargasId = this.id;
          this.model.EquipoTransporteId = this.transporte.id
          ;
          this.ordenSalidaService.matchEquipoTransporte(this.model).subscribe(resp1 => { 
@@ -129,7 +126,7 @@ export class EquipotransportesalidaComponent implements OnInit {
 
        new Promise( resolve => setTimeout(resolve, 300) );
        this.alertify.success("Se creo el equipo de transporte correctamente.");
-       this.router.navigate(['/despacho/listadocargas']);
+       this.router.navigate(['/picking/listadotrabajopendiente']);
      });
    }
    onBlurMethod(placa){

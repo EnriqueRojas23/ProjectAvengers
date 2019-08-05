@@ -31,6 +31,10 @@ constructor(private http: HttpClient) { }
   get(id) : Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.baseUrl +"Get?id=" + id ,httpOptions)
   };
+  getPropietario(id) : Observable<Cliente[]> {
+    return this.http.get<Cliente[]>(this.baseUrl +"GetPropietario?id=" + id ,httpOptions)
+  };
+
 
   getAllClientes(criterio: string) : Observable<Cliente[]> {
   return this.http.get<Cliente[]>(this.baseUrl +"GetAllClientes?criterio="+ criterio ,httpOptions)

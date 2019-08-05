@@ -156,27 +156,26 @@ namespace CargaClic.Repository
                                     invLod.FechaHoraRegistro = DateTime.Now;
                                     invLod.LodNum = "";
                                     //En el origen, Stage de entrada.
-                                    invLod.UbicacionId = cab.UbicacionId;
+                                    invLod.UbicacionId = cab.UbicacionId.Value;
                                     await _context.AddAsync<InvLod>(invLod);
                                     await _context.SaveChangesAsync();
 
                                     // Secuencia de LPN
                                     invLod.LodNum =   'E' + (invLod.Id).ToString().PadLeft(8,'0');
                                     
-
-
                                     dominio = new InventarioGeneral();
                                     //Vinculo INVLOD
                                     dominio.LodId = invLod.Id;
                                     dominio.FechaRegistro = DateTime.Now;
                                     dominio.HuellaId = huelladetalle_aux.Where(x=>x.Cas == true).SingleOrDefault().Id;    //command.HuellaId;
-                                    dominio.LotNum = command.Lote;
+                                    dominio.LotNum = command.Lote.Trim();
                                     dominio.ProductoId = linea.ProductoId;
                                     dominio.UsuarioIngreso = 1;
                                     dominio.LineaId = linea.Id;
                                     dominio.OrdenReciboId = linea.OrdenReciboId;
                                     dominio.EstadoId = command.EstadoID;
                                     dominio.UntCas = huelladetalle_aux.Where(x=>x.Cas == true).SingleOrDefault().UntQty; 
+                                    dominio.Peso = command.Peso;
                                     linea.EstadoID = command.EstadoID;
                                     dominio.ClienteId = cab.PropietarioId;
                                     linea.Lote = command.Lote;

@@ -1,1 +1,7 @@
 @import '~@angular/material/theming';
+/* for example, let's change the mouse hover color */
+$cell-odd-background-color: lightyellow;
+$row-mouse-hover-color: lightgreen;
+
+/* make sure to add the @import the SlickGrid Bootstrap Theme AFTER the variables changes */
+@import '../node_modules/angular-slickgrid/styles/sass/slickgrid-theme-bootstrap.scss';

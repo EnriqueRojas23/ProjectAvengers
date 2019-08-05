@@ -60,7 +60,6 @@ registrar_detalle(model: any){
 )};
 
 vincularEquipoTransporte(model: any){
-    
     return this.http.post(this.baseUrl + 'RegisterEquipoTransporte', model,httpOptions);
 }
 matchEquipoTransporte(model: any){

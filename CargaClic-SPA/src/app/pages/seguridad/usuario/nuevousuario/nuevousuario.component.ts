@@ -32,15 +32,14 @@ export class NuevousuarioComponent implements OnInit {
        this.alertify.error(error);
     }, () => { 
       this.alertify.success("Se registró correctamente.");
-      this.router.navigate(['/listausuarios']);
+      this.router.navigate(['/seguridad/listausuarios']);
     });
-
   }
   ngOnInit() {
     $("html,body").animate({ scrollTop: 0 }, "slow");
   }
   cancel(){
-    this.router.navigate(['/listausuarios']);
+    this.router.navigate(['/seguridad/listausuarios']);
   }
   
 }

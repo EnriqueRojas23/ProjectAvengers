@@ -1,10 +1,10 @@
-<div class="page-head">
-    <h2 class="page-head-title">Líneas de la Órden de Recibo</h2>
-    <nav aria-label="breadcrumb" role="navigation">
-      <ol class="breadcrumb page-head-nav">
-        <li class="breadcrumb-item"><a [routerLink]="['/recibo/listaordenrecibo']" routerLinkActive="router-link-active" >Ordenes de Recibo</a></li>
+
+    <h2 class="page-head-title">Orden de Recibo</h2>
+    <div class="light-font">
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb primary-color">
+        <li class="breadcrumb-item" [routerLink]="['/recibo/listaordenrecibo']" routerLinkActive="router-link-active" >Listado de órdenes</li>
         <li class="breadcrumb-item active">Detalle de la Orden de Recibo</li>
-        
       </ol>
     </nav>
   </div>
@@ -12,10 +12,16 @@
 <div class="main-content container-fluid">
   <div  class="col-md-12">
     <div class="card card-border-color card-border-color-primary">
-      <div class="card-header card-header-divider">Orden de Recibo N° {{model.numOrden}} </div>
+      <div class="card-header"> Detalles de la Orden<span class="card-subtitle"> Datos de detalle de la orden de recibo</span></div>
       <div class="row">
-          <div class="col-md-8">
-              <button class="btn-buttons btn-primary"   (click)="regresar()"  type="button"> << Regresar a la Orden</button>  
+          <div class="offset-md-1 col-md-8">
+           
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4"></div>
+          <div class="offset-md-8 col-md-3">
+              <button class="btn btn-block btn-button btn-primary"   (click)="regresar()"  type="button">  Regresar </button>  
           </div>
         </div>
       <div class="card-body ">

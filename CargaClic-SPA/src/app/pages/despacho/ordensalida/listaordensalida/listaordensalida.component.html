@@ -79,7 +79,7 @@
      
     <div class="row">
         <div [hidden]="checkSelects()" class="col-md-7  offset-md-1">
-            <button class="btn btn-outline-primary" ngbTooltip="Agregar Ordenes"  (click)="agregar()"  type="button">Agregar Ordenes</button>  
+            <!-- <button class="btn btn-outline-primary" ngbTooltip="Agregar Ordenes"  (click)="agregar()"  type="button">Agregar Ordenes</button>   -->
         </div>
         <div [hidden]="!checkSelects()" class="col-md-7  offset-md-1">
         </div>
@@ -177,11 +177,11 @@
            
                   <ng-container matColumnDef="actionsColumn">
                       <mat-header-cell *matHeaderCellDef>
-                           <button mat-fab ngbTooltip="Nueva Orden de Salida" color="primary"  routerLink="/despacho/nuevaordensalida"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> 
+                           <button mat-fab ngbTooltip="Nueva Orden de Salida" color="primary"  routerLink="/picking/nuevaordensalida"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> 
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row">
                           <button   class="btn btn-space btn-outline-primary" ngbTooltip="Editar Orden" (click)="edit(row.ordenReciboId)" type="button"><i class="fas fa-edit"></i></button>
-                          <button [swal]="deleteSwal" (confirm)="delete(row.ordenSalidaId)"  [disabled]="row.nombreEstado != 'Planeado'"  class="btn btn-space btn-outline-primary" ngbTooltip="Eliminar Orden" type="button"><i class="fas fa-trash"></i></button>
+                          <button [swal]="deleteSwal" (confirm)="delete(row.ordenSalidaId)"  [disabled]="row.nombreEstado != 'Creado'"  class="btn btn-space btn-outline-primary" ngbTooltip="Eliminar Orden" type="button"><i class="fas fa-trash"></i></button>
                           <button  class="btn btn-space btn-outline-primary" (click)="ver(row.ordenSalidaId)" type="button"><i class="fas fa-search"></i></button>
                         </mat-cell>
                   </ng-container>

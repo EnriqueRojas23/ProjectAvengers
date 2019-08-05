@@ -1,4 +1,4 @@
-using CargaClic.Data;
+
 using CargaClic.Domain.Mantenimiento;
 using CargaClic.Domain.Seguridad;
 using CargaClic.Data.Mappings.Mantenimiento;
@@ -9,6 +9,9 @@ using CargaClic.Domain.Prerecibo;
 using CargaClic.Domain.Inventario;
 using CargaClic.Domain.Despacho;
 using CargaClic.Data.Mappings.Despacho;
+using CargaClic.Domain.Facturacion;
+using CargaClic.Data.Mappings.Facturacion;
+using CargaClic.Data.Mappings.Inventario;
 
 namespace CargaClic.Data
 {
@@ -30,9 +33,12 @@ namespace CargaClic.Data
         
 
         public DbSet<OrdenRecibo> OrdenesRecibo {get;set;}
-        public DbSet<Carga> Carga {get;set;}
-        public DbSet<CargaDetalle> CargaDetalle {get;set;}
+        public DbSet<Shipment> Shipment {get;set;}
+        public DbSet<ShipmentLine> ShipmentLine {get;set;}
+        public DbSet<Pckwrk> Pckwrk {get;set;}
+        public DbSet<Wrk> Wrk {get;set;}
         public DbSet<Manifiesto> Manifiesto {get;set;}
+        public DbSet<Carga> Carga {get;set;}
         public DbSet<OrdenReciboDetalle> OrdenesReciboDetalle {get;set;}
 
         public DbSet<OrdenSalida> OrdenSalida {get;set;}
@@ -44,8 +50,13 @@ namespace CargaClic.Data
         public DbSet<EquipoTransporte> EquipoTransporte {get;set;}
         public DbSet<Ubicacion> Ubicacion {get;set;}
 
+        public DbSet<Preliquidacion> Preliquidacion {get;set;}
+        public DbSet<PreliquidacionDetalle> PreliquidacionDetalle {get;set;}
+
         public DbSet<InventarioGeneral> InventarioGeneral {get;set;}
         public DbSet<InvLod> InvLod {get;set;}
+        public DbSet<Kardex> Kardex {get;set;}
+        public DbSet<KardexGeneral> KardexGeneral {get;set;}
 
         public DbSet<Huella> Huella {get;set;}
         public DbSet<HuellaDetalle> HuellaDetalle {get;set;}
@@ -72,18 +83,30 @@ namespace CargaClic.Data
             builder.ApplyConfiguration(new OrdenReciboDetalleConfiguration());
 
 
+            builder.ApplyConfiguration(new PreliquidacionConfiguration());
+            builder.ApplyConfiguration(new DomumentoConfiguration());
+            builder.ApplyConfiguration(new PreliquidacionDetalleConfiguration());
+            builder.ApplyConfiguration(new ComprobanteConfiguration());
+            builder.ApplyConfiguration(new ComprobanteDetalleConfiguration());
+
+
             builder.ApplyConfiguration(new OrdenSalidaConfiguration());
             builder.ApplyConfiguration(new OrdenSalidaDetalleConfiguration());
 
-            builder.ApplyConfiguration(new CargaConfiguration());
-            builder.ApplyConfiguration(new CargaDetalleConfiguration());
+            builder.ApplyConfiguration(new ShipmentConfiguration());
+            builder.ApplyConfiguration(new ShipmentLineConfiguration());
             builder.ApplyConfiguration(new ManifiestoConfiguration());
-            
+            builder.ApplyConfiguration(new PckwrkConfiguration());
+            builder.ApplyConfiguration(new CargaConfiguration());
+            builder.ApplyConfiguration(new WrkConfiguration());
             
             
             builder.ApplyConfiguration(new InventarioGeneralConfiguration());
             builder.ApplyConfiguration(new AjusteInventarioConfiguration());
             builder.ApplyConfiguration(new InvLodConfiguration());
+            builder.ApplyConfiguration(new KardexConfiguration());
+            builder.ApplyConfiguration(new KardexGeneralConfiguration());
+            
 
 
             builder.ApplyConfiguration(new ValorTablaConfiguration());
@@ -126,6 +149,13 @@ namespace CargaClic.Data
                 .HasOne(rp => rp.Rol)
                 .WithMany(p => p.RolUser)
                 .HasForeignKey(p => p.RolId);
+
+           builder.Entity<InventarioGeneral>()
+                    .HasOne(rp => rp.InvLod)
+                    .WithMany(g => g.inventario)
+                    .HasForeignKey(s => s.LodId); 
+
+
             builder.Entity<RolUser>()
                 .HasOne(rp => rp.User)
                 .WithMany(r => r.RolUser)

@@ -48,6 +48,8 @@ using CargaClic.ReadRepository.Repository.Inventario;
 using CargaClic.ReadRepository.Interface.Despacho;
 using CargaClic.ReadRepository.Repository.Despacho;
 using CargaClic.Domain.Despacho;
+using CargaClic.ReadRepository.Interface.Facturacion;
+using CargaClic.Domain.Facturacion;
 
 namespace CargaClic.API
 {
@@ -119,9 +121,16 @@ namespace CargaClic.API
             services.AddScoped<IRepository<OrdenSalidaDetalle>,Repository<OrdenSalidaDetalle>>();
             services.AddScoped<IOrdenReciboRepository,OrdenReciboRepository>();
             services.AddScoped<IOrdenSalidaRepository,OrdenSalidaRepository>();
+
+
             services.AddScoped<IDespachoReadRepository,DespachoReadRepository>();
+
+            services.AddScoped<IFacturacionReadRepository,FacturacionReadRepository>();
+            services.AddScoped<IFacturacionRepository,FacturacionRepository>();
+            services.AddScoped<IRepository<Documento>,Repository<Documento>>();
             
             
+            services.AddScoped<IRepository<Propietario>,Repository<Propietario>>();
             
 
             

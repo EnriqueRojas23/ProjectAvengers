@@ -34,7 +34,7 @@ export class NuevorolComponent implements OnInit {
     if (form.invalid) {
       return; 
     }
-    // this.rolService(this.model).subscribe(resp => { 
+    // this.rolService.saveRoles(this.model).subscribe(resp => { 
     // }, error => {
     //    this.alertify.error(error);
     // }, () => { 

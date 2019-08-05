@@ -114,7 +114,7 @@ export class NuevaordensalidadetalleComponent implements OnInit {
       this.alertify.error(error);
     },() => {
       this.alertify.success("Se actualizó correctamente.");
-      this.router.navigate(['/despacho/verordensalida',  this.model.OrdenSalidaId ]);
+      this.router.navigate(['/picking/verordensalida',  this.model.OrdenSalidaId ]);
     })
   }
 
@@ -132,7 +132,7 @@ export class NuevaordensalidadetalleComponent implements OnInit {
 
   }
   cancel(){
-    this.router.navigate(['/despacho/verordensalida',  this.model.OrdenReciboId ]);
+    this.router.navigate(['/picking/verordensalida',  this.model.OrdenReciboId ]);
   }
   CambioHuella(id){
     this.huellaDetalle = [];

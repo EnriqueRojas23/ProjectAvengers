@@ -40,12 +40,12 @@ namespace CargaClic.ReadRepository.Repository.Despacho
 
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "[Recepcion].[pa_listar_ordenessalida]";
+                string sQuery = "[Despacho].[pa_listar_ordenessalida]";
                 conn.Open();
                 var result = await conn.QueryAsync<GetAllOrdenSalida>(sQuery,
                                                                     parametros
                                                                     ,commandType:CommandType.StoredProcedure
-                  );
+                  ); 
                 return result;
             }
         }
@@ -112,6 +112,77 @@ namespace CargaClic.ReadRepository.Repository.Despacho
             
            
 
+        }
+
+        public async Task<IEnumerable<GetAllOrdenSalida>> GetAllOrdenSalidaPendiente(int PropietarioId, int EstadoId, int DaysAgo)
+        {
+             var parametros = new DynamicParameters();
+            parametros.Add("PropietarioId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: PropietarioId);
+            parametros.Add("EstadoId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: EstadoId);
+            parametros.Add("DaysAgo", dbType: DbType.Int64, direction: ParameterDirection.Input, value: DaysAgo);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[Despacho].[pa_listar_ordenessalida_pendiente]";
+                conn.Open();
+                var result = await conn.QueryAsync<GetAllOrdenSalida>(sQuery,
+                                                                    parametros
+                                                                    ,commandType:CommandType.StoredProcedure
+                  ); 
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<ListarTrabajoResult>> ListarTrabajo( int PropietarioId, int EstadoId )
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("PropietarioId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: PropietarioId);
+            parametros.Add("EstadoId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: EstadoId);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[Despacho].[pa_listarTrabajo]";
+                conn.Open();
+                var result = await conn.QueryAsync<ListarTrabajoResult>(sQuery,
+                                                                    parametros
+                                                                    ,commandType:CommandType.StoredProcedure
+                  ); 
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<ListarTrabajoDetallesResult>> ListarTrabajoDetalle(long WrkId)
+        {
+             var parametros = new DynamicParameters();
+            parametros.Add("WrkId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: WrkId);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[Despacho].[pa_listartareadetalles]";
+                conn.Open();
+                var result = await conn.QueryAsync<ListarTrabajoDetallesResult>(sQuery,
+                                                                    parametros
+                                                                    ,commandType:CommandType.StoredProcedure
+                  ); 
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<PendienteCargaResult>> ListarPendienteCarga()
+        {
+             var parametros = new DynamicParameters();
+            
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[Despacho].[pa_listar_pendientescarga]";
+                conn.Open();
+                var result = await conn.QueryAsync<PendienteCargaResult>(sQuery,
+                                                                    parametros
+                                                                    ,commandType:CommandType.StoredProcedure
+                  ); 
+                return result;
+            }
         }
     }
 }

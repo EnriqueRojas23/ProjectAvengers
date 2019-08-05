@@ -53,6 +53,12 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
   ngOnInit() {
       this.model.linea = 'Autogenerado';
       this.model.OrdenReciboId  = this.activatedRoute.snapshot.params["uid"];
+     
+      this.ordenReciboService.obtenerOrden(this.model.OrdenReciboId).subscribe(resp => 
+        {
+          this.model.propietarioId =  resp.propietarioId;
+        })
+
       this.generalService.getAll(3).subscribe(resp=>
         {
           
@@ -68,7 +74,7 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogBuscarProducto, {
       width: '650px',
       height: '500px',
-      data: {codigo: this.model.OrdenReciboId, descripcion: ""}
+      data: {codigo: this.model.propietarioId, descripcion: ""}
     });
     dialogRef.afterClosed().subscribe(result => {
       this.model.descripcionLarga = result.descripcionLarga;

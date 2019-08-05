@@ -1,0 +1,46 @@
+.mat-row {
+    cursor: pointer;
+  }
+  .mat-column-select {
+    flex: 0 0 60px;
+    text-align: right;
+    
+  }
+  .mat-column-codigo {
+    flex: 0 0 90px;
+    text-align: right;
+    
+  }
+  .mat-column-workNum {
+    flex: 0 0 100px;
+    text-align: center;
+  }
+  .mat-column-propietario {
+    flex:-1 0 150px;
+    
+    
+  }
+  .mat-column-FechaRegistro {
+    flex: 0 0 80px;
+    
+  }
+  .mat-column-peso {
+    flex: 0 0 60px;
+    
+  }
+  .mat-column-unidadMedida {
+    flex: 0 0 60px;
+    display:inherit;
+  
+    
+  }
+  .mat-column-producto {
+    flex: 0 0 260px;
+    
+  }
+  
+  .mat-column-actionsColumn {
+    flex: 0 0 120px;
+    
+  }
+  

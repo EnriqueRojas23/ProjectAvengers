@@ -23,6 +23,8 @@ namespace CargaClic.Domain.Inventario
         public bool? Almacenado {get;set;}
         public int EstadoId {get;set;}
         public int ClienteId {get;set;}
-
+        public long? ShipmentLine {get;set;}
+        public InvLod InvLod {get;set;}
+        public decimal? Peso {get;set;}
     }
 }

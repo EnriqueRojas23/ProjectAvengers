@@ -1,14 +1,14 @@
 
-<div class="page-head">
-    <h2 class="page-head-title">Paletizar</h2>
-    <nav aria-label="breadcrumb" role="navigation">
-      <ol class="breadcrumb page-head-nav">
-        <li class="breadcrumb-item"><a href="#">Equipos de Transporte</a></li>
-        <li class="breadcrumb-item">Listado de Órdenes de Recibo</li>
-        <li class="breadcrumb-item active">Identificar Pallets</li>
-      </ol>
-    </nav>
- </div>
+
+    <h2 class="page-head-title">Recepción de Órdenes</h2>
+    <div class="light-font">
+        <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb primary-color">
+                <li class="breadcrumb-item" [routerLink]="['/recibo/listaordenrecibida' , this.EquipoTransporteId ]" >Listado de órdenes de recibo</li>
+                <li class="breadcrumb-item  active" [routerLink]="['/recibo/Asignarpuerta' , this.model.EquipoTransporteId ]" routerLinkActive="router-link-active" >Paletizado</li>
+              </ol>
+        </nav>
+      </div>
 
 <div class="main-content container-fluid">
   
@@ -169,13 +169,13 @@
                     </mat-form-field>
       
       
-                    <!-- <div class="input-div">
-                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidad">Cantidad Esperada</label>
+                     <div class="input-div">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidad">Peso </label>
                         <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                          <input matInput readonly type="text" (keypress)="numberOnly($event)" maxlength="5" required [(ngModel)]="modeldetail.cantidad"  #cantidad="ngModel"  name="cantidad" >
+                          <input matInput type="text" appTwoDigitDecimaNumber maxlength="10" [(ngModel)]="modeldetail.peso"  #cantidad="ngModel"  name="cantidad" >
                         </mat-form-field>
                         
-                      </div> -->
+                      </div>
 
                       <div class="input-div">
                           <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidadRecibida">Cantidad Recibida</label>

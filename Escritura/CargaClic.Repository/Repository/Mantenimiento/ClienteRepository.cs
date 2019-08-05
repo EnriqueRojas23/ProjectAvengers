@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using CargaClic.Data;
 using CargaClic.Domain.Mantenimiento;
@@ -103,7 +102,7 @@ namespace CargaClic.Repository.Repository.Mantenimiento
                         
                         return propietarioxcliente.Id;
                  }
-                  catch (System.Exception ex)
+                  catch (System.Exception )
                   {
                         transaction.Rollback(); 
                         throw;
@@ -134,7 +133,7 @@ namespace CargaClic.Repository.Repository.Mantenimiento
                         
                         return direccion.iddireccion;
                  }
-                  catch (System.Exception ex)
+                  catch (System.Exception)
                   {
                         transaction.Rollback(); 
                         throw;

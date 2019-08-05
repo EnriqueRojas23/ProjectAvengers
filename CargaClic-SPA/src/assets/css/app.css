@@ -4819,7 +4819,7 @@ input[type="button"].btn-block {
   /* border: 0px solid rgba(0, 0, 0, 0.125) !Important; */
   border-top-color: #4285f4 !important;
   border-radius: 3px;
-  border-top: 3px solid #4285f4!important;
+  border-top: 3px solid #181715!important;
 }
 
 .card > hr {
@@ -5089,7 +5089,7 @@ input[type="button"].btn-block {
   padding: 7px 20px;
   margin-bottom: 1rem;
   list-style: none;
-  background-color: whitesmoke;
+  background-color: #3a6998;
   border-radius: 2px;
 }
 
@@ -11551,7 +11551,8 @@ canvas {
 }
 
 .be-color-header .be-top-header {
-  background-color: #3F51B5;
+  /* background-color: #3F51B5; */
+  background-color: #5f5e5d;
   border-bottom-color: #3F51B5;
 
 }
@@ -13696,11 +13697,12 @@ canvas {
   display: block;
   margin-bottom: 5px;
   margin-top: 6px;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -1px;
-  font-size: 2.154rem;
+  font-size: 2.054rem;
   color: #6b6b6b;
   line-height: 36px;
+  
 }
 
 .page-head-description {
@@ -13741,6 +13743,7 @@ canvas {
 
 .page-head .breadcrumb-item {
   padding-left: 0;
+  cursor: pointer;
 }
 
 @media (max-width: 767.98px) {
@@ -19513,7 +19516,7 @@ fieldset[disabled] .btn-color.btn-evernote.active {
 
 /*Breadcrumbs*/
 .breadcrumb {
-  background-color: whitesmoke;
+  background-color: #3a6998;
   margin-bottom: 18px;
   padding: 7px 20px 6px;
   line-height: 16px;

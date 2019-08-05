@@ -25,24 +25,19 @@ export class ListaordensalidaComponent implements OnInit {
    gridColumnApi;
    frameworkComponents;
 
-  columnDefs = [
-      {headerName: 'N° Orden', field: 'numOrden',sortable: true , filter: true},
-      {headerName: 'Propietario', field: 'propietario', sortable: true , filter: true},
-      {headerName: 'Estado', field: 'nombreEstado',sortable: true , filter: true},
-      {
-        headerName: "Child/Parent",
-        field: "value",
-        cellRenderer: "childMessageRenderer",
-        colId: "params",
-        width: 180
-      }
-  ];
-  rowData: OrdenSalida[] ;
-  // rowData = [
-  //     { make: 'Toyota', model: 'Celica', price: 35000 },
-  //     { make: 'Ford', model: 'Mondeo', price: 32000 },
-  //     { make: 'Porsche', model: 'Boxter', price: 72000 }
+  // columnDefs = [
+  //     {headerName: 'N° Orden', field: 'numOrden',sortable: true , filter: true},
+  //     {headerName: 'Propietario', field: 'propietario', sortable: true , filter: true},
+  //     {headerName: 'Estado', field: 'nombreEstado',sortable: true , filter: true},
+  //     {
+  //       headerName: "Child/Parent",
+  //       field: "value",
+  //       cellRenderer: "childMessageRenderer",
+  //       colId: "params",
+  //       width: 180
+  //     }
   // ];
+  // rowData: OrdenSalida[] ;
 
 
   @ViewChild(MatSort) sort: MatSort;
@@ -89,13 +84,9 @@ export class ListaordensalidaComponent implements OnInit {
       this.frameworkComponents = {
         childMessageRenderer: EditButtonRendererComponent
       };
-
-
-
-
-    }
-
+  }
   ngOnInit() {
+    this.loading = true;
     this.clienteService.getAllPropietarios("").subscribe(resp => { 
       resp.forEach(element => {
         this.clientes.push({ val: element.id , viewValue: element.razonSocial});
@@ -107,21 +98,9 @@ export class ListaordensalidaComponent implements OnInit {
             this.filterBanks();
           });
           this.loading = false;
-
-
+          this.model.intervalo = 3;
+          this.model.estadoIdfiltro = 21;
     });
-
-
-
-    this.loading = true;
-    this.model.intervalo = 3;
-    this.model.estadoIdfiltro = 21;
-    this.model.PropietarioFiltroId = 1;
-    
-    this.EstadoId =this.model.estadoIdfiltro;
-    this.model.PropietarioId = this.model.PropietarioFiltroId;
-
-
   }
   onGridReady(params) {
     this.gridApi = params.api;
@@ -161,21 +140,22 @@ export class ListaordensalidaComponent implements OnInit {
     
   }
   ver(id){
-    this.router.navigate(['/despacho/verordensalida',id]);
+    this.router.navigate(['/picking/verordensalida',id]);
    }
    buscar(){
+
     this.ordensalidaService.getAllOrdenSalida(this.model).subscribe(list => {
       
+      
+
       this.ordenes = list;
-      this.rowData = list;
-      console.log(this.rowData);
+      //this.rowData = list;
+      
       this.loading = false;
       this.listData = new MatTableDataSource(this.ordenes);
       this.listData.paginator = this.paginator;
       this.listData.sort = this.sort;
       
-  
-        
       this.listData.filterPredicate = (data,filter) => {
         return this.displayedColumns.some(ele => {
           
@@ -193,4 +173,43 @@ export class ListaordensalidaComponent implements OnInit {
    methodFromParent(cell) {
     alert("Parent Component Method from " + cell + "!");
   }
+  delete(id){
+     
+    this.ordensalidaService.deleteOrder(id).subscribe(resp => {
+
+       this.ordensalidaService.getAllOrdenSalida(this.model).subscribe(list => {
+           
+         this.ordenes = list;
+         this.loading = false;
+         this.listData = new MatTableDataSource(this.ordenes);
+         this.listData.paginator = this.paginator;
+         this.listData.sort = this.sort;
+
+   });
+    }, error => {
+      
+     if(error = "err020")
+     this.alertify.error("Esta Orden de Recibo tiene productos asociados.");
+     else
+     this.alertify.error("Ocurrió un error inesperado.");
+
+     }, () => { 
+
+       this.listData.filterPredicate = (data,filter) => {
+         return this.displayedColumns.some(ele => {
+           
+           if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
+              {
+                
+                 return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+            
+              }
+           })
+          };
+      });
+   }
+  applyFilter() {
+    this.listData.filter = this.searchKey.trim().toLowerCase();
+  }
+
 }

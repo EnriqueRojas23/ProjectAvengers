@@ -1,0 +1,89 @@
+
+    <div class="modal-header modal-header-colored">
+      <h3 class="modal-title" aria-level="2">Asignar Puerta</h3>
+      
+    </div>
+ <div class="card card-border-color card-border-color-primary">
+
+
+  <div class="card-body">
+      
+      <div  class="mat-elevation-z8">
+          <mat-table #table [dataSource] = "listData" matSort >
+             <!-- Checkbox Column -->
+             <ng-container matColumnDef="ubicacion">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >  Puerta </mat-header-cell>
+                <mat-cell *matCellDef="let user"> {{user.ubicacion}} </mat-cell>
+              </ng-container>
+
+
+             <ng-container matColumnDef="almacen">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Almacén</mat-header-cell>
+              <mat-cell  *matCellDef="let orden" > 
+                  <!-- <button class="btn btn-space btn-outline-primary" (click)="ver(orden.ordenReciboId)"  type="button"> -->
+                    <!-- <i class="mdi mdi-search"></i> -->
+                    <!-- <a class="router-link"  (click)="ver(orden.ordenReciboId)"> OR{{orden.numOrden}}  </a> -->
+                    <span class="label label-info pull-xs-center">{{orden.almacen}}</span>
+                  <!-- </button> -->
+          
+              </mat-cell>
+            </ng-container>
+      
+        
+              <ng-container matColumnDef="area">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Área </mat-header-cell>
+                  <mat-cell *matCellDef="let user"> {{user.area}} </mat-cell>
+                </ng-container>
+        
+                <!-- [style.color]="'#ff0000'" -->
+        
+             
+              <ng-container matColumnDef="estado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
+                  <mat-cell *matCellDef="let user"> 
+
+                 <div *ngIf="user.estado == 'Lleno' then thenBlock else elseBlock"></div>
+                <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.estado}}     </div>     </ng-template>
+                <ng-template #elseBlock>   <div>{{user.estado}}     </div>   </ng-template>  
+                  </mat-cell>
+                </ng-container>
+
+
+          
+
+         
+                <ng-container matColumnDef="actionsColumn">
+                    <mat-header-cell *matHeaderCellDef>
+                        <!-- <div class="example-button-row">
+                            <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/nuevaordenrecibo"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
+                        </div>
+              -->
+                       
+                       
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                       <div *ngIf="row.estado == 'Libre' then thenBlock else elseBlock"></div>
+                       <ng-template #thenBlock>  <button  class="btn btn-space btn-outline-primary" ngbTooltip="Asignar Puerta" (click)="asignarPuerta(row.id)" type="button"><i class="fas fa-check"></i></button>     </ng-template>
+                       <ng-template #elseBlock>   <div>    </div>   </ng-template>  
+                        
+                    </mat-cell>
+                </ng-container>
+       
+        
+          <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" >
+          <!-- [ngClass]="{'highlight': selectedRowIndex == row.id}"
+          (click)="highlight(row)"> -->
+
+          </mat-row>
+        
+        
+          </mat-table>
+
+
+         <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+
+        </div>
+      
+  </div>
+ 

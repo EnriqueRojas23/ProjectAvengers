@@ -29,7 +29,7 @@ import { VerordenreciboComponent } from './prerecibo/ordenrecibo/verordenrecibo/
 import { OrdenReciboService } from '../_services/Recepcion/ordenrecibo.service';
 import { GeneralService } from '../_services/Mantenimiento/general.service';
 import { VincularequipotransporteComponent, DialogBuscarPlaca, DialogBuscarEmpTransporte, DialogBuscarChofer } from './prerecibo/equipotransporte/vincularequipotransporte/vincularequipotransporte.component';
-import { AsignarpuertaComponent } from './prerecibo/puerta/asignarpuerta/asignarpuerta.component';
+
 import { ListaordenrecibidaComponent } from './recibo/ordenrecibo/listaordenrecibida/listaordenrecibida.component';
 import { IdentificarreciboComponent } from './recibo/ordenrecibo/identificarrecibo/identificarrecibo.component';
 import { ListadovehiculoComponent } from './mantenimiento/vehiculo/listadovehiculo/listadovehiculo.component';
@@ -68,12 +68,28 @@ import { NuevopropietarioComponent } from './mantenimiento/propietario/nuevoprop
 import { NuevaordensalidadetalleComponent } from './despacho/ordensalida/nuevaordensalidadetalle/nuevaordensalidadetalle.component';
 import { VerordensalidaComponent } from './despacho/ordensalida/verordensalida/verordensalida.component';
 import { DialogBuscarProducto } from './modal/ModalBuscarProducto/ModalBuscarProducto.component';
-import { PlanificarcargaComponent } from './despacho/carga/planificarcarga/planificarcarga.component';
-import { ListadodespachoComponent } from './despacho/carga/listadodespacho/listadodespacho.component';
+
 import { AgGridModule } from 'ag-grid-angular';
 import { EditButtonRendererComponent } from './modal/Edit-button-renderer/Edit-button-renderer.component';
-import { ListadocargasComponent } from './despacho/carga/listadocargas/listadocargas.component';
+
 import { EquipotransportesalidaComponent } from './despacho/equipotransportesalida/equipotransportesalida.component';
+import { PendientespreliquidacionComponent } from './facturacion/preliquidacion/pendientespreliquidacion/pendientespreliquidacion.component';
+
+import { AngularSlickgridModule } from 'angular-slickgrid';
+import { TranslateModule } from '@ngx-translate/core';
+import { GestionpreliquidacionComponent } from './facturacion/preliquidacion/gestionpreliquidacion/gestionpreliquidacion.component';
+import { DialogNuevaFactura } from './modal/ModalNuevaFactura/ModalNuevaFactura.component';
+import { AsignarpuertaComponent } from './prerecibo/puerta/asignarpuerta/asignarpuerta.component';
+import { DialogAsignarPuerta } from './modal/ModalAsignarPuerta/ModalAsignarPuerta.component';
+import { DialogAsignarTrabajador } from './modal/ModalAsignarTrabajador/ModalAsignarTrabajador.component';
+
+import { ConfirmarmovimientoComponent, NgbdModalConfirmRetiro } from './despacho/carga/confirmarmovimiento/confirmarmovimiento.component';
+
+import { PlanificarpickingComponent } from './despacho/picking/planificarpicking/planificarpicking.component';
+import { ListadoTrabajoPendienteComponent } from './despacho/picking/listadotrabajopendiente/listadotrabajopendiente.component';
+import { Listado2trabajoasignadoComponent } from './despacho/carga/listado2trabajoasignado/listado2trabajoasignado.component';
+import { PendienteCargaComponent } from './despacho/carga/listadopendientescarga/pendientecarga.component';
+import { ListadocargaComponent } from './despacho/carga/listadocarga/listadocarga.component';
 
 
 
@@ -98,6 +114,7 @@ import { EquipotransportesalidaComponent } from './despacho/equipotransportesali
     DialogBuscarPlaca,
     DialogBuscarEmpTransporte,
     DialogBuscarChofer,
+    DialogNuevaFactura,
     NuevaordenreciboComponent,
     ListaordenreciboComponent,
     NuevaordenrecibodetalleComponent,
@@ -114,6 +131,7 @@ import { EquipotransportesalidaComponent } from './despacho/equipotransportesali
     AcomodopalletsComponent,
     AlmacenamientoComponent,
     NgbdModalConfirmAlmacenamiento,
+    NgbdModalConfirmRetiro,
     DialogExcepciones,
     SpeedDialFabComponent,
     ListadoequipotransporteentranteComponent,
@@ -140,11 +158,18 @@ import { EquipotransportesalidaComponent } from './despacho/equipotransportesali
     DialogAgregarDireccion,
     NuevaordensalidadetalleComponent,
     VerordensalidaComponent,
-    PlanificarcargaComponent,
-    ListadodespachoComponent,
+    PlanificarpickingComponent,
+    PendienteCargaComponent,
     EditButtonRendererComponent,
-    ListadocargasComponent,
-    EquipotransportesalidaComponent
+    ListadoTrabajoPendienteComponent,
+    EquipotransportesalidaComponent,
+    PendientespreliquidacionComponent,
+    GestionpreliquidacionComponent,
+    DialogAsignarPuerta,
+    DialogAsignarTrabajador,
+    Listado2trabajoasignadoComponent,
+    ConfirmarmovimientoComponent,
+    ListadocargaComponent
 
   ],
   exports: [
@@ -173,6 +198,8 @@ import { EquipotransportesalidaComponent } from './despacho/equipotransportesali
     MatCheckboxModule,
     NgbModule,
     TreeviewModule.forRoot(),
+    AngularSlickgridModule.forRoot(),
+    TranslateModule.forRoot(),
     NgxLoadingModule.forRoot({
       animationType: ngxLoadingAnimationTypes.wanderingCubes,
       backdropBackgroundColour: 'rgba(0,0,0,0.1)', 
@@ -207,13 +234,17 @@ import { EquipotransportesalidaComponent } from './despacho/equipotransportesali
     DialogBuscarEmpTransporte,
     DialogBuscarChofer,
     NgbdModalConfirmAlmacenamiento,
+    NgbdModalConfirmRetiro,
     DialogExcepciones,
     DialogEditarHuella,
     DialogNuevoHuella,
     DialogNuevaHuellaDetalle,
     DialogNuevoCliente,
     DialogAgregarDireccion,
-    EditButtonRendererComponent
+    DialogNuevaFactura,
+    EditButtonRendererComponent,
+    DialogAsignarPuerta,
+    DialogAsignarTrabajador
   ],
   
 })

@@ -21,6 +21,7 @@ namespace CargaClic.API.Dtos.Recepcion
         public int? UnidadMedidaId { get;set; }
         public int? HuellaDetalleId {get;set;}
         public int PropietarioId {get;set;}
+        public decimal? Peso {get;set;}
 
         
 

@@ -116,6 +116,7 @@ namespace CargaClic.Repository
                 return dominio;
             }
         }
+        
 
         public async Task<long> Almacenamiento(InventarioForStorage command)
         {
@@ -147,15 +148,37 @@ namespace CargaClic.Repository
                        break;  
                 }
             }
-        
+            KardexGeneral nuevo  ;
 
             using(var transaction = _context.Database.BeginTransaction())
             {
                
                 try
                 {
-                        invlod.UbicacionId =   invlod.UbicacionProxId;
+                        invlod.UbicacionId =   invlod.UbicacionProxId.Value;
                         invlod.UbicacionProxId = null;
+
+                        nuevo = new KardexGeneral();
+                        nuevo.Almacenado = false;
+                        nuevo.EstadoId = dominio.EstadoId;
+                        nuevo.FechaExpire = dominio.FechaExpire;
+                        nuevo.FechaManufactura = dominio.FechaManufactura;
+                        nuevo.FechaRegistro = dominio.FechaRegistro;
+                        nuevo.HuellaId = dominio.HuellaId;
+                        nuevo.LineaId = dominio.LineaId;
+                        nuevo.LodId = dominio.LodId;
+                        nuevo.LotNum = dominio.LotNum;
+                        nuevo.Movimiento = "E";
+                        nuevo.OrdenReciboId = dominio.OrdenReciboId;
+                        nuevo.Peso = dominio.Peso;
+                        nuevo.ProductoId = dominio.ProductoId;
+                        nuevo.PropietarioId = dominio.ClienteId;
+                        nuevo.ShipmentLine = null;
+                        nuevo.UntQty = dominio.UntQty;
+                        nuevo.UsuarioIngreso = 1;
+                        nuevo.InventarioId = dominio.Id;
+                        
+                        _context.KardexGeneral.Add(nuevo);
                          
                         await _context.SaveChangesAsync();
                         transaction.Commit();
@@ -291,9 +314,8 @@ namespace CargaClic.Repository
             string[] prm = mergeInventarioRegister.ids.Split(',');
             InventarioGeneral dominio = new InventarioGeneral();
             InvLod invLod = null;
-            int total = 0;
             List<AjusteInventario> ajustes = new List<AjusteInventario>();
-            AjusteInventario ajuste = null;
+            
 
 
 

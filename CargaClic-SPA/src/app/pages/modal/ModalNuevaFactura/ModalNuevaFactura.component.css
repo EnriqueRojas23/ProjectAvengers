@@ -1,0 +1,28 @@
+.mat-row {
+    cursor: pointer;
+  }
+  
+  .mat-column-Codigo {
+    flex: 0 0 40px;
+    text-align: right;
+    
+  }
+  .mat-column-descripcion {
+    flex: 0 0 210px;
+    justify-content: left;
+  }
+  .mat-column-subtotal {
+    flex: 0 0 90px;
+    
+  }
+  .mat-column-igv {
+    flex: 0 0  90px;
+  }
+  .mat-column-total {
+    flex: 0 0  90px;
+  }
+
+  
+
+  
+ 

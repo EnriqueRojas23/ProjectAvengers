@@ -78,6 +78,9 @@ export class AjusteinventariodetalleComponent implements OnInit {
   regresar(){
     this.router.navigate(["/inventario/ajusteinventario"]);
   }
-
+  applyFilter() {
+    
+    this.listData.filter = this.searchKey.trim().toLowerCase();
+  }
 
 }

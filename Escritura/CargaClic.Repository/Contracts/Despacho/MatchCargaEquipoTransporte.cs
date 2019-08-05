@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace CargaClic.API.Dtos.Recepcion
+namespace CargaClic.API.Dtos.Despacho
 {
    public class  MatchCargaEquipoTransporte
    {
@@ -9,6 +9,6 @@ namespace CargaClic.API.Dtos.Recepcion
         [Required]
         public long EquipoTransporteId {get;set;}
         [Required]
-        public long CargaId {get;set;}
+        public string CargasId {get;set;}
     }
 }
