@@ -112,6 +112,20 @@ namespace CargaClic.API.Controllers.Despacho
           return Ok (resp);
       }
 
+      [HttpGet("ListarPickingPendiente")]
+      public async  Task<IActionResult> ListarPickingPendiente()
+      { 
+          var resp  = await _repo_Read_Despacho.ListarPickingPendiente();
+          return Ok (resp);
+      }
+
+      [HttpGet("ListarPickingPendienteDetalle")]
+      public async  Task<IActionResult> ListarPickingPendienteDetalle(long ShipmentId)
+      { 
+          var resp  = await _repo_Read_Despacho.ListarPickingPendienteDetalle(ShipmentId);
+          return Ok (resp);
+      }
+
 
    
      

@@ -82,29 +82,18 @@ export class ListaordenreciboComponent implements OnInit , AfterViewInit, OnDest
    
   ngOnInit() {
     this.loading = true;
-    
     this.clienteService.getAllPropietarios('').subscribe(resp => { 
       resp.forEach(element => {
         this.clientes.push({ val: element.id , viewValue: element.razonSocial});
       });
-
-        
-
         this.ClientesCtrl.setValue(this.clientes[0]);
-
         this.filteredClientes.next(this.clientes.slice());
-
         this.ClientesFilterCtrl.valueChanges
         .pipe(takeUntil(this._onDestroy))
         .subscribe(() => {
               this.filterBanks();
             });
     });
-
-
-
-    
-
     this.model = {
     };
 
@@ -280,10 +269,8 @@ export class ListaordenreciboComponent implements OnInit , AfterViewInit, OnDest
 
 
     this.ordenreciboService.getAll(this.model).subscribe(list => {
-    this.ordenes = list;
 
-    
-    
+    this.ordenes = list;
     this.loading = false;
     this.listData = new MatTableDataSource(this.ordenes);
     this.listData.paginator = this.paginator;

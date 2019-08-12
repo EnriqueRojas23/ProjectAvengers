@@ -57,7 +57,7 @@ namespace CargaClic.ReadRepository.Repository.Despacho
 
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "[Recepcion].[obtener_ordenrecibodetalle]";
+                string sQuery = "[Despacho].[obtener_ordenrecibodetalle]";
                 conn.Open();
                 var result = await conn.QueryAsync<GetAllOrdenSalidaDetalle>(sQuery,
                                                                            parametros
@@ -181,6 +181,38 @@ namespace CargaClic.ReadRepository.Repository.Despacho
                                                                     parametros
                                                                     ,commandType:CommandType.StoredProcedure
                   ); 
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<ListarShipmentResult>> ListarPickingPendiente()
+        {
+              var parametros = new DynamicParameters();
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[Despacho].[pa_listarpickingpendiente]";
+                conn.Open();
+                var result = await conn.QueryAsync<ListarShipmentResult>(sQuery,
+                                                                    parametros
+                                                                    ,commandType:CommandType.StoredProcedure
+                  ); 
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<ListarShipmentDetalleResult>> ListarPickingPendienteDetalle(long ShipmentId)
+        {
+             var parametros = new DynamicParameters();
+            parametros.Add("ShipmentId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: ShipmentId);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[Despacho].[pa_listarpickingpendientedetalle]";
+                conn.Open();
+                var result = await conn.QueryAsync<ListarShipmentDetalleResult>(sQuery,
+                                                                           parametros
+                                                                          ,commandType:CommandType.StoredProcedure
+                  );
                 return result;
             }
         }

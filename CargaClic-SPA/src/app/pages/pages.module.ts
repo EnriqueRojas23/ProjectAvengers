@@ -90,6 +90,7 @@ import { ListadoTrabajoPendienteComponent } from './despacho/picking/listadotrab
 import { Listado2trabajoasignadoComponent } from './despacho/carga/listado2trabajoasignado/listado2trabajoasignado.component';
 import { PendienteCargaComponent } from './despacho/carga/listadopendientescarga/pendientecarga.component';
 import { ListadocargaComponent } from './despacho/carga/listadocarga/listadocarga.component';
+import { ConfirmarpinckingComponent } from './despacho/picking/confirmarpincking/confirmarpincking.component';
 
 
 
@@ -169,7 +170,8 @@ import { ListadocargaComponent } from './despacho/carga/listadocarga/listadocarg
     DialogAsignarTrabajador,
     Listado2trabajoasignadoComponent,
     ConfirmarmovimientoComponent,
-    ListadocargaComponent
+    ListadocargaComponent,
+    ConfirmarpinckingComponent
 
   ],
   exports: [

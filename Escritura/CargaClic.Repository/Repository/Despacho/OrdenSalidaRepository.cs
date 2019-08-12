@@ -271,6 +271,7 @@ namespace CargaClic.Repository
                         {
 
                             shipmentline = new ShipmentLine();
+
                             shipmentline.EstadoId = (Int16)  Constantes.EstadoCarga.Pendiente;
                             shipmentline.HuellaId = item2.HuellaId;
                             shipmentline.LineaId = item2.Id;
@@ -279,14 +280,27 @@ namespace CargaClic.Repository
                             shipmentline.UnidadMedidaId = item2.UnidadMedidaId;
                             shipmentline.ShipmentId = dominio.Id;
                             shipmentline.Cantidad = item2.Cantidad;
-                            await _context.ShipmentLine.AddAsync(shipmentline);
-                          
 
+                            await _context.ShipmentLine.AddAsync(shipmentline);
                             await _context.SaveChangesAsync();
 
                             //aca bifurca si es se hace por vencimiento o si no tiene el pedido por lote.
-
-                            var result = (from a in _context.InventarioGeneral 
+                            List<InventarioGeneral> result ;
+                            if(item2.Lote == null)
+                            {
+                                     result = (from a in _context.InventarioGeneral 
+                                        .Include(z=>z.InvLod)
+                                        where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
+                                                    a.Almacenado == true &
+                                                    a.ShipmentLine == null )
+                                                    select a)
+                                        .OrderBy(x=>x.FechaExpire)
+                                        .OrderByDescending(x=>x.UntQty)
+                                        .OrderBy(x=> x.InvLod.LodNum).ToList();
+                            }
+                            else
+                            {
+                             result = (from a in _context.InventarioGeneral 
                                         .Include(z=>z.InvLod)
                                         where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
                                                     a.Almacenado == true &
@@ -297,6 +311,14 @@ namespace CargaClic.Repository
                                         .OrderByDescending(x=>x.UntQty)
                                         .OrderBy(x=> x.InvLod.LodNum).ToList();
 
+                                        
+                            }
+                          
+
+
+
+
+
 
 
                                     recaudado_individual = 0;
@@ -306,75 +328,45 @@ namespace CargaClic.Repository
 
                                         if(ids.Where(x=>x == inventario.Id).Count() > 0)
                                                continue;
+                                        
+                                        pckwrk = new Pckwrk();
+                                        pckwrk.CantidadPallet = inventario.UntQty;
+                                        pckwrk.FechaExpire = inventario.FechaExpire;
+                                        pckwrk.HuellaDetalleId = inventario.HuellaId;
+                                        pckwrk.OrdenSalidaId = item2.OrdenSalidaId;
+                                        pckwrk.ProductoId = inventario.ProductoId;
+                                        pckwrk.PropietarioId = item.PropietarioId;
+                                        pckwrk.ShipmentLineId = shipmentline.Id;
+                                        pckwrk.UbicacionId = inventario.InvLod.UbicacionId;
+                                        pckwrk.WrkId = wrk.Id;
+                                        pckwrk.LodNum = inventario.InvLod.LodNum;
+                                        pckwrk.InventarioId = inventario.Id;
+                                        pckwrk.Confirmado = false;
+                                        pckwrk.OrdenReciboId = inventario.OrdenReciboId;
+                                        pckwrk.LineaId = inventario.LineaId;
+                                        pckwrk.FechaIngreso =  inventario.FechaRegistro;
+                                        pckwrk.LotNum = inventario.LotNum;
+                                        inventario.Almacenado = false;
+                                        inventario.ShipmentLine = shipmentline.Id;
+
+                                        ids.Add(inventario.Id);
 
                                         if(recaudado_individual <= item2.Cantidad) {
-                                        
-                                            
-                                            pckwrk = new Pckwrk();
-                                            pckwrk.CantidadPallet = inventario.UntQty;
                                             pckwrk.CantidadRetiro = inventario.UntQty;
-                                            pckwrk.Completo = false;
-                                            pckwrk.FechaExpire = inventario.FechaExpire;
-                                            pckwrk.HuellaDetalleId = inventario.HuellaId;
-                                            pckwrk.OrdenSalidaId = item2.OrdenSalidaId;
-                                            pckwrk.ProductoId = inventario.ProductoId;
-                                            pckwrk.PropietarioId = item.PropietarioId;
-                                            pckwrk.ShipmentLineId = shipmentline.Id;
-                                            pckwrk.UbicacionId = inventario.InvLod.UbicacionId;
-                                            pckwrk.WrkId = wrk.Id;
-                                            pckwrk.LodNum = inventario.InvLod.LodNum;
-                                            pckwrk.InventarioId = inventario.Id;
                                             pckwrk.Completo = true;
-                                            pckwrk.Confirmado = false;
-                                            pckwrk.OrdenReciboId = inventario.OrdenReciboId;
-                                            pckwrk.LineaId = inventario.LineaId;
-                                            pckwrk.FechaIngreso =  inventario.FechaRegistro;
-                                            pckwrk.LotNum = inventario.LotNum;
 
-                                            
                                             await _context.Pckwrk.AddAsync(pckwrk);
-                                        
-                                            ids.Add(inventario.Id);
-
-                                            inventario.Almacenado = false;
-                                            inventario.ShipmentLine = shipmentline.Id;
-
                                             await _context.SaveChangesAsync();
                                         }
                                         else {
-
-
-                                            pckwrk = new Pckwrk();
-                                            pckwrk.CantidadPallet = inventario.UntQty;
-                                            pckwrk.CantidadRetiro =item2.Cantidad-  (recaudado_individual - inventario.UntQty);
+                                            pckwrk.CantidadRetiro =item2.Cantidad -  (recaudado_individual - inventario.UntQty);
                                             if(pckwrk.CantidadRetiro == 0) 
                                                 break;
                                             pckwrk.Completo = false;
-                                            //pckwrk.DestinoId = 1;
-                                            pckwrk.FechaExpire = inventario.FechaExpire;
-                                            pckwrk.HuellaDetalleId = inventario.HuellaId;
-                                            pckwrk.OrdenSalidaId = item2.OrdenSalidaId;
-                                            pckwrk.ProductoId = inventario.ProductoId;
-                                            pckwrk.PropietarioId = item.PropietarioId;
-                                            pckwrk.ShipmentLineId = shipmentline.Id;
-                                            pckwrk.UbicacionId = inventario.InvLod.UbicacionId;
-                                            pckwrk.WrkId = wrk.Id;
-                                            pckwrk.LodNum = inventario.InvLod.LodNum;
-                                            pckwrk.InventarioId = inventario.Id;
-                                            pckwrk.Confirmado = false;
-                                            pckwrk.OrdenReciboId = inventario.OrdenReciboId;
-                                            pckwrk.LineaId = inventario.LineaId;
-                                            pckwrk.FechaIngreso =  inventario.FechaRegistro;
-                                            pckwrk.LotNum = inventario.LotNum;
-
+                                 
                                             await _context.Pckwrk.AddAsync(pckwrk);
-                                        
-                                            ids.Add(inventario.Id);
-
-                                            inventario.Almacenado = false;
-                                            inventario.ShipmentLine = shipmentline.Id;
-
                                             await _context.SaveChangesAsync();
+
                                             break;
                                         }
                                     }

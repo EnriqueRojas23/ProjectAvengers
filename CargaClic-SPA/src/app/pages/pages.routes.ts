@@ -53,6 +53,7 @@ import { ListadoTrabajoPendienteComponent } from './despacho/picking/listadotrab
 import { Listado2trabajoasignadoComponent } from './despacho/carga/listado2trabajoasignado/listado2trabajoasignado.component';
 import { PendienteCargaComponent } from './despacho/carga/listadopendientescarga/pendientecarga.component';
 import { ListadocargaComponent } from './despacho/carga/listadocarga/listadocarga.component';
+import { ConfirmarpinckingComponent } from './despacho/picking/confirmarpincking/confirmarpincking.component';
 
 
 
@@ -103,7 +104,9 @@ const pagesRoutes: Routes = [
     {path : 'picking/nuevaordensalida', component : NuevaordensalidaComponent, canActivate: [AuthGuard]} ,
     {path : 'picking/nuevaordensalidadetalle/:uid', component : NuevaordensalidadetalleComponent, canActivate: [AuthGuard]} ,
     {path : 'picking/verordensalida/:uid', component : VerordensalidaComponent, canActivate: [AuthGuard]} ,
-    {path : 'picking/planificarpicking', component : PlanificarpickingComponent, canActivate: [AuthGuard]} ,
+    {path : 'picking/planificarpicking', component : PlanificarpickingComponent, canActivate: [AuthGuard]},
+    {path : 'picking/confirmarpicking', component : ConfirmarpinckingComponent, canActivate: [AuthGuard]} ,
+    
     {path : 'picking/listadotrabajopendiente', component : ListadoTrabajoPendienteComponent, canActivate: [AuthGuard]} ,
     {path : 'picking/listado2trabajoasignado', component : Listado2trabajoasignadoComponent, canActivate: [AuthGuard]} ,
     {path : 'picking/confirmarmovimiento/:uid', component : ConfirmarmovimientoComponent, canActivate: [AuthGuard]} ,

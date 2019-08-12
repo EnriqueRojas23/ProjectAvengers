@@ -10,26 +10,26 @@ import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service'
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { takeUntil } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
-
+import { Shipment, ShipmentLine } from 'src/app/_models/Despacho/shipmentline';
+import { SafeHtml } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-planificarpicking',
-  templateUrl: './planificarpicking.component.html',
-  styleUrls: ['./planificarpicking.component.css']
+  selector: 'app-confirmarpincking',
+  templateUrl: './confirmarpincking.component.html',
+  styleUrls: ['./confirmarpincking.component.css']
 })
-export class PlanificarpickingComponent implements OnInit {
-
+export class ConfirmarpinckingComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   searchKey: string;
   pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = [ 'select', 'numOrden' ,'propietario','nombreEstado','guiaRemision' ,'equipotransporte', 'placa','fechaRequerida','horaRequerida','fechaRegistro' ];
+  displayedColumns: string[] = [ 'shipmentNumber' ,'propietario','nombreEstado','cliente' ,'direccion', 'fechaRegistro' ,'actionsColumn' ];
   
-  listData: MatTableDataSource<OrdenSalida>;
+  listData: MatTableDataSource<Shipment>;
   public loading = false;
-  ordenes: OrdenSalida[] = [];
+  Shipments: Shipment[] = [];
 
-  ordenesaux: OrdenSalida[] = [];
+  ShipmentLines: ShipmentLine[] = [];
   model: any  = {};
   ids: string = "";
   idsCarga: string[] = [];
@@ -41,14 +41,9 @@ export class PlanificarpickingComponent implements OnInit {
   @ViewChild(MatPaginator) paginator1: MatPaginator;
   searchKey1: string;
   
-  displayedColumns1: string[] = [  'numOrden' ,'propietario','nombreEstado','guiaRemision' ,'equipotransporte', 'placa','fechaRequerida','horaRequerida','fechaRegistro','actionsColumn' ];
-  ordeneseleccionadas: OrdenSalida[] = [];
-  listData1: MatTableDataSource<OrdenSalida>;
-
-
-
-
-
+  displayedColumns1: string[] = [  'codigo' ,'descripcionLarga','metodo','cantidad' ,'actionsColumn' ];
+  ordeneseleccionadas: ShipmentLine[] = [];
+  listData1: MatTableDataSource<ShipmentLine>;
 
 
 
@@ -114,19 +109,19 @@ export class PlanificarpickingComponent implements OnInit {
 
 
   }
-  selection = new SelectionModel<OrdenSalida>(true, []);
+  selection = new SelectionModel<Shipment>(true, []);
   checkSelects() {
     return  this.selection.selected.length > 0 ?  false : true;
   }
-  checkboxLabel(row?: OrdenSalida): string {
+  checkboxLabel(row?: Shipment): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.ordenSalidaId + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows =  this.ordenes.length;
+    const numRows =  this.Shipments.length;
     return numSelected === numRows;
   }
   protected filterBanks() {
@@ -146,120 +141,44 @@ export class PlanificarpickingComponent implements OnInit {
     
   }
   ver(id){
-    this.router.navigate(['/picking/verordensalida',id]);
+    this.loading  = true;
+
+    this.ordensalidaService.getAllPickingPendienteDetalle(id).subscribe(list => {
+    
+    this.ShipmentLines = list;
+    this.loading  = false;
+    this.listData1 = new MatTableDataSource(this.ShipmentLines);
+    this.listData1.paginator = this.paginator;
+    this.listData1.sort = this.sort;
+
+    this.listData1.filterPredicate = (data,filter) => {
+      return this.displayedColumns.some(ele => {
+        
+        if(ele != 'almacen' && ele !='cliente' && ele != 'familia' )
+           {
+            
+              return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+           }
+        })
+     }
+    
+    });
+
    }
    highlight(row){
     this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row);
   }
-  agregarorden() {
-    let Id = this.selection.selected ;
-    
 
-    Id.forEach(element => {
-      this.ordeneseleccionadas.push(element);  
-      const index = this.ordenes.indexOf(element);
-      this.ordenes.splice(index, 1);
-
-    });
-
-     
-     this.loading  = false;
-     this.listData1 = new MatTableDataSource(this.ordeneseleccionadas);
-     this.listData1.paginator = this.paginator;
-     this.listData1.sort = this.sort;
- 
-     this.listData1.filterPredicate = (data,filter) => {
-       return this.displayedColumns.some(ele => {
-         
-         if(ele != 'almacen' && ele !='cliente' && ele != 'familia' )
-            {
-             
-               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-            }
-         })
-      }
-     
-
-
-
-     
-     this.loading = false;
-     this.listData = new MatTableDataSource(this.ordenes);
-     this.listData.paginator = this.paginator;
-     this.listData.sort = this.sort;
-     
-     this.listData.filterPredicate = (data,filter) => {
-       return this.displayedColumns.some(ele => {
-         
-         if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-            {
-              
-               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-          
-            }
-         })
-        }
-        this.selection.clear() ;
-    
-  }
   masterToggle() {
     this.isAllSelected() ?
         this.selection.clear() :
         this.listData.data.forEach(row => this.selection.select(row));
   }
-  eliminar(Id){
-    
-    
-
-   
-      const index = this.ordeneseleccionadas.indexOf(Id);
-      this.ordeneseleccionadas.splice(index, 1);
-      this.ordenes.push(Id);  
- 
-
-     
-     this.loading  = false;
-     this.listData1 = new MatTableDataSource(this.ordeneseleccionadas);
-     this.listData1.paginator = this.paginator;
-     this.listData1.sort = this.sort;
- 
-     this.listData1.filterPredicate = (data,filter) => {
-       return this.displayedColumns.some(ele => {
-         
-         if(ele != 'almacen' && ele !='cliente' && ele != 'familia' )
-            {
-             
-               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-            }
-         })
-      }
-     
-
-
-
-     
-     this.loading = false;
-     this.listData = new MatTableDataSource(this.ordenes);
-     this.listData.paginator = this.paginator;
-     this.listData.sort = this.sort;
-     
-     this.listData.filterPredicate = (data,filter) => {
-       return this.displayedColumns.some(ele => {
-         
-         if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-            {
-              
-               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-          
-            }
-         })
-        }
-        this.selection.clear() ;
-  }
+  
   planificar(){
     this.loading  = true;
     this.ordeneseleccionadas.forEach( element => {
-      this.ids  = this.ids + ',' + String(element.ordenSalidaId);
+      this.ids  = this.ids + ',' + String(element.id);
     });
     this.model_pendientes.ids = this.ids;
     console.log(this.model_pendientes);
@@ -270,31 +189,29 @@ export class PlanificarpickingComponent implements OnInit {
          this.alertify.error(error);
       }, () => { 
         this.alertify.success("Se planificó correctamente.");
-        this.router.navigate(['/picking/confirmarpicking' ]);
+        this.router.navigate(['/picking/listadotrabajopendiente' ]);
       });
     
   
   }
-  buscar (){
-    this.ordensalidaService.getAllOrdenSalidaPendientes(this.model).subscribe(list => {
-      
-     console.log(list);
+  buscar () {
 
-    this.ordenes = list;
+    this.ordensalidaService.getAllPickingPendiente().subscribe(list => {
+      
+    console.log(list);
+      
+    this.Shipments = list;
     this.loading = false;
-    this.listData = new MatTableDataSource(this.ordenes);
+    this.listData = new MatTableDataSource(this.Shipments);
     this.listData.paginator = this.paginator;
     this.listData.sort = this.sort;
-    
       
     this.listData.filterPredicate = (data,filter) => {
       return this.displayedColumns.some(ele => {
         
         if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
            {
-             
               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-         
            }
         })
        }

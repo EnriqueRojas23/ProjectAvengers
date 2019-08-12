@@ -14,7 +14,8 @@ namespace CargaClic.ReadRepository.Interface.Despacho
          Task<IEnumerable<GetAllCargas>> GetAllCargas(int PropietarioId, int EstadoId);
          Task<IEnumerable<ListarTrabajoDetallesResult>> ListarTrabajoDetalle(long WrkId);
          Task<IEnumerable<ListarTrabajoResult>> ListarTrabajo(int PropietarioId, int EstadoId);
-
+         Task<IEnumerable<ListarShipmentResult>> ListarPickingPendiente();
+         Task<IEnumerable<ListarShipmentDetalleResult>> ListarPickingPendienteDetalle(long ShipmentId);
          Task<IEnumerable<PendienteCargaResult>> ListarPendienteCarga();
     }
 }

@@ -168,7 +168,7 @@ namespace CargaClic.Repository
                                     dominio.LodId = invLod.Id;
                                     dominio.FechaRegistro = DateTime.Now;
                                     dominio.HuellaId = huelladetalle_aux.Where(x=>x.Cas == true).SingleOrDefault().Id;    //command.HuellaId;
-                                    dominio.LotNum = command.Lote.Trim();
+                                    dominio.LotNum = (command.Lote == null?null:command.Lote.Trim());
                                     dominio.ProductoId = linea.ProductoId;
                                     dominio.UsuarioIngreso = 1;
                                     dominio.LineaId = linea.Id;

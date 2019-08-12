@@ -6,7 +6,6 @@ namespace CargaClic.ReadRepository.Contracts.Despacho.Results
     public class PendienteCargaResult
     {
         
-
         public Int64 Id { get; set; }
         public string Codigo {get;set;}
         public string Producto {get;set;}

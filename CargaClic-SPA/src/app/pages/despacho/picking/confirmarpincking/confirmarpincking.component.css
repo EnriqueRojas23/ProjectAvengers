@@ -1,0 +1,43 @@
+
+.mat-row {
+    cursor: pointer;
+  }
+  
+  .mat-column-nombreEstado {
+    flex: 0 0 80px;
+    text-align: right;
+    
+  }
+  .mat-column-NumOrden {
+    flex: 0 0 100px;
+    text-align: center;
+  }
+  .mat-column-direccion {
+    flex: 0 0 300px;
+    text-align: center;
+  }
+  .mat-column-propietario {
+    flex:-1 0 150px;
+    
+    
+  }
+  .mat-column-codigo {
+    flex: 0 0 100px;
+    
+  }
+  .mat-column-select {
+    flex: 0 0 38px;
+    display:inherit;
+  
+    
+  }
+  .mat-column-descripcionLarga {
+    flex: 0 0 360px;
+    
+  }
+  
+  .mat-column-actionsColumn {
+    flex: 0 0 120px;
+    
+  }
+  

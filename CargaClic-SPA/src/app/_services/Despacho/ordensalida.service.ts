@@ -9,7 +9,7 @@ import { EquipoTransporte } from 'src/app/_models/Recepcion/equipotransporte';
 import { environment } from 'src/environments/environment';
 import { OrdenSalida } from 'src/app/_models/Despacho/ordenrecibo';
 import { Carga } from 'src/app/_models/Despacho/Carga';
-import { ShipmentLine } from 'src/app/_models/Despacho/shipmentline';
+import { ShipmentLine, Shipment } from 'src/app/_models/Despacho/shipmentline';
 
 
 const httpOptions = {
@@ -49,6 +49,15 @@ getAllPendienteCarga(model: any) : Observable<ShipmentLine[]> {
   return this.http.get<ShipmentLine[]>(this.baseUrl + "GetAllPendienteCarga" + params,httpOptions)
 };
 
+getAllPickingPendiente() : Observable<Shipment[]> {
+  let params = "";
+  return this.http.get<Shipment[]>(this.baseUrl + "ListarPickingPendiente" + params,httpOptions)
+};
+
+getAllPickingPendienteDetalle(Id) : Observable<ShipmentLine[]> {
+  let params = "?ShipmentId=" + Id;
+  return this.http.get<ShipmentLine[]>(this.baseUrl + "ListarPickingPendienteDetalle" + params,httpOptions)
+};
 
 
 
