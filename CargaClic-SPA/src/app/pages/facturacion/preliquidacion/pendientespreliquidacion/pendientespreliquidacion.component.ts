@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { Dropdownlist } from 'src/app/_models/Constantes';
 import { FormControl } from '@angular/forms';
-import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatSort, MatPaginator, MatTableDataSource, DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
 import { OrdenSalida } from 'src/app/_models/Despacho/ordenrecibo';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrdenRecibo } from 'src/app/_models/Recepcion/ordenrecibo';
@@ -14,8 +14,9 @@ import { PreLiquidacion } from 'src/app/_models/Facturacion/preliquidacion';
 import { AngularGridInstance, GridOption, Column, Formatters, Formatter, CaseType, OperatorType } from 'angular-slickgrid';
 import Swal from 'sweetalert2';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { AppDateAdapter, APP_DATE_FORMATS } from 'src/app/pages/account-settings/datepicker.extend';
 
-
+import * as moment from 'moment';
 const customEnableButtonFormatter: Formatter = (row: number, cell: number, value: any, columnDef: Column, dataContext: any, grid: any) => {
   return '<span style="color:green">  S/. ' + value.toLocaleString('en-US', {minimumFractionDigits: 2}) + '</span>';
 };
@@ -24,7 +25,15 @@ const customEnableButtonFormatter: Formatter = (row: number, cell: number, value
 @Component({
   selector: 'app-pendientespreliquidacion',
   templateUrl: './pendientespreliquidacion.component.html',
-  styleUrls: ['./pendientespreliquidacion.component.css']
+  styleUrls: ['./pendientespreliquidacion.component.css'],
+  providers: [
+    {
+        provide: DateAdapter, useClass: AppDateAdapter
+    },
+    {
+        provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS
+    }
+    ]
 })
 export class PendientespreliquidacionComponent implements OnInit {
  
@@ -70,19 +79,20 @@ export class PendientespreliquidacionComponent implements OnInit {
 
   ngOnInit() {
     this.columnDefinitions = [
-      { id: 'FechaIngreso', name: 'Fecha Ingreso', field: 'fechaIngreso', sortable: true ,  filterable: true },
-      //{ id: 'descripcionLarga', name: 'Duration (days)', field: 'descripcionLarga', sortable: true },
-      { id: 'Tarifa', name: 'Tarifa', field: 'tarifa', sortable: true },
-      { id: 'paletas', name: '# Pallets', field: 'paletas' },
-      { id: 'posdia', name: 'Pos Dia', field: 'posdia' },
-      { id: 'estadiaTotal', name: '# días', field: 'estadiaTotal' },
-      { id: 'posTotal', name: 'POS Total', field: 'posTotal' },
-      { id: 'ingreso', name: 'IN', field: 'ingreso' },
-      { id: 'salida', name: 'OUT', field: 'salida' },
+      { id: 'id', name: 'Id', field: 'id', sortable: true ,  filterable: true },
+      { id: 'producto', name: 'Producto ', field: 'producto', sortable: true },
+      { id: 'Tarifa', name: 'Tarifa', field: 'tarifa',formatter: customEnableButtonFormatter,params: { minDecimalPlaces: 2, maxDecimalPlaces: 2 }, sortable: true },
+      { id: 'posdia', name: 'Pos Dia', field: 'posdia' ,formatter: customEnableButtonFormatter,params: { minDecimalPlaces: 2, maxDecimalPlaces: 2 },},
+      { id: 'ingreso', name: 'IN', field: 'in',formatter: customEnableButtonFormatter,params: { minDecimalPlaces: 2, maxDecimalPlaces: 2 } ,},
+      { id: 'salida', name: 'OUT', field: 'out' ,formatter: customEnableButtonFormatter,params: { minDecimalPlaces: 2, maxDecimalPlaces: 2 },},
+      { id: 'seguro', name: 'Seguro', field: 'seguro' ,formatter: customEnableButtonFormatter,params: { minDecimalPlaces: 2, maxDecimalPlaces: 2 },},
+      { id: 'cantidad', name: 'Cantidad', field: 'cantidad' },
+      { id: 'Pallets', name: '# Pallets', field: 'pallets' },
+      { id: 'posTotal', name: 'POS Total', field: 'posTotal' ,formatter: customEnableButtonFormatter,params: { minDecimalPlaces: 2, maxDecimalPlaces: 2 }, },
       { id: 'total', name: 'Total', formatter: customEnableButtonFormatter,params: { minDecimalPlaces: 2, maxDecimalPlaces: 2 }, field: 'total', sortable: true }
     ];
     this.gridOptions = {
-      enableGrouping: true,  
+      enableGrouping: false,  
       enableAutoResize: true,       // true by default
       enableCellNavigation: true,
       autoHeight: false,
@@ -97,6 +107,34 @@ export class PendientespreliquidacionComponent implements OnInit {
         pageSize: 10,
         totalItems: 0
       },
+      presets: {
+        // the column position in the array is very important and represent
+        // the position that will show in the grid
+        columns: [
+          { columnId: 'producto', width: 120, headerCssClass: 'customHeaderClass' },
+          { columnId: 'Tarifa', width: 20 },
+          { columnId: 'posdia', width: 40 },
+          { columnId: 'ingreso', width: 40 },
+          { columnId: 'salida', width: 40 },
+          { columnId: 'seguro', width: 40 },
+         // { columnId: 'cantidad', width: 30 },
+          { columnId: 'Pallets', width: 20 },
+          { columnId: 'posTotal', width: 40 },
+          { columnId: 'total', width: 40 },
+          
+        ],
+        // filters: [
+        //   { columnId: 'producto', searchTerms: [2, 22, 44] },
+        //   { columnId: 'id', searchTerms: ['>5'] }
+        // ],
+        sorters: [
+          { columnId: 'producto', direction: 'DESC' },
+          { columnId: 'id', direction: 'ASC' }
+        ],
+
+        // with Backend Service ONLY, you can also add Pagination info
+        pagination: { pageNumber: 2, pageSize: 20 }
+      }
       
      
     };
@@ -160,19 +198,26 @@ export class PendientespreliquidacionComponent implements OnInit {
     
   }
   buscar(){
-    this.facturacionService.getPendientesLiquidacion(this.model.PropietarioFiltroId).subscribe(list => {
+    this.model.InicioCorte = moment(this.model.FechaInicio).format("DD/MM/YYYY");
+    this.model.FinCorte = moment(this.model.FechaFin).format("DD/MM/YYYY");
+    //moment(this.model.FechaInicio, "DD/MM/YYYY");
+
+    this.facturacionService.getPendientesLiquidacion(this.model.PropietarioFiltroId
+      ,this.model).subscribe(list => {
       
+        console.log(list);
+
       this.ClienteId = this.model.PropietarioFiltroId;
 
       this.ordenes = list;
-            this.dataViewObj.setGrouping({
-        getter: 'descripcionLarga',  
-        formatter: (g) => {
-          return `  ${g.value} <span style="color:green">(${g.count} items)</span>`;
-        },
-        aggregateCollapsed: false,  
-        lazyTotalsCalculation: true
-      });
+      //       this.dataViewObj.setGrouping({
+      //   getter: 'descripcionLarga',  
+      //   formatter: (g) => {
+      //     return `  ${g.value} <span style="color:green">(${g.count} items)</span>`;
+      //   },
+      //   aggregateCollapsed: false,  
+      //   lazyTotalsCalculation: true
+      // });
 
       this.dataset = list;
       this.loading = false;
@@ -198,7 +243,12 @@ export class PendientespreliquidacionComponent implements OnInit {
         this.selection.clear() :
         this.listData.data.forEach(row => this.selection.select(row));
   }
-  generar(){
+  generar() {
+
+    this.model.InicioCorte = moment(this.model.FechaInicio).format("DD/MM/YYYY");
+    this.model.FinCorte = moment(this.model.FechaFin).format("DD/MM/YYYY");
+
+
     if(this.ClienteId == undefined){
       this.alertify.success("Debe cargar un cliente.");
       return;

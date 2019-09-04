@@ -52,9 +52,10 @@ namespace CargaClic.API.Controllers.Facturacion
             _mapper = mapper;
         }
         [HttpGet("GetPendientesLiquidacion")]
-        public async Task<IActionResult> GetPendientesLiquidacion(int Id)
+        public async Task<IActionResult> GetPendientesLiquidacion(int Id, string fechainicio, string fechafin)
         { 
-            var resp  =  await _repo_Read_Facturacion.GetPendientesLiquidacion(Id);
+            var resp  =  await _repo_Read_Facturacion.GetPendientesLiquidacion(Id,
+            fechainicio, fechafin);
             return Ok (resp);
         }
         

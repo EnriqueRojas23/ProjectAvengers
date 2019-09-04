@@ -91,6 +91,7 @@ import { Listado2trabajoasignadoComponent } from './despacho/carga/listado2traba
 import { PendienteCargaComponent } from './despacho/carga/listadopendientescarga/pendientecarga.component';
 import { ListadocargaComponent } from './despacho/carga/listadocarga/listadocarga.component';
 import { ConfirmarpinckingComponent } from './despacho/picking/confirmarpincking/confirmarpincking.component';
+import { KardexgeneralComponent } from './inventario/inventariogeneral/kardexgeneral/kardexgeneral.component';
 
 
 
@@ -171,7 +172,8 @@ import { ConfirmarpinckingComponent } from './despacho/picking/confirmarpincking
     Listado2trabajoasignadoComponent,
     ConfirmarmovimientoComponent,
     ListadocargaComponent,
-    ConfirmarpinckingComponent
+    ConfirmarpinckingComponent,
+    KardexgeneralComponent
 
   ],
   exports: [
@@ -202,13 +204,15 @@ import { ConfirmarpinckingComponent } from './despacho/picking/confirmarpincking
     TreeviewModule.forRoot(),
     AngularSlickgridModule.forRoot(),
     TranslateModule.forRoot(),
+    
     NgxLoadingModule.forRoot({
-      animationType: ngxLoadingAnimationTypes.wanderingCubes,
+      animationType: ngxLoadingAnimationTypes.pulse,
       backdropBackgroundColour: 'rgba(0,0,0,0.1)', 
       backdropBorderRadius: '4px',
       primaryColour: '#ffffff', 
       secondaryColour: '#ffffff', 
-      tertiaryColour: '#ffffff'
+      tertiaryColour: '#ffffff',
+      
   }),
     NgxMaterialTimepickerModule.forRoot(),
     AngularDualListBoxModule ,

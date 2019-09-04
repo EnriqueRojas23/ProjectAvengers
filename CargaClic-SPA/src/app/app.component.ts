@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NgxUiLoaderService, NgxUiLoaderConfig } from 'ngx-ui-loader';
+import { NgxUiLoaderDemoService } from './_services/ngx-ui-loader-demo.service.service';
 
+
+
+
+ 
 
 @Component({
   selector: 'app-root',
@@ -9,7 +14,8 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent implements OnInit   {
   title = 'CargaClic-SPA';
-  constructor() {
+  constructor(public demoService: NgxUiLoaderDemoService) {
+    
   }
   ngOnInit() {
   }

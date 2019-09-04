@@ -21,6 +21,7 @@ namespace CargaClic.Repository.Interface
         Task<Int64> assignmentOfUser(AsignarUsuarioSalida asignarPuertaSalida);
 
         Task<Int64> RegisterCarga(CargaForRegister cargaForRegister);
+        Task<Int64> RegisterSalida(CargaForRegister ordenSalidaForRegister);
 
 
     }

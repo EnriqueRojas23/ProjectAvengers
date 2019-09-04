@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild, Inject, ViewEncapsulation } from '@angular/core';
-import { Dropdownlist } from 'src/app/_models/Constantes';
 import { Ubicacion } from 'src/app/_models/Mantenimiento/ubicacion';
 import { MatSort, MatPaginator, MatTableDataSource, MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
-import { InventarioService } from 'src/app/_services/Inventario/inventario.service';
-import { DialogData } from 'src/app/_models/Common/dialogdata';
 import { NgbActiveModal, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { InventarioGeneral } from 'src/app/_models/Inventario/inventariogeneral';
 import { ActivatedRoute, Router } from '@angular/router';

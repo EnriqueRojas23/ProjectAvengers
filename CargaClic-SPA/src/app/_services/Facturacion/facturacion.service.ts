@@ -29,8 +29,11 @@ constructor(private http: HttpClient) { }
 
 
 
-getPendientesLiquidacion(id: number) : Observable<PreLiquidacion[]> {
-  let params = "?Id=" + id ;
+getPendientesLiquidacion(id: number ,model: any) : Observable<PreLiquidacion[]> {
+  let params = "?Id=" + id +
+   "&fechainicio=" + model.InicioCorte +
+   "&fechafin=" + model.FinCorte;
+   
   return this.http.get<PreLiquidacion[]>(this.baseUrl + "GetPendientesLiquidacion" + params,httpOptions)
 };
 generar_preliquidacion(model: any){

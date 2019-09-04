@@ -41,7 +41,7 @@ export class DialogBuscarProducto {
   }
 
   buscar(){
-    
+       
         this.model.propietarioId =    this.data.codigo;
         this.productoService.getAll(this.model.codigo,this.model.propietarioId).subscribe(list => {
         this.productos = list;

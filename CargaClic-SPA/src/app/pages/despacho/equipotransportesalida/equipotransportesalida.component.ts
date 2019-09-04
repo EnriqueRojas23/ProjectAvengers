@@ -110,8 +110,7 @@ export class EquipotransportesalidaComponent implements OnInit {
      }, () => { 
     
          this.model.CargasId = this.id;
-         this.model.EquipoTransporteId = this.transporte.id
-         ;
+         this.model.EquipoTransporteId = this.transporte.id;
          this.ordenSalidaService.matchEquipoTransporte(this.model).subscribe(resp1 => { 
     
         }, error => {
@@ -119,14 +118,10 @@ export class EquipotransportesalidaComponent implements OnInit {
         }, () => { 
           this.alertify.success("Se vinculó al equipo correctamente.");
         });
-     
-
-
-
 
        new Promise( resolve => setTimeout(resolve, 300) );
        this.alertify.success("Se creo el equipo de transporte correctamente.");
-       this.router.navigate(['/picking/listadotrabajopendiente']);
+       this.router.navigate(['/despacho/listadocarga']);
      });
    }
    onBlurMethod(placa){

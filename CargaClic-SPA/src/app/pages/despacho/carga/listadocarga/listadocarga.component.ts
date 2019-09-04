@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
-import { ShipmentLine } from 'src/app/_models/Despacho/shipmentline';
 import { Dropdownlist } from 'src/app/_models/Constantes';
 import { ReplaySubject, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -9,6 +8,8 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { Router } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Carga } from 'src/app/_models/Despacho/carga';
+import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-listadocarga',
@@ -23,7 +24,7 @@ export class ListadocargaComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   searchKey: string;
   pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = [ 'select' , 'numCarga' ,'estado','fechaRegistro','placa' ,'equipoTransporte',  'actionsColumn' ];
+  displayedColumns: string[] = [ 'select' , 'propietario',  'numCarga' ,'estado','fechaRegistro' ,'fechaRequerida','placa' ,'equipoTransporte',  'actionsColumn' ];
   
   listData: MatTableDataSource<Carga>;
   public loading = false;
@@ -44,11 +45,9 @@ export class ListadocargaComponent implements OnInit {
     {val: 31, viewValue: 'Hace un mes '},
   ];
   estados: Dropdownlist[] = [
-      {val: 21, viewValue: 'Planeado'},
-      {val: 5, viewValue: 'Asignado'},
-      {val: 6, viewValue: 'Recibiendo'},
-    {val: 12, viewValue: 'Almacenado'},
-    
+      {val: 25, viewValue: 'Pendiente'},
+      {val: 26, viewValue: 'Confirmado'},
+      {val: 27, viewValue: 'Despachado'},
   ];
   public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
   public ClientesCtrl: FormControl = new FormControl();
@@ -58,10 +57,26 @@ export class ListadocargaComponent implements OnInit {
 
   constructor(private ordensalidaService: OrdenSalidaService
     ,  private alertify: AlertifyService ,
+    private clienteService: ClienteService,
     private router: Router) { }
 
   ngOnInit() {
-    this.loading = true;
+    
+    this.clienteService.getAllPropietarios("").subscribe(resp => { 
+      resp.forEach(element => {
+        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+      });
+      this.filteredClientes.next(this.clientes.slice());
+      this.ClientesFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+            this.filterBanks();
+          });
+          this.loading = false;
+          this.model.intervalo = 3;
+          this.model.estadoIdfiltro = 21;
+    });
+
     this.model.intervalo = 3;
     this.model.estadoIdfiltro = 30;
     this.model.PropietarioFiltroId = 1;
@@ -76,13 +91,13 @@ export class ListadocargaComponent implements OnInit {
     
     this.ordensalidaService.getAllCargas(this.model).subscribe(list => {
       
-      this.lines = list;
-      console.log(this.lines);
-      this.loading = false;
-      this.listData = new MatTableDataSource(this.lines);
-      this.listData.paginator = this.paginator;
-      this.listData.sort = this.sort;
+    this.lines = list;
       
+      
+    this.listData = new MatTableDataSource(this.lines);
+    this.listData.paginator = this.paginator;
+    this.listData.sort = this.sort;
+    
         
       this.listData.filterPredicate = (data,filter) => {
         return this.displayedColumns.some(ele => {
@@ -96,7 +111,8 @@ export class ListadocargaComponent implements OnInit {
           })
          }
       });
-  }
+    }
+
   selection = new SelectionModel<Carga>(true, []);
   checkSelects() {
     return  this.selection.selected.length > 0 ?  false : true;
@@ -113,7 +129,7 @@ export class ListadocargaComponent implements OnInit {
     return numSelected === numRows;
   }
   masterToggle() {
-    console.log('entre');
+    
     this.isAllSelected() ?
         this.selection.clear() :
         this.listData.data.forEach(row => this.selection.select(row));
@@ -122,7 +138,7 @@ export class ListadocargaComponent implements OnInit {
     this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row)
   }
   asignarVehiculo(){
-
+         
         this.model.UsuarioRegistroId = 1;
         this.ordensalidaService.registrar_carga(this.model).subscribe(resp => {
        });
@@ -131,17 +147,54 @@ export class ListadocargaComponent implements OnInit {
   asignar() {
     let ids = "";
     this.selection.selected.forEach(el => {
-          ids = "," + el.id;
+          ids = ids + ',' + el.id;
     });
     this.model.ids = ids.substring(1,ids.length + 1);
     this.router.navigate(['/despacho/equipotransportesalida', this.model.ids]);
     
  }
+ darsalida() {
+  let ids = "";
+  this.selection.selected.forEach(el => {
+        ids = ids + ',' + el.id;
+        // if ( el.estado != 'Confirmado')
+        // {
+        //    this.alertify.error("Esta orden no está confirmada");
+        //    return;
+        // }
+    });
+   this.model.ids = ids.substring(1,ids.length + 1);
+   console.log(this.model.ids);
+   
+     this.ordensalidaService.registrar_salidacarga(this.model).subscribe(x=> 
+      {
+           this.alertify.error("Se ha registrado la salida con éxito");
+    });
+    
+
+
+ }
   applyFilter() {
-  this.listData.filter = this.searchKey.trim().toLowerCase();
-  }
-  buscar(){
-        
+    this.listData.filter = this.searchKey.trim().toLowerCase();
   }
 
+  buscar(){
+  }
+
+  protected filterBanks() {
+    if (!this.clientes) {
+      return;
+    }
+    let search = this.ClientesFilterCtrl.value;
+    if (!search) {
+      this.filteredClientes.next(this.clientes.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filteredClientes.next(
+      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
+    );
+    
+  }
 }

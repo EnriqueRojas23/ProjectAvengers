@@ -69,7 +69,7 @@ export class NuevaordensalidadetalleComponent implements OnInit {
     this.ordenSalidaService.obtenerOrden(this.model.OrdenSalidaId).subscribe( resp => 
       {
 
-        console.log(resp);
+        
         
         const dialogRef = this.dialog.open(DialogBuscarProducto, {
               width: '650px',
@@ -132,7 +132,7 @@ export class NuevaordensalidadetalleComponent implements OnInit {
 
   }
   cancel(){
-    this.router.navigate(['/picking/verordensalida',  this.model.OrdenReciboId ]);
+    this.router.navigate(['/picking/verordensalida',  this.model.OrdenSalidaId ]);
   }
   CambioHuella(id){
     this.huellaDetalle = [];

@@ -54,6 +54,7 @@ import { Listado2trabajoasignadoComponent } from './despacho/carga/listado2traba
 import { PendienteCargaComponent } from './despacho/carga/listadopendientescarga/pendientecarga.component';
 import { ListadocargaComponent } from './despacho/carga/listadocarga/listadocarga.component';
 import { ConfirmarpinckingComponent } from './despacho/picking/confirmarpincking/confirmarpincking.component';
+import { KardexgeneralComponent } from './inventario/inventariogeneral/kardexgeneral/kardexgeneral.component';
 
 
 
@@ -96,6 +97,7 @@ const pagesRoutes: Routes = [
     {path : 'mantenimiento/nuevahuelladetalle/:uid/:uid2', component : NuevahuelladetalleComponent, canActivate: [AuthGuard]} ,
 
     {path : 'inventario/inventariogeneral', component : ListadoinventarioComponent, canActivate: [AuthGuard]} ,
+    {path : 'inventario/kardexgeneral', component : KardexgeneralComponent, canActivate: [AuthGuard]} ,
     {path : 'inventario/ajusteinventario', component : AjustesinventarioComponent, canActivate: [AuthGuard]} ,
     {path : 'inventario/ajusteinventariodetalle/:uid', component : AjusteinventariodetalleComponent, canActivate: [AuthGuard]} ,
     {path : 'inventario/nuevoajuste/:uid/:uid2', component : NuevoajusteComponent, canActivate: [AuthGuard]} ,

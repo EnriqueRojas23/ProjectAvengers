@@ -27,7 +27,9 @@ export class OrdenSalidaService {
   baseUrl = environment.baseUrl + '/api/ordensalida/';
 constructor(private http: HttpClient) { }
 
-
+registrar_salidacarga(model:any) { 
+  return this.http.post(this.baseUrl + 'RegisterSalidaShipment', model,httpOptions);
+}
 RegistarOrdenSalida(model: any){
   return this.http.post(this.baseUrl + 'RegisterOrdenSalida', model,httpOptions);
 }

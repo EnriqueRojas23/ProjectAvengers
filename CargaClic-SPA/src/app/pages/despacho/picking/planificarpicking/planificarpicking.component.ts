@@ -257,12 +257,12 @@ export class PlanificarpickingComponent implements OnInit {
         this.selection.clear() ;
   }
   planificar(){
-    this.loading  = true;
+    
     this.ordeneseleccionadas.forEach( element => {
       this.ids  = this.ids + ',' + String(element.ordenSalidaId);
     });
     this.model_pendientes.ids = this.ids;
-    console.log(this.model_pendientes);
+    
     this.ordensalidaService.PlanificarPicking(this.model_pendientes).subscribe(resp => {
         this.model = resp;
         this.loading = false;

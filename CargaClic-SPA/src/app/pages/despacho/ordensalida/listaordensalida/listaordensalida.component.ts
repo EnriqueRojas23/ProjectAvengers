@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Dropdownlist } from 'src/app/_models/Constantes';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 import { OrdenRecibo } from 'src/app/_models/Recepcion/ordenrecibo';
@@ -12,6 +12,10 @@ import { takeUntil } from 'rxjs/operators';
 import { OrdenSalidaService } from 'src/app/_services/Despacho/ordensalida.service';
 import { OrdenSalida } from 'src/app/_models/Despacho/ordenrecibo';
 import { EditButtonRendererComponent } from 'src/app/pages/modal/Edit-button-renderer/Edit-button-renderer.component';
+import { Loader, NgxUiLoaderService, SPINNER } from 'ngx-ui-loader';
+
+
+const LOGO_URL = 'https://raw.githubusercontent.com/t-ho/ngx-ui-loader/master/src/assets/angular.png'; 
 
 @Component({
   selector: 'app-listaordensalida',
@@ -19,25 +23,20 @@ import { EditButtonRendererComponent } from 'src/app/pages/modal/Edit-button-ren
   styleUrls: ['./listaordensalida.component.css']
 })
 export class ListaordensalidaComponent implements OnInit {
+  masterLoader: Loader;
+  loaders: any[];
+  
+  @Input() loader: Loader;
+  timers: any[];
+  tasks: {};
+
 
   title = 'app';
    gridApi;
    gridColumnApi;
    frameworkComponents;
-
-  // columnDefs = [
-  //     {headerName: 'N° Orden', field: 'numOrden',sortable: true , filter: true},
-  //     {headerName: 'Propietario', field: 'propietario', sortable: true , filter: true},
-  //     {headerName: 'Estado', field: 'nombreEstado',sortable: true , filter: true},
-  //     {
-  //       headerName: "Child/Parent",
-  //       field: "value",
-  //       cellRenderer: "childMessageRenderer",
-  //       colId: "params",
-  //       width: 180
-  //     }
-  // ];
-  // rowData: OrdenSalida[] ;
+   
+   
 
 
   @ViewChild(MatSort) sort: MatSort;
@@ -54,6 +53,7 @@ export class ListaordensalidaComponent implements OnInit {
   clientes: Dropdownlist[] = [];
   EstadoId : number;
   context;
+  taskId: string = 'bg-default'
  
 
   intervalo: Dropdownlist[] = [
@@ -74,11 +74,21 @@ export class ListaordensalidaComponent implements OnInit {
   public ClientesCtrl: FormControl = new FormControl();
   public ClientesFilterCtrl: FormControl = new FormControl();
   protected _onDestroy = new Subject<void>();
+
   constructor(private ordensalidaService: OrdenSalidaService,
     private router: Router,
     private clienteService: ClienteService,
-    private alertify: AlertifyService
-    ) { 
+    private alertify: AlertifyService,
+    private ngxUiLoaderService: NgxUiLoaderService
+    ) 
+    { 
+
+      this.masterLoader = this.ngxUiLoaderService.getLoader();
+      this.timers = [];
+      this.tasks = {};
+  
+
+      
 
       this.context = { componentParent: this };
       this.frameworkComponents = {
@@ -86,7 +96,7 @@ export class ListaordensalidaComponent implements OnInit {
       };
   }
   ngOnInit() {
-    this.loading = true;
+    
     this.clienteService.getAllPropietarios("").subscribe(resp => { 
       resp.forEach(element => {
         this.clientes.push({ val: element.id , viewValue: element.razonSocial});
@@ -143,6 +153,8 @@ export class ListaordensalidaComponent implements OnInit {
     this.router.navigate(['/picking/verordensalida',id]);
    }
    buscar(){
+    
+
 
     this.ordensalidaService.getAllOrdenSalida(this.model).subscribe(list => {
       

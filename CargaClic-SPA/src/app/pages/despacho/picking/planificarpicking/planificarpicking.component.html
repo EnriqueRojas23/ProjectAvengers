@@ -65,6 +65,8 @@
           <div [hidden]="checkSelects()" class="col-md-3">
               <button type="button" ngbTooltip="Agregar Ordenes"  (click)="agregarorden()" class="btn btn-block btn-primary"><i class="fa fa-folder"></i> Agregar Ordenes </button>
           </div>
+          <div [hidden]="!checkSelects()" class="col-md-7">
+          </div>
           <div [hidden]="checkSelects()" class="col-md-4">
           </div>
   
@@ -207,7 +209,7 @@
                 <button class="btn-buttons btn-outline-primary"> </button> 
             </div>
             <div  class="col-md-3">
-                <button type="button" ngbTooltip="Planificar Ordenes"  (click)="planificar()" class="btn btn-block btn-danger"><i class="fa fa-folder"></i> Planificar </button>
+                <button type="button" ngbTooltip="Planificar Ordenes" [swal]="planificarSwal" (confirm)="planificar()" class="btn btn-block btn-danger"><i class="fa fa-folder"></i> Planificar </button>
             </div>
             <div  class="col-md-4">
             </div>
@@ -333,37 +335,17 @@
      
     </div>
    </div>
-   
-  
-
-  
-  
-  
-     
-    
-    
-    
   
   </div>
   
   <swal
-    #deleteSwal
-    title="Eliminar la Orden"
-    text="¿Esta seguro que desea eliminar la orden?"
+    #planificarSwal
+    title="Planificar órdenes de salida"
+    text="¿Esta seguro que desea planificar las ordenes seleccionadas?"
     type="question"
     [showCancelButton]="true"
     [focusCancel]="true"
-    [options]="{ confirmButtonText: 'Elminar' }"
-    >
+    [options]="{ confirmButtonText: 'Planificar' }">
   </swal>
   
-  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
-  
-  <!-- <mat-progress-bar
-            class="example-margin"
-            [color]="color"
-            [mode]="indeterminate"
-            [value]="value"
-            [bufferValue]="bufferValue">
-  </mat-progress-bar> -->
   

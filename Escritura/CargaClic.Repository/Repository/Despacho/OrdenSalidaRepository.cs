@@ -58,7 +58,7 @@ namespace CargaClic.Repository
                 {
                     foreach (var item in prm)
                     {
-                        var cargaDb = await _context.Carga.SingleOrDefaultAsync(x=>x.Id == Int64.Parse(item));
+                        var cargaDb = await _context.Shipment.SingleOrDefaultAsync(x=>x.Id == Int64.Parse(item));
                         cargaDb.EquipoTransporteId = EquipoTransporteId;
                         cargaDb.EstadoId = (int) Constantes.EstadoCarga.Confirmado;
                         await _context.SaveChangesAsync();
@@ -127,7 +127,7 @@ namespace CargaClic.Repository
                         kardex.Peso = dominio.Peso;
                         kardex.ProductoId = dominio.ProductoId;
                         kardex.PropietarioId = dominio.ClienteId;
-                        kardex.ShipmentLine = null;
+                        kardex.ShipmentLine = pckrk.ShipmentLineId;
                         kardex.UntQty = pckrk.CantidadRetiro * -1 ; //dominio.UntQty * -1;
                         kardex.UsuarioIngreso = 1;
                         kardex.InventarioId = dominio.Id;
@@ -281,6 +281,7 @@ namespace CargaClic.Repository
                             shipmentline.ShipmentId = dominio.Id;
                             shipmentline.Cantidad = item2.Cantidad;
 
+
                             await _context.ShipmentLine.AddAsync(shipmentline);
                             await _context.SaveChangesAsync();
 
@@ -291,8 +292,8 @@ namespace CargaClic.Repository
                                      result = (from a in _context.InventarioGeneral 
                                         .Include(z=>z.InvLod)
                                         where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
-                                                    a.Almacenado == true &
-                                                    a.ShipmentLine == null )
+                                                    a.Almacenado == true 
+                                                     )
                                                     select a)
                                         .OrderBy(x=>x.FechaExpire)
                                         .OrderByDescending(x=>x.UntQty)
@@ -303,8 +304,8 @@ namespace CargaClic.Repository
                              result = (from a in _context.InventarioGeneral 
                                         .Include(z=>z.InvLod)
                                         where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
-                                                    a.Almacenado == true &
-                                                    a.ShipmentLine == null &
+                                                    a.Almacenado == true 
+                                                     &
                                                     a.LotNum == item2.Lote)
                                                     select a)
                                         .OrderBy(x=>x.FechaExpire)
@@ -440,6 +441,27 @@ namespace CargaClic.Repository
                  linea = (Convert.ToInt32(linea) + 1).ToString().PadLeft(4,'0');
             }
 
+            int total = 0;
+
+            var inventario =  _context.InventarioGeneral.Where(x=>x.ProductoId ==  command.ProductoId).ToList();
+
+            inventario.ForEach(x=> total = total + x.UntQty );
+
+            if(total < command.Cantidad){
+                throw new ArgumentException("No existen productos sufientes en el inventario");
+            }
+            
+            total = 0;
+            if(command.Lote != null){
+                var existen = inventario.Where(x=>x.LotNum == command.Lote).ToList();
+                existen.ForEach(x=> total = total + x.UntQty );
+
+                if(total < command.Cantidad){
+                    throw new ArgumentException("No existen productos sufientes en el inventario");
+                }
+            }
+            
+
 
             dominio = new OrdenSalidaDetalle();
             dominio.Cantidad = command.Cantidad;
@@ -536,8 +558,6 @@ namespace CargaClic.Repository
             string[] prm = command.ids.Split(',');
 
             ShipmentLine sl ;
-           
-
             Carga carga  ;
             
             
@@ -545,18 +565,13 @@ namespace CargaClic.Repository
             carga.EstadoId = (int) Constantes.EstadoCarga.Pendiente;
             carga.FechaRegistro = DateTime.Now;
             carga.NumCarga = "";
-            //carga.Peso = command.Peso;
             carga.UsuarioRegistroId = command.UsuarioRegistroId;
-            //carga.Volumen = command.Volumen;
-
 
             using(var transaction = _context.Database.BeginTransaction())
             {
         
-
                 await _context.Carga.AddAsync(carga);
                 await _context.SaveChangesAsync();
-
 
                 carga.NumCarga = "OC0-" + (carga.Id).ToString().PadLeft(6,'0');
                 await _context.SaveChangesAsync();
@@ -572,6 +587,53 @@ namespace CargaClic.Repository
                 await _context.SaveChangesAsync();
                 transaction.Commit();
                 return carga.Id;
+            }
+        }
+
+        public async Task<long> RegisterSalida(CargaForRegister command)
+        {
+            //command.ids  = command.ids.Substring(1,command.ids.Length - 1);
+            string[] prm = command.ids.Split(',');
+
+            Shipment sl ;
+          
+            using(var transaction = _context.Database.BeginTransaction())
+            {
+        
+                //await _context.Carga.AddAsync(carga);
+               // await _context.SaveChangesAsync();
+
+               // carga.NumCarga = "OC0-" + (carga.Id).ToString().PadLeft(6,'0');
+                await _context.SaveChangesAsync();
+
+                 foreach (var item in prm)
+                 {
+                     sl = 
+                        await _context.Shipment.Where(x=>x.Id == Convert.ToInt64(item)).SingleOrDefaultAsync();
+
+                    sl.EstadoId = 27;
+                    sl.FechaSalida = DateTime.Now;
+
+                    var shipmentlines =  await _context.ShipmentLine.Where(x=>x.ShipmentId == sl.Id).ToListAsync();
+
+                    foreach (var item2 in shipmentlines)
+                    {
+                        var pckrk = await _context.Pckwrk.Where(x=>x.ShipmentLineId == item2.Id).ToListAsync();
+                        pckrk.ForEach(x=> {
+                            x.FechaSalida = DateTime.Now;
+                        });
+
+                        var kardex = await _context.KardexGeneral.Where(x=>x.ShipmentLine == item2.Id).ToListAsync();
+                        kardex.ForEach(x=> {
+                            x.FechaSalida = DateTime.Now;
+                        });
+                    }
+
+                    
+                 }
+                await _context.SaveChangesAsync();
+                transaction.Commit();
+                return 1;
             }
         }
     }

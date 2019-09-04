@@ -159,6 +159,13 @@ namespace CargaClic.API.Controllers.Despacho
             var createdUser = await _repo_OrdenSalida.RegisterOrdenSalida(ordenSalidaForRegister);
             return Ok(createdUser);
       }
+      [HttpPost("RegisterSalidaShipment")]
+      public async Task<IActionResult> RegisterSalidaShipment(CargaForRegister ordenSalidaForRegister)
+      {
+            var createdUser = await _repo_OrdenSalida.RegisterSalida(ordenSalidaForRegister);
+            return Ok(createdUser);
+      }
+      
       [HttpPost("register_detail")]
       public async Task<IActionResult> Register_Detail(OrdenSalidaDetalleForRegister ordenReciboDetalleForRegisterDto)
       {

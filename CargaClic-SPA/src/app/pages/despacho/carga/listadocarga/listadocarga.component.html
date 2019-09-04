@@ -1,6 +1,6 @@
 
 <div class="page-head">
-    <h2 class="page-head-title">Pendiente de Carga</h2>
+    <h2 class="page-head-title">Pendiente de Despacho</h2>
     <nav aria-label="breadcrumb" role="navigation">
       <ol class="breadcrumb page-head-nav">
         <li class="breadcrumb-item"><a href="#">Despachos del Sistema</a></li>
@@ -79,23 +79,19 @@
         </div>
       
     
-  
-   
-    
           <div class="row">
-      
               <div class="col-md-1">
-                  
               </div>
               <div class="col-md-3">
                   <button class="btn btn-block  btn-primary" ngbTooltip="Asignar Transporte"  (click)="asignar()"  type="button">Asignar Transporte </button>  
               </div>
               <div class="col-md-3">
-                  
+                <button class="btn btn-block  btn-danger" [swal]="darSalidaSwal" (confirm)="darsalida()"  ngbTooltip="Dar Salida"    type="button">Dar Salida</button>  
               </div>
          
-      
-              <div  class="col-md-4">
+              <div class="col-md-1">
+              </div>
+              <div  class="col-md-3">
                   <div class="input-container">
                       <i class="fa fa-search"></i>
                       <mat-form-field class="search-form-field" >
@@ -124,11 +120,16 @@
                         </mat-checkbox>
                       </mat-cell>
                   </ng-container>
+
+                  <ng-container matColumnDef="propietario" >
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >  Propietario </mat-header-cell>
+                    <mat-cell *matCellDef="let user"> {{user.propietario}} </mat-cell>
+                  </ng-container>
   
                  <ng-container matColumnDef="numCarga">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>N°</mat-header-cell>
                   <mat-cell  *matCellDef="let orden" > 
-                        <span class="label label-info pull-xs-center">{{orden.numCarga}}</span>
+                        <span class="label label-info pull-xs-center">SHP{{orden.shipmentNumber}}</span>
                   </mat-cell>
                 </ng-container>
           
@@ -144,7 +145,7 @@
                         <mat-cell *matCellDef="let user"> {{user.placa}} </mat-cell>
                       </ng-container>
               
-                    <ng-container matColumnDef="equipoTransporte">
+                      <ng-container matColumnDef="equipoTransporte">
                         <mat-header-cell *matHeaderCellDef mat-sort-header >Equipo Transporte</mat-header-cell>
                         <mat-cell *matCellDef="let user"> {{user.equipoTransporte}} </mat-cell>
                       </ng-container>
@@ -155,15 +156,24 @@
                               {{user.fechaRegistro | date:'dd-MM-yyyy' }} 
                           </mat-cell>
                         </ng-container>
+
+
+                        <ng-container matColumnDef="fechaRequerida">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Requerida</mat-header-cell>
+                          <mat-cell *matCellDef="let user"> 
+                              {{user.fechaRequerida | date:'dd-MM-yyyy' }} 
+                          </mat-cell>
+                        </ng-container>
+  
   
              
                     <ng-container matColumnDef="actionsColumn">
                         <mat-header-cell *matHeaderCellDef>
-                              <button mat-fab ngbTooltip="Nueva Orden de Salida" color="primary"  routerLink="/despacho/nuevaordensalida"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>  
+                              <!-- <button mat-fab ngbTooltip="Nueva Orden de Salida" color="primary"  routerLink="/despacho/nuevaordensalida"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>   -->
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button   class="btn btn-space btn-outline-primary" ngbTooltip="Editar Orden" (click)="edit(row.ordenReciboId)" type="button"><i class="fas fa-edit"></i></button>
-                            <button [swal]="deleteSwal" (confirm)="delete(row.ordenSalidaId)"  [disabled]="row.nombreEstado != 'Planeado'"  class="btn btn-space btn-outline-primary" ngbTooltip="Eliminar Orden" type="button"><i class="fas fa-trash"></i></button>
+                            <!-- <button   class="btn btn-space btn-outline-primary" ngbTooltip="Editar Orden" (click)="edit(row.ordenReciboId)" type="button"><i class="fas fa-edit"></i></button>
+                            <button [swal]="deleteSwal" (confirm)="delete(row.ordenSalidaId)"  [disabled]="row.nombreEstado != 'Planeado'"  class="btn btn-space btn-outline-primary" ngbTooltip="Eliminar Orden" type="button"><i class="fas fa-trash"></i></button> -->
                             <button  class="btn btn-space btn-outline-primary" (click)="ver(row.ordenSalidaId)" type="button"><i class="fas fa-search"></i></button>
                           </mat-cell>
                     </ng-container>
@@ -194,23 +204,16 @@
   </div>
   
   <swal
-    #deleteSwal
-    title="Eliminar la Orden"
-    text="¿Esta seguro que desea eliminar la orden?"
+    #darSalidaSwal
+    title="Salida de despacho"
+    text="¿Esta seguro que desea dar salida al despacho?"
     type="question"
     [showCancelButton]="true"
     [focusCancel]="true"
-    [options]="{ confirmButtonText: 'Elminar' }"
+    [options]="{ confirmButtonText: 'Aceptar' }"
     >
   </swal>
   
   <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
   
-  <!-- <mat-progress-bar
-            class="example-margin"
-            [color]="color"
-            [mode]="indeterminate"
-            [value]="value"
-            [bufferValue]="bufferValue">
-  </mat-progress-bar> -->
   

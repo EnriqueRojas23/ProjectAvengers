@@ -28,10 +28,13 @@ namespace CargaClic.ReadRepository.Repository.Despacho
                 return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             }
         }
-        public  async Task<IEnumerable<GetPendientesLiquidacion>> GetPendientesLiquidacion(int ClienteId)
+        public  async Task<IEnumerable<GetPendientesLiquidacion>> GetPendientesLiquidacion(int ClienteId,
+        string corteinicio, string cortefin)
         {
             var parametros = new DynamicParameters();
-            parametros.Add("ClienteId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: ClienteId);
+            parametros.Add("PropietarioId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: ClienteId);
+            parametros.Add("strcorteinicio", dbType: DbType.String, direction: ParameterDirection.Input, value: corteinicio);
+            parametros.Add("strcortefin", dbType: DbType.String, direction: ParameterDirection.Input, value: cortefin);
 
             using (IDbConnection conn = Connection)
             {

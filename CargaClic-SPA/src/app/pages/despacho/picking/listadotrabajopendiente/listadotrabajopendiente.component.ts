@@ -13,6 +13,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { Router } from '@angular/router';
 import { DialogAsignarPuerta } from 'src/app/pages/modal/ModalAsignarPuerta/ModalAsignarPuerta.component';
 import { DialogAsignarTrabajador } from 'src/app/pages/modal/ModalAsignarTrabajador/ModalAsignarTrabajador.component';
+import { AuthService } from 'src/app/_services/auth.service';
 
 
 @Component({
@@ -61,7 +62,8 @@ export class ListadoTrabajoPendienteComponent implements OnInit {
     private alertify: AlertifyService ,
     private router: Router,
     public dialog: MatDialog,
-    private clienteService: ClienteService) {
+    private clienteService: ClienteService,
+    public authService: AuthService) {
 
 
    }
@@ -166,7 +168,7 @@ export class ListadoTrabajoPendienteComponent implements OnInit {
 
   asignarPuerta(): void {
    
-  
+
 
     if(this.selection.selected.length > 1 || this.selection.selected.length ==  0){
       this.alertify.error("Debe seleccionar solo un Trabajo");
@@ -211,6 +213,8 @@ export class ListadoTrabajoPendienteComponent implements OnInit {
     });
   }
   asignarTrabajador(): void {
+
+
 
     if(this.selection.selected.length > 1 || this.selection.selected.length ==  0){
       this.alertify.error("Debe seleccionar solo un Trabajo");

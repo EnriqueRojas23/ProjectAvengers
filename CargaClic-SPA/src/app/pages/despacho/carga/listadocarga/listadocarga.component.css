@@ -4,7 +4,7 @@
   }
   
   .mat-column-numCarga {
-    flex: 0 0 180px;
+    flex: 0 0 120px;
     text-align: right;
     
   }
@@ -13,16 +13,20 @@
     text-align: center;
   }
   .mat-column-equipoTransporte {
-    flex:-1 0 80px;
-    
-    
+    flex:0 0 180px;
+    text-align: right;
   }
-  .mat-column-FechaRegistro {
-    flex: 0 0 80px;
+  .mat-column-fechaRequerida {
+    flex: 0 0 120px;
     
   }
   .mat-column-estado {
     flex: 0 0 80px;
+    
+  }
+
+  .mat-column-propietario {
+    flex: 0 0 120px;
     
   }
   .mat-column-select {

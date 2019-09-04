@@ -1,6 +1,6 @@
 
 <div class="page-head">
-  <h2 class="page-head-title">Pendientes de Preliquidación </h2>
+  <h2 class="page-head-title">Preliquidación por Cliente</h2>
   <nav aria-label="breadcrumb" role="navigation">
     <ol class="breadcrumb page-head-nav">
       <li class="breadcrumb-item"><a href="#">Preliquidación por Cliente</a></li>
@@ -18,7 +18,7 @@
                   <b> Filtro de búsqueda  </b>  
             </div>
         <div class="card-body">
-            <div class="row">
+            <div class="  row">
           
                 <div class="col-md-3">
                     <label class="col-form-label text-sm-right" for="username">Propietario:</label>
@@ -34,6 +34,24 @@
                         </mat-select>
                       </mat-form-field>
                   </div>
+
+                <div class="col-md-4">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="FechaEsperada">F. Inicio</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <input matInput required type="datetime" [matDatepicker]="picker" autocomplete="off" [(ngModel)]="model.FechaInicio" name="FechaInicio" #FechaInicio="ngModel" >
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+               </div>
+
+               <div class="col-md-4">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="FechaEsperada">F. Fin</label>
+                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput required type="datetime" [matDatepicker]="picker1" autocomplete="off" [(ngModel)]="model.FechaFin" name="FechaFin" #FechaFin="ngModel" >
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+               </div>
                    
                  
   

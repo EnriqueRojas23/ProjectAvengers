@@ -13,6 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DialogAsignarPuerta } from 'src/app/pages/modal/ModalAsignarPuerta/ModalAsignarPuerta.component';
 import { DialogAsignarTrabajador } from 'src/app/pages/modal/ModalAsignarTrabajador/ModalAsignarTrabajador.component';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-Listado2trabajoasignado',
@@ -57,7 +58,8 @@ export class Listado2trabajoasignadoComponent implements OnInit {
     private alertify: AlertifyService ,
     private router: Router,
     public dialog: MatDialog,
-    private clienteService: ClienteService) { }
+    private clienteService: ClienteService,
+    public authService: AuthService) { }
 
     ngOnInit() {
 
@@ -75,7 +77,8 @@ export class Listado2trabajoasignadoComponent implements OnInit {
   
   
       });
-  
+      const token = this.authService.jwtHelper.decodeToken(localStorage.getItem('token'));
+      console.log(token.nameid);
   
   
       this.loading = true;

@@ -20,5 +20,6 @@ namespace CargaClic.Domain.Despacho
         public long? ManifiestoId { get; set; }
         public int ClienteId {get;set;}
         public int DireccionId {get;set;}
+        public long? EquipoTransporteId {get;set;}
     }
 }

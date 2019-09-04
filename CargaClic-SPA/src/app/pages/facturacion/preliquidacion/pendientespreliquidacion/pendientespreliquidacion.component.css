@@ -35,4 +35,8 @@
 
   }
   
- 
+  .header-column.ui-state-default{
+    background: #49945d9e;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #000000;
+  }

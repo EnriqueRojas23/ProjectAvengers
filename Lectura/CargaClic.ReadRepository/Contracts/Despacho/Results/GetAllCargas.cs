@@ -8,9 +8,10 @@ namespace CargaClic.ReadRepository.Contracts.Despacho.Results
         
 
         public Int64 Id { get; set; }
-        public string NumCarga { get; set; }
+        public string ShipmentNumber { get; set; }
         public string Propietario { get; set; }
         public DateTime FechaRegistro { get; set; }
+        public DateTime FechaRequerida { get; set; }
         public string Placa { get; set; }
         public string Estado { get; set; }
         public string Cliente {get;set;}
