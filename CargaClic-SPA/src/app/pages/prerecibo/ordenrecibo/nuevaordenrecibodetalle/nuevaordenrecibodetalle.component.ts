@@ -88,9 +88,6 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
       return; 
     }
 
-    
-
-
     this.ordenReciboService.registrar_detalle(this.model).subscribe(x=> {
       
     },error => {

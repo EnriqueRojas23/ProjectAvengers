@@ -88,7 +88,7 @@ export class PlanificarpickingComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.model.intervalo = 0;
-    this.model.estadoIdfiltro = 21;
+    this.model.estadoIdfiltro = 20;
     this.model.PropietarioId = 1;
     
     

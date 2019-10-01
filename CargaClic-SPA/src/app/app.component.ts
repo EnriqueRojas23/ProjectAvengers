@@ -5,7 +5,6 @@ import { NgxUiLoaderDemoService } from './_services/ngx-ui-loader-demo.service.s
 
 
 
- 
 
 @Component({
   selector: 'app-root',
@@ -15,7 +14,6 @@ import { NgxUiLoaderDemoService } from './_services/ngx-ui-loader-demo.service.s
 export class AppComponent implements OnInit   {
   title = 'CargaClic-SPA';
   constructor(public demoService: NgxUiLoaderDemoService) {
-    
   }
   ngOnInit() {
   }

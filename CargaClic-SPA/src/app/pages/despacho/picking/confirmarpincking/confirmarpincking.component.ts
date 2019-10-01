@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
-import { OrdenSalida } from 'src/app/_models/Despacho/ordenrecibo';
 import { Dropdownlist } from 'src/app/_models/Constantes';
 import { ReplaySubject, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -11,7 +10,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { takeUntil } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Shipment, ShipmentLine } from 'src/app/_models/Despacho/shipmentline';
-import { SafeHtml } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-confirmarpincking',

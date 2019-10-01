@@ -128,6 +128,7 @@ namespace CargaClic.API
             services.AddScoped<IFacturacionReadRepository,FacturacionReadRepository>();
             services.AddScoped<IFacturacionRepository,FacturacionRepository>();
             services.AddScoped<IRepository<Documento>,Repository<Documento>>();
+            services.AddScoped<IRepository<Tarifa>,Repository<Tarifa>>();
             
             
             services.AddScoped<IRepository<Propietario>,Repository<Propietario>>();

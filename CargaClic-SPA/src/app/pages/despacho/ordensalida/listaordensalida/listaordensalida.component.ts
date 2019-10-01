@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 import { OrdenSalidaService } from 'src/app/_services/Despacho/ordensalida.service';
 import { OrdenSalida } from 'src/app/_models/Despacho/ordenrecibo';
 import { EditButtonRendererComponent } from 'src/app/pages/modal/Edit-button-renderer/Edit-button-renderer.component';
-import { Loader, NgxUiLoaderService, SPINNER } from 'ngx-ui-loader';
+
 
 
 const LOGO_URL = 'https://raw.githubusercontent.com/t-ho/ngx-ui-loader/master/src/assets/angular.png'; 
@@ -23,10 +23,10 @@ const LOGO_URL = 'https://raw.githubusercontent.com/t-ho/ngx-ui-loader/master/sr
   styleUrls: ['./listaordensalida.component.css']
 })
 export class ListaordensalidaComponent implements OnInit {
-  masterLoader: Loader;
+  
   loaders: any[];
   
-  @Input() loader: Loader;
+  
   timers: any[];
   tasks: {};
 
@@ -79,11 +79,11 @@ export class ListaordensalidaComponent implements OnInit {
     private router: Router,
     private clienteService: ClienteService,
     private alertify: AlertifyService,
-    private ngxUiLoaderService: NgxUiLoaderService
+    
     ) 
     { 
 
-      this.masterLoader = this.ngxUiLoaderService.getLoader();
+      
       this.timers = [];
       this.tasks = {};
   

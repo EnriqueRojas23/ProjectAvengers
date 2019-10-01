@@ -141,6 +141,8 @@ export class ListadocargaComponent implements OnInit {
          
         this.model.UsuarioRegistroId = 1;
         this.ordensalidaService.registrar_carga(this.model).subscribe(resp => {
+          this.buscar();
+          this.alertify.success("Se ha asignado el equipo de transporte.");
        });
 
   }
@@ -157,18 +159,15 @@ export class ListadocargaComponent implements OnInit {
   let ids = "";
   this.selection.selected.forEach(el => {
         ids = ids + ',' + el.id;
-        // if ( el.estado != 'Confirmado')
-        // {
-        //    this.alertify.error("Esta orden no está confirmada");
-        //    return;
-        // }
+      
     });
    this.model.ids = ids.substring(1,ids.length + 1);
-   console.log(this.model.ids);
+   
    
      this.ordensalidaService.registrar_salidacarga(this.model).subscribe(x=> 
       {
-           this.alertify.error("Se ha registrado la salida con éxito");
+           this.buscar();
+           this.alertify.success("Se ha registrado la salida con éxito");
     });
     
 
@@ -179,6 +178,40 @@ export class ListadocargaComponent implements OnInit {
   }
 
   buscar(){
+    this.model.intervalo = 3;
+    this.model.estadoIdfiltro = 30;
+    this.model.PropietarioFiltroId = 1;
+    
+    
+    this.EstadoId =this.model.estadoIdfiltro;
+    this.model.PropietarioId = this.model.PropietarioFiltroId;
+
+    
+    this.model.PropietarioId = 1;
+    this.model.EstadoId = 25;
+    
+    this.ordensalidaService.getAllCargas(this.model).subscribe(list => {
+      
+    this.lines = list;
+      
+      
+    this.listData = new MatTableDataSource(this.lines);
+    this.listData.paginator = this.paginator;
+    this.listData.sort = this.sort;
+    
+        
+      this.listData.filterPredicate = (data,filter) => {
+        return this.displayedColumns.some(ele => {
+          
+          if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
+             {
+               
+                return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+           
+             }
+          })
+         }
+      });
   }
 
   protected filterBanks() {

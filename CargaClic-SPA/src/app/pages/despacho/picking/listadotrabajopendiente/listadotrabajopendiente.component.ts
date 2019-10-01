@@ -105,7 +105,7 @@ export class ListadoTrabajoPendienteComponent implements OnInit {
 
     this.ordensalidaService.getAllWork(this.model).subscribe(list => {
       
-      console.log(list);
+
 
       this.cargas = list;
       

@@ -122,25 +122,27 @@ namespace CargaClic.Repository
         }
         public async Task<long> GenerarPreliquidacion(PreliquidacionForRegister command)
         {
-
+            
             IEnumerable<GetPendientesLiquidacion> result ;
             Decimal SubTo = 0;
 
             var parametros = new DynamicParameters();
-            parametros.Add("ClienteId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: command.ClienteId);
+
+            parametros.Add("PropietarioId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: command.ClienteId);
+            parametros.Add("strcorteinicio", dbType: DbType.String, direction: ParameterDirection.Input, value: command.InicioCorte);
+            parametros.Add("strcortefin", dbType: DbType.String, direction: ParameterDirection.Input, value: command.FinCorte);
 
             using (IDbConnection conn = Connection)
             {
                 string sQuery = "[Facturacion].[pa_listarpendientespreliquidacion]";
-                //conn.Open();
-                 result = await conn.QueryAsync<GetPendientesLiquidacion>(sQuery,
+                 result = await conn.QueryAsync<GetPendientesLiquidacion    >(sQuery,
                                                                            parametros
                                                                           ,commandType:CommandType.StoredProcedure
                   );
             }
             foreach (var item in result)
             {
-                  SubTo = SubTo + item.Total ;
+                SubTo = SubTo + item.Total ;
             }
 
             using(var transaction = _context.Database.BeginTransaction())
@@ -163,14 +165,14 @@ namespace CargaClic.Repository
                 foreach (var item in result)
                 {
                     detalle = new PreliquidacionDetalle();
-                    detalle.FechaIngreso = Convert.ToDateTime(item.FechaIngreso);
-                    detalle.Ingreso = item.Ingreso;
-                    detalle.Montacarga = item.MontaCarga;
-                    detalle.Movilidad = item.Movilidad;
+//                    detalle.FechaIngreso = Convert.ToDateTime(item.FechaIngreso);
+                    detalle.Ingreso = item.In;
+    //                detalle.Montacarga = item.MontaCarga;
+      //              detalle.Movilidad = item.Movilidad;
                     detalle.Pos = item.Posdia;
                     detalle.PreliquidacionId = preliquidacion.Id;
-                    detalle.ProductoId = item.ProductoId;
-                    detalle.Salida = item.Salida;
+                    detalle.ProductoId = item.Id;
+                    detalle.Salida = item.Out;
                     detalle.Seguro = item.Seguro;
                     await _context.AddAsync<PreliquidacionDetalle>(detalle);
                     

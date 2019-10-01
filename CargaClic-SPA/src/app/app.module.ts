@@ -61,14 +61,12 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
 
 
 
-
 // @dynamic
 @NgModule({
    declarations: [
       AppComponent,
       LoginComponent,
-      PagesComponent,
-
+      PagesComponent
       
       
       
@@ -92,7 +90,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
          cancelButtonClass: 'btn'
      }),
      AngularSlickgridModule.forRoot(),
-     
+      
      NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
      NgxUiLoaderRouterModule, // import this module for showing loader automatically when navigating between app routes
      NgxUiLoaderHttpModule,
@@ -105,8 +103,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
         ErrorInterceptorProvide,
         AlertifyService,
         UserService,
-        [NgxUiLoaderDemoService],
-        { provide: XHRBackend, useClass: ApiXHRBackend }
+        { provide: XHRBackend, useClass: ApiXHRBackend },
+        [NgxUiLoaderDemoService]
         
       
         

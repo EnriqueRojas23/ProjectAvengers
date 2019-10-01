@@ -80,5 +80,22 @@ namespace CargaClic.ReadRepository.Repository.Despacho
                 return result;
             }
         }
+
+        public async Task<IEnumerable<GetTarifas>> GetTarifas(int ClienteId)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("clienteid", dbType: DbType.Int32, direction: ParameterDirection.Input, value: ClienteId);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[Facturacion].[pa_listar_tarifas]";
+                conn.Open();
+                var result = await conn.QueryAsync<GetTarifas>(sQuery,
+                                                                           parametros
+                                                                          ,commandType:CommandType.StoredProcedure
+                  );
+                return result;
+            }
+        }
     }
 }

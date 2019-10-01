@@ -55,6 +55,9 @@ import { PendienteCargaComponent } from './despacho/carga/listadopendientescarga
 import { ListadocargaComponent } from './despacho/carga/listadocarga/listadocarga.component';
 import { ConfirmarpinckingComponent } from './despacho/picking/confirmarpincking/confirmarpincking.component';
 import { KardexgeneralComponent } from './inventario/inventariogeneral/kardexgeneral/kardexgeneral.component';
+import { GestiontarifarioComponent } from './facturacion/preliquidacion/gestiontarifario/gestiontarifario.component';
+import { NuevatarifaComponent } from './facturacion/preliquidacion/nuevatarifa/nuevatarifa.component';
+import { EditartarifaComponent } from './facturacion/preliquidacion/editartarifa/editartarifa.component';
 
 
 
@@ -97,10 +100,10 @@ const pagesRoutes: Routes = [
     {path : 'mantenimiento/nuevahuelladetalle/:uid/:uid2', component : NuevahuelladetalleComponent, canActivate: [AuthGuard]} ,
 
     {path : 'inventario/inventariogeneral', component : ListadoinventarioComponent, canActivate: [AuthGuard]} ,
-    {path : 'inventario/kardexgeneral', component : KardexgeneralComponent, canActivate: [AuthGuard]} ,
     {path : 'inventario/ajusteinventario', component : AjustesinventarioComponent, canActivate: [AuthGuard]} ,
     {path : 'inventario/ajusteinventariodetalle/:uid', component : AjusteinventariodetalleComponent, canActivate: [AuthGuard]} ,
     {path : 'inventario/nuevoajuste/:uid/:uid2', component : NuevoajusteComponent, canActivate: [AuthGuard]} ,
+    {path : 'inventario/kardexgeneral', component : KardexgeneralComponent, canActivate: [AuthGuard]} ,
 
     {path : 'picking/listaordensalida', component : ListaordensalidaComponent, canActivate: [AuthGuard]} ,
     {path : 'picking/nuevaordensalida', component : NuevaordensalidaComponent, canActivate: [AuthGuard]} ,
@@ -115,6 +118,9 @@ const pagesRoutes: Routes = [
 
     {path : 'facturacion/pendientespreliquidacion', component : PendientespreliquidacionComponent, canActivate: [AuthGuard]} ,
     {path : 'facturacion/gestionpreliquidacion', component : GestionpreliquidacionComponent, canActivate: [AuthGuard]} ,
+    {path : 'facturacion/gestiontarifario', component : GestiontarifarioComponent, canActivate: [AuthGuard]} ,
+    {path : 'facturacion/nuevatarifa', component : NuevatarifaComponent, canActivate: [AuthGuard]} ,
+    {path : 'facturacion/editartarifa/:uid', component : EditartarifaComponent, canActivate: [AuthGuard]} ,
 
     {path : 'despacho/pendienteCarga', component : PendienteCargaComponent, canActivate: [AuthGuard]} ,
     {path : 'despacho/equipotransportesalida/:uid', component : EquipotransportesalidaComponent, canActivate: [AuthGuard]} ,

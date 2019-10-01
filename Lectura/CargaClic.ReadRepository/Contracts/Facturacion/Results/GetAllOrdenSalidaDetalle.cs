@@ -16,7 +16,5 @@ namespace CargaClic.ReadRepository.Contracts.Despacho.Results
         public decimal PosTotal{get;set;}
         public decimal Total {get;set;}
         
-       
-        
     }
 }

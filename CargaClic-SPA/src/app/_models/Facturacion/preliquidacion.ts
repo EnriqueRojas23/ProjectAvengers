@@ -24,5 +24,16 @@ export interface Serie {
      estadoId: number;
 }
 
+export interface Tarifa {
+     id: number;
+     descripcionLarga: string;
+     pos: number;
+     ingreso: number;
+     salida: number;
+     seguro: number;
+     montacarga: number;
+     movilidad:number;
+}
+
 
 

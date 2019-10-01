@@ -10,7 +10,6 @@ export interface Carga {
      NombreEstado:  string ;
      ubicacion: string;
      destino: string ;
-     estado: string;
      
 }
 

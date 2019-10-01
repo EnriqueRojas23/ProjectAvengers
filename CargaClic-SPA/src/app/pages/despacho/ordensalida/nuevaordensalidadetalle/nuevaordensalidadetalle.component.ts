@@ -62,6 +62,10 @@ export class NuevaordensalidadetalleComponent implements OnInit {
               viewValue: element.nombreEstado
             })
           });
+          this.clientes.push({
+            val: 10,
+            viewValue : "Disponible y Merma"
+          })
         })
   }
   openDialog(): void {

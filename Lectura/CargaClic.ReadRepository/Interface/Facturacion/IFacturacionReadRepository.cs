@@ -11,6 +11,7 @@ namespace CargaClic.ReadRepository.Interface.Facturacion
          string corteinicio, string cortefin);
          Task<IEnumerable<GetLiquidaciones>> GetPreLiquidaciones(int ClienteId);
          Task<IEnumerable<GetLiquidaciones>> GetPreLiquidacion(int PreliquidacionId);
+         Task<IEnumerable<GetTarifas>> GetTarifas(int ClienteId);
          
 
     }

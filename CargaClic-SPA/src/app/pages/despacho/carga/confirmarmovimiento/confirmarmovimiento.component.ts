@@ -151,7 +151,7 @@ private getDismissReason(reason: any): string {
 
   regresar(){
     
-    this.router.navigate(['/trabajador']);
+    this.router.navigate(['picking/listado2trabajoasignado']);
   }
 }
 

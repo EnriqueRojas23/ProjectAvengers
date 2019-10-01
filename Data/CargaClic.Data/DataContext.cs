@@ -63,6 +63,8 @@ namespace CargaClic.Data
         public DbSet<ValorTabla> ValorTabla {get;set;}
 
         public DbSet<Producto> Producto {get;set;}
+        public DbSet<Tarifa> Tarifa {get;set;}
+
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -120,6 +122,9 @@ namespace CargaClic.Data
             builder.ApplyConfiguration(new AreaConfiguration());
             builder.ApplyConfiguration(new HuellaDetalleConfiguration());
             builder.ApplyConfiguration(new ProductoConfiguration());
+
+
+            builder.ApplyConfiguration(new TarifaConfiguration());
 
             base.OnModelCreating(builder);
 

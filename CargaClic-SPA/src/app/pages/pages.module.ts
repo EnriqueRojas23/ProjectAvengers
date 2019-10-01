@@ -92,6 +92,10 @@ import { PendienteCargaComponent } from './despacho/carga/listadopendientescarga
 import { ListadocargaComponent } from './despacho/carga/listadocarga/listadocarga.component';
 import { ConfirmarpinckingComponent } from './despacho/picking/confirmarpincking/confirmarpincking.component';
 import { KardexgeneralComponent } from './inventario/inventariogeneral/kardexgeneral/kardexgeneral.component';
+import { GestiontarifarioComponent } from './facturacion/preliquidacion/gestiontarifario/gestiontarifario.component';
+import { CellRendererProductos } from '../_common/Renderers/cellRendererProductos/cellRendererProductos.component';
+import { NuevatarifaComponent } from './facturacion/preliquidacion/nuevatarifa/nuevatarifa.component';
+import { EditartarifaComponent } from './facturacion/preliquidacion/editartarifa/editartarifa.component';
 
 
 
@@ -172,8 +176,12 @@ import { KardexgeneralComponent } from './inventario/inventariogeneral/kardexgen
     Listado2trabajoasignadoComponent,
     ConfirmarmovimientoComponent,
     ListadocargaComponent,
+    KardexgeneralComponent,
     ConfirmarpinckingComponent,
-    KardexgeneralComponent
+    GestiontarifarioComponent,
+    CellRendererProductos,
+    NuevatarifaComponent,
+    EditartarifaComponent 
 
   ],
   exports: [
@@ -204,15 +212,13 @@ import { KardexgeneralComponent } from './inventario/inventariogeneral/kardexgen
     TreeviewModule.forRoot(),
     AngularSlickgridModule.forRoot(),
     TranslateModule.forRoot(),
-    
     NgxLoadingModule.forRoot({
-      animationType: ngxLoadingAnimationTypes.pulse,
+      animationType: ngxLoadingAnimationTypes.wanderingCubes,
       backdropBackgroundColour: 'rgba(0,0,0,0.1)', 
       backdropBorderRadius: '4px',
       primaryColour: '#ffffff', 
       secondaryColour: '#ffffff', 
-      tertiaryColour: '#ffffff',
-      
+      tertiaryColour: '#ffffff'
   }),
     NgxMaterialTimepickerModule.forRoot(),
     AngularDualListBoxModule ,
@@ -221,7 +227,9 @@ import { KardexgeneralComponent } from './inventario/inventariogeneral/kardexgen
     MatSelectModule,
     SweetAlert2Module,
     MatProgressBarModule,
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([
+      CellRendererProductos
+    ])
     
   ],
   providers: [

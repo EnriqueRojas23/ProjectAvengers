@@ -1,0 +1,20 @@
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+.mat-column-producto {
+    flex: 0 0 380px;
+}
+.mat-column-familia {
+  flex: 0 0 100px;
+}
+.mat-column-almacen {
+  flex: 0 0 120px;
+}
+.mat-column-codigo {
+  flex: 0 0 100px;
+}
+.mat-column-cliente {
+  flex: 0 0 160px;
+}

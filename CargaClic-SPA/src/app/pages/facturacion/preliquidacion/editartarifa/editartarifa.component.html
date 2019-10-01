@@ -1,0 +1,122 @@
+
+<div class="page-head">
+    <h2 class="page-head-title">Tarifario</h2>
+    <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb page-head-nav">
+        <li class="breadcrumb-item"><a href="#">Nuevo Tarifario</a></li>
+        <!-- <li class="breadcrumb-item">Listado de Órdenes de Recibo</li>
+        <li class="breadcrumb-item active">Identificar Pallets</li> -->
+      </ol>
+    </nav>
+  </div>
+  
+    <div class="main-content container-fluid">
+    
+  
+        <div class="col-md-12">
+          <div class="card card-border-color card-border-color-primary">
+            <div class="card-header ">Editar Tarifa<span class="card-subtitle"> Edición de tarifas</span></div>
+            <div class="card-body ">
+              <form #f="ngForm"  (ngSubmit)="registrar(f)" >
+  
+                  <!-- <div class="input-div">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="power">Propietario</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <mat-select required [formControl]="ClientesCtrl" (selectionChange)="CambioCliente($event.value)" [(value)]="model.PropietarioControl"   placeholder="Selección" #singleSelect>
+                            <mat-option>
+                                <ngx-mat-select-search [placeholderLabel]="'Buscar'" [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
+                              </mat-option>
+                          <mat-option  *ngFor="let pow of filteredClientes | async" [value]="pow">
+                              {{pow.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>  -->
+  
+  
+                  <!-- <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Producto:</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                        <mat-select [formControl]="ProductosCtrl"  [(value)]="model.ProductoId" >
+                         <mat-option>
+                             <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ProductosFilterCtrl"></ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option  *ngFor="let pow of filteredProductos  | async"  [value]="pow.val">
+                              {{pow.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div> -->
+  
+  
+                 <div class="input-div">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="pos">POS</label>
+                    <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                      <input matInput autocomplete="off"    appTwoDigitDecimaNumber required  [(ngModel)]="model.pos" #pos="ngModel"  name="pos" type="number">
+                    </mat-form-field>
+                    <div *ngIf="pos.invalid && (pos.dirty || pos.touched)"  class="alert alert-danger">
+                    <div *ngIf="pos.errors.required">
+                      Debe ingresar el POS.
+                    </div>
+                  </div>
+                </div>
+  
+                 <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="ingreso">IN</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput autocomplete="off"  appTwoDigitDecimaNumber required  [(ngModel)]="model.ingreso" #ingreso="ngModel"  name="in" type="number">
+                  </mat-form-field>
+                  <div *ngIf="ingreso.invalid && (ingreso.dirty || ingreso.touched)"  class="alert alert-danger">
+                  <div *ngIf="ingreso.errors.required">
+                    Debe ingresar el IN.
+                  </div>
+                </div>
+               </div>
+  
+                 <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="salida">OUT</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput autocomplete="off"  appTwoDigitDecimaNumber required  [(ngModel)]="model.salida" #salida="ngModel"  name="salida" type="number">
+                  </mat-form-field>
+                  <div *ngIf="salida.invalid && (salida.dirty || salida.touched)"  class="alert alert-danger">
+                  <div *ngIf="salida.errors.required">
+                    Debe ingresar el OUY.
+                  </div>
+                </div>
+               </div>
+  
+                <div class="input-div">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="seguro">SEGURO</label>
+                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
+                    <input matInput autocomplete="off"  appTwoDigitDecimaNumber required  [(ngModel)]="model.seguro" #seguro="ngModel"  name="seguro" type="number">
+                  </mat-form-field>
+                  <div *ngIf="seguro.invalid && (seguro.dirty || seguro.touched)"  class="alert alert-danger">
+                  <div *ngIf="seguro.errors.required">
+                    Debe ingresar el OUY.
+                  </div>
+                </div>
+              </div>
+  
+                <div class="row pt-2 pt-sm-5 mt-1">
+                    <div class="col-sm-6 pl-0">
+                      <p class="text-right">
+                        <button  [disabled]="!f.valid" class="btn btn-space btn-primary" type="submit">Guardar</button>
+                        <button  [routerLink]="['/recibo/listaordenrecibo']" routerLinkActive="router-link-active"  class="btn btn-space btn-secondary">Cancel</button>
+                      </p>
+                    </div>
+                  </div>
+                  
+         
+               
+              </form>
+            </div>
+            </div>
+          </div>
+      
+  
+    
+    
+     
+  
+  </div>
+    

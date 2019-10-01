@@ -1,0 +1,207 @@
+
+<div class="page-head">
+  <h2 class="page-head-title">Tarifario</h2>
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb page-head-nav">
+      <li class="breadcrumb-item"><a href="#">Tarifario por cliente</a></li>
+      <!-- <li class="breadcrumb-item">Listado de Órdenes de Recibo</li>
+      <li class="breadcrumb-item active">Identificar Pallets</li> -->
+    </ol>
+  </nav>
+</div>
+
+<div class="main-content container-fluid">
+
+      <div class="col-md-12">
+    <div class="card card-border-color card-border-color-warning">
+        <div class="card-header">
+                  <b> Filtro de búsqueda  </b>  
+            </div>
+        <div class="card-body">
+            <div class="  row">
+          
+                <div class="col-md-4">
+                    <label class="col-form-label text-sm-right" for="username">Propietario:</label>
+                    
+                    <mat-form-field class="input-form-field  col-sm-8 ">
+                        <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
+                         <mat-option>
+                             <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
+                              {{pow.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+
+              
+                   
+                 
+  
+                <div class="col-md-3">
+                   <button class="btn btn-block btn-warning"  (click)="buscar()"  type="button">Buscar</button>
+                </div>
+             
+              </div>
+        </div>
+    </div>
+
+  </div>
+<div class="col-md-12">
+   
+
+
+  <div class="card card-border-color card-border-color-warning">
+    <div class="card-header">
+          <div>
+              <b> Tarifas  </b> <span class="card-subtitle">  Tarifa por producto  </span>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-1">
+              
+            </div>
+
+      </div>
+      <div class="card-body">
+        <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/facturacion/nuevatarifa"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> 
+          <div  class="example-container">
+
+              <div [ngStyle]="style">
+                  <ag-grid-angular 
+                  #agGrid
+                  style="width: 100%; height: 300px;"
+                  id="myGrid"
+                  class="ag-theme-balham"
+                  [columnDefs]="columnDefs"
+                  [defaultColDef]="defaultColDef"
+                  [columnTypes]="columnTypes"
+                  [rowData]="rowData"
+                  (gridReady)="onGridReady($event)"
+                  [frameworkComponents]="frameworkComponents"
+                  (cellValueChanged)="onCellValueChanged($event)"
+                  [context]="context"
+                  rowSelection="multiple"
+                  >
+                  
+                  </ag-grid-angular>
+        
+                
+                  </div>
+
+    <div class="container">
+      <!-- <div  class="mat-elevation-z8">
+        <mat-table #table [dataSource] = "listData" matSort >
+            
+            <ng-container matColumnDef="producto">
+              <mat-header-cell *matHeaderCellDef mat-sort-header >  Producto </mat-header-cell>
+              <mat-cell *matCellDef="let producto"> {{producto.descripcionLarga}} </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="pos">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Pos</mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.pos}} </mat-cell>
+          </ng-container>
+    
+      
+            <ng-container matColumnDef="ingreso">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >  In </mat-header-cell>
+                <mat-cell *matCellDef="let producto"> {{producto.ingreso}} </mat-cell>
+              </ng-container>
+      
+      
+            
+
+              <ng-container matColumnDef="salida">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Out </mat-header-cell>
+                  <mat-cell *matCellDef="let producto"> {{producto.salida}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="seguro">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >  Seguro  </mat-header-cell>
+                    <mat-cell *matCellDef="let producto"> {{producto.seguro}} </mat-cell>
+                  </ng-container>
+
+                <ng-container matColumnDef="montacarga">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header >  Montacarga </mat-header-cell>
+                      <mat-cell *matCellDef="let producto"> {{producto.montacarga}} </mat-cell>
+                    </ng-container> 
+
+                <ng-container matColumnDef="movilidad">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >  Movilidad </mat-header-cell>
+                    <mat-cell *matCellDef="let producto"> {{producto.movilidad}} </mat-cell>
+                  </ng-container>
+
+
+                   
+              <ng-container matColumnDef="actionsColumn">
+                  <mat-header-cell *matHeaderCellDef>
+                      <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/mantenimiento/nuevoproducto"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button> 
+
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                      <button class="btn btn-space btn-outline-primary" ngbTooltip="Editar tarifa" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
+                      <button class="btn  btn-outline-primary" (click)="open(row)" ngbTooltip="Eliminar tarifa"  type="button"><i class="fa fa-trash"></i></button>
+                  </mat-cell>
+              </ng-container>
+      
+      
+        <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" >
+
+
+        </mat-row>
+      
+      
+        </mat-table>
+
+
+        <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+
+      </div> -->
+        </div>
+ 
+      </div> 
+    </div>
+   
+  </div>
+</div>
+
+
+</div>
+
+<swal
+  #confirmarSwal
+  title="Confirmar Generación"
+  text="¿Esta seguro que desea generar la preliquidación?"
+  type="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  [options]="{ confirmButtonText: 'Generar' }"
+  >
+</swal>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
+
+<!-- <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="indeterminate"
+          [value]="value"
+          [bufferValue]="bufferValue">
+</mat-progress-bar> -->
+
+       <!-- <ag-grid-angular 
+            #agGrid
+            style="width: 500px; height: 500px;"
+            id="myGrid" 
+            class="ag-theme-balham"
+            [rowData]="rowData" 
+            [columnDefs]="columnDefs"
+            [context]="context"
+            [frameworkComponents]="frameworkComponents"
+            (gridReady)="onGridReady($event)"
+            >
+            </ag-grid-angular> -->

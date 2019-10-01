@@ -3,4 +3,4 @@ export interface DialogData {
     codigo: any;
     descripcion: string;
   }
-  
+   

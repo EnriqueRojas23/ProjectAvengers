@@ -92,7 +92,7 @@ export class Listado2trabajoasignadoComponent implements OnInit {
   
       
       this.model.PropietarioId = 1;
-      this.model.EstadoId = 30;
+      this.model.EstadoId = 31;
       
   
   

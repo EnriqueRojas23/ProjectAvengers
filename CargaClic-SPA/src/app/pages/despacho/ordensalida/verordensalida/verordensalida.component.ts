@@ -31,7 +31,7 @@ export class VerordensalidaComponent implements OnInit {
 	}
   constructor(private ordenServicio : OrdenSalidaService
     ,private activatedRoute: ActivatedRoute
-    ,  private router: Router
+    , private router: Router
     ,private alertify: AlertifyService
     ) { }
 

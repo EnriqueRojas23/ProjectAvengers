@@ -9,7 +9,7 @@ import { EquipoTransporte } from 'src/app/_models/Recepcion/equipotransporte';
 import { environment } from 'src/environments/environment';
 import { OrdenSalida } from 'src/app/_models/Despacho/ordenrecibo';
 import { Carga } from 'src/app/_models/Despacho/Carga';
-import { PreLiquidacion, Serie } from 'src/app/_models/Facturacion/preliquidacion';
+import { PreLiquidacion, Serie, Tarifa } from 'src/app/_models/Facturacion/preliquidacion';
 
 
 const httpOptions = {
@@ -27,7 +27,10 @@ export class FacturacionService {
   baseUrl = environment.baseUrl + '/api/facturacion/';
 constructor(private http: HttpClient) { }
 
-
+getTarifas(id: number) : Observable<Tarifa[]> {
+  let params = "?clienteid=" + id ;
+  return this.http.get<Tarifa[]>(this.baseUrl + "GetAllTarifas" + params,httpOptions)
+};
 
 getPendientesLiquidacion(id: number ,model: any) : Observable<PreLiquidacion[]> {
   let params = "?Id=" + id +
@@ -54,16 +57,46 @@ generar_comprobante(model: any){
 
 getPreLiquidaciones(model: any) : Observable<PreLiquidacion[]> {
     let params = "?Id=" + model.PropietarioId ;
-    // "&EstadoId=" + model.estadoIdfiltro +
-    // "&DaysAgo=" + model.intervalo;
+
     return this.http.get<PreLiquidacion[]>(this.baseUrl + "GetPreLiquidaciones" + params,httpOptions);
   };
-  getPreLiquidacion(id: number) : Observable<PreLiquidacion> {
+getPreLiquidacion(id: number) : Observable<PreLiquidacion> {
     let params = "?Id=" + id ;
     return this.http.get<PreLiquidacion>(this.baseUrl + "GetPreLiquidacion" + params,httpOptions);
   };
-  getSeries() : Observable<Serie[]> {
+getSeries() : Observable<Serie[]> {
     return this.http.get<Serie[]>(this.baseUrl + "GetAllSeries",httpOptions);
   };
+
+insertTarifa(model: any){
+  
+   console.log(model);
+   model.PropietarioId = model.PropietarioControl.val;
+   
+    return this.http.post(this.baseUrl + 'InsertTarifa',model,httpOptions)
+    .pipe(
+      map((response: any) => {
+      } 
+     )
+  )};
+
+  //GetTarifa
+  getTarifa(id: any) : Observable<Serie[]> {
+    return this.http.get<Serie[]>(this.baseUrl + "GetTarifa?id="+ id ,httpOptions);
+  };
+
+
+  updateTarifa(model: any){
+  
+    
+    
+     return this.http.post(this.baseUrl + 'UpdateTarifa',model,httpOptions)
+     .pipe(
+       map((response: any) => {
+       } 
+      )
+   )};
+
+
  
 }

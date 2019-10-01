@@ -3,6 +3,11 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ProductoService } from 'src/app/_services/Mantenimiento/producto.service';
 import { Producto } from 'src/app/_models/Mantenimiento/producto';
 import { Router } from '@angular/router';
+import { ReplaySubject, Subject } from 'rxjs';
+import { Dropdownlist } from 'src/app/_models/Constantes';
+import { FormControl } from '@angular/forms';
+import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-listadoproducto',
@@ -19,20 +24,27 @@ export class ListadoproductoComponent implements OnInit {
   listData: MatTableDataSource<Producto>;
   public loading = false;
   productos: Producto[];
+  clientes: Dropdownlist[] = [];
   model: any  ;
 
-
+  public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
+  public ClientesCtrl: FormControl = new FormControl();
+  public ClientesFilterCtrl: FormControl = new FormControl();
+  protected _onDestroy = new Subject<void>();
+  
   constructor(private productoService: ProductoService
-   , private router: Router ) { }
+   , private router: Router 
+   ,   private clienteService: ClienteService,) { }
 
   ngOnInit() {
     this.loading = true;
     this.model = {
     };
     this.model.criterio = "";
-    this.model.clienteId = 1;
+    this.model.clienteId = this.model.PropietarioId;
 
-    this.productoService.getAll(this.model.criterio, this.model.clienteId).subscribe(list=> {
+    
+    this.productoService.getAll(this.model.criterio, 1).subscribe(list=> {
       this.productos = list ;
       this.loading = false;
       this.listData = new MatTableDataSource(this.productos);
@@ -54,10 +66,76 @@ export class ListadoproductoComponent implements OnInit {
     });
 
 
+    this.clienteService.getAllPropietarios("").subscribe(resp => { 
+      resp.forEach(element => {
+        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+      });
+      this.filteredClientes.next(this.clientes.slice());
+      this.ClientesFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+            this.filterBanks();
+          });
+          this.loading = false;
+          this.model.intervalo = 3;
+          this.model.estadoIdfiltro = 21;
+    });
+
   }
   verHuellas(id){
     this.router.navigate(['mantenimiento/verproducto', id]);
 
+  }
+  buscar(){
+    this.loading = true;
+
+    this.model.criterio = "";
+    this.model.clienteId = this.model.PropietarioId;
+
+    console.log(this.model.PropietarioId);
+    
+    if(this.model.clienteId == "undefined")
+    {
+       this.model.clienteId = 1;
+    }
+
+    
+    this.productoService.getAll(this.model.criterio, this.model.clienteId).subscribe(list=> {
+      this.productos = list ;
+      this.loading = false;
+      this.listData = new MatTableDataSource(this.productos);
+      this.listData.paginator = this.paginator;
+      this.listData.sort = this.sort;
+
+    
+      
+    this.listData.filterPredicate = (data,filter) => {
+      return this.displayedColumns.some(ele => {
+        
+        if(ele != 'almacen' && ele !='cliente' && ele != 'familia' )
+           {
+            
+              return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+           }
+        })
+       }
+    });
+  }
+  protected filterBanks() {
+    if (!this.clientes) {
+      return;
+    }
+    let search = this.ClientesFilterCtrl.value;
+    if (!search) {
+      this.filteredClientes.next(this.clientes.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filteredClientes.next(
+      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
+    );
+    
   }
 
 }

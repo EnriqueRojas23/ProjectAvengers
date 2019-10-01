@@ -289,29 +289,61 @@ namespace CargaClic.Repository
                             List<InventarioGeneral> result ;
                             if(item2.Lote == null)
                             {
-                                     result = (from a in _context.InventarioGeneral 
-                                        .Include(z=>z.InvLod)
-                                        where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
-                                                    a.Almacenado == true 
-                                                     )
-                                                    select a)
-                                        .OrderBy(x=>x.FechaExpire)
-                                        .OrderByDescending(x=>x.UntQty)
-                                        .OrderBy(x=> x.InvLod.LodNum).ToList();
+
+                                        if(item2.EstadoId == 10)
+                                        {
+                                                result = (from a in _context.InventarioGeneral 
+                                                .Include(z=>z.InvLod)
+                                                where (a.ProductoId == item2.ProductoId  
+                                                 & a.Almacenado == true 
+                                                && (a.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
+                                                ||  a.EstadoId == (Int16) Constantes.EstadoInventario.Merma)
+                                                   )
+                                                            select a)
+                                                .OrderBy(x=>x.FechaExpire)
+                                                .OrderBy(x=>x.UntQty).ToList();
+                                        }
+                                        else {
+
+
+                                        result = (from a in _context.InventarioGeneral 
+                                            .Include(z=>z.InvLod)
+                                            where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
+                                                        a.Almacenado == true 
+                                                        )
+                                                        select a)
+                                            .OrderBy(x=>x.FechaExpire)
+                                            .OrderBy(x=>x.UntQty).ToList();
+                                        }
+                                        
                             }
                             else
                             {
-                             result = (from a in _context.InventarioGeneral 
-                                        .Include(z=>z.InvLod)
-                                        where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
-                                                    a.Almacenado == true 
-                                                     &
-                                                    a.LotNum == item2.Lote)
-                                                    select a)
-                                        .OrderBy(x=>x.FechaExpire)
-                                        .OrderByDescending(x=>x.UntQty)
-                                        .OrderBy(x=> x.InvLod.LodNum).ToList();
 
+                                       if(item2.EstadoId == 10)
+                                        {
+                                                result = (from a in _context.InventarioGeneral 
+                                                .Include(z=>z.InvLod)
+                                                where (a.ProductoId == item2.ProductoId  
+                                                  & a.Almacenado == true 
+                                                  & a.LotNum == item2.Lote
+                                                        && (a.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
+                                                        ||  a.EstadoId == (Int16) Constantes.EstadoInventario.Merma)
+                                                    )
+                                                                select a)
+                                                    .OrderBy(x=>x.FechaExpire)
+                                                    .OrderBy(x=>x.UntQty).ToList();
+                                        }
+                                        else {
+                                        result = (from a in _context.InventarioGeneral 
+                                                    .Include(z=>z.InvLod)
+                                                    where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
+                                                                a.Almacenado == true 
+                                                                &  a.LotNum == item2.Lote)
+                                                                select a)
+                                                    .OrderBy(x=>x.FechaExpire)
+                                                    .OrderBy(x=>x.UntQty).ToList();
+                                        }
                                         
                             }
                           
@@ -429,8 +461,9 @@ namespace CargaClic.Repository
         public async Task<long> RegisterOrdenSalidaDetalle(OrdenSalidaDetalleForRegister command)
         {
             OrdenSalidaDetalle dominio ;
+            List<InventarioGeneral> inventario  ;
             string linea = "";
-            //int cantidadTotal = 0;
+            int total = 0;
 
             var detalles =  _context.OrdenSalidaDetalle.Where(x=>x.OrdenSalidaId == command.OrdenSalidaId);
 
@@ -441,9 +474,44 @@ namespace CargaClic.Repository
                  linea = (Convert.ToInt32(linea) + 1).ToString().PadLeft(4,'0');
             }
 
-            int total = 0;
+            if(command.Lote == "")
+            {
+                if(command.EstadoID == 10)
+                {
+                        inventario =  _context.InventarioGeneral.Where(
+                        x=>x.ProductoId ==  command.ProductoId
+                        && x.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
+                        ||  x.EstadoId == (Int16) Constantes.EstadoInventario.Merma
+                        ).ToList();
+                }
+                else {
+                        inventario =  _context.InventarioGeneral.Where(
+                        x=>x.ProductoId ==  command.ProductoId
+                        && x.EstadoId == command.EstadoID
+                        ).ToList();
+                }
+            }
+            else{
+                if(command.EstadoID == 10)
+                {
+                        inventario =  _context.InventarioGeneral.Where(
+                        x=>x.ProductoId ==  command.ProductoId
+                        && x.LotNum == command.Lote
+                        && x.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
+                        ||  x.EstadoId == (Int16) Constantes.EstadoInventario.Merma
+                        ).ToList();
+                }
+                else {
+                        inventario =  _context.InventarioGeneral.Where(
+                        x=>x.ProductoId ==  command.ProductoId
+                        && x.LotNum == command.Lote
+                        && x.EstadoId == command.EstadoID
+                        ).ToList();
+                }
+            }
 
-            var inventario =  _context.InventarioGeneral.Where(x=>x.ProductoId ==  command.ProductoId).ToList();
+
+            
 
             inventario.ForEach(x=> total = total + x.UntQty );
 
@@ -592,26 +660,18 @@ namespace CargaClic.Repository
 
         public async Task<long> RegisterSalida(CargaForRegister command)
         {
-            //command.ids  = command.ids.Substring(1,command.ids.Length - 1);
             string[] prm = command.ids.Split(',');
-
             Shipment sl ;
-          
             using(var transaction = _context.Database.BeginTransaction())
             {
         
-                //await _context.Carga.AddAsync(carga);
-               // await _context.SaveChangesAsync();
-
-               // carga.NumCarga = "OC0-" + (carga.Id).ToString().PadLeft(6,'0');
                 await _context.SaveChangesAsync();
-
-                 foreach (var item in prm)
+                foreach (var item in prm)
                  {
                      sl = 
                         await _context.Shipment.Where(x=>x.Id == Convert.ToInt64(item)).SingleOrDefaultAsync();
 
-                    sl.EstadoId = 27;
+                    sl.EstadoId = (Int16) Constantes.EstadoCarga.Despachado;
                     sl.FechaSalida = DateTime.Now;
 
                     var shipmentlines =  await _context.ShipmentLine.Where(x=>x.ShipmentId == sl.Id).ToListAsync();
@@ -621,7 +681,9 @@ namespace CargaClic.Repository
                         var pckrk = await _context.Pckwrk.Where(x=>x.ShipmentLineId == item2.Id).ToListAsync();
                         pckrk.ForEach(x=> {
                             x.FechaSalida = DateTime.Now;
+                              _context.Ubicacion.Where(y=>y.Id ==  x.UbicacionId).Single().EstadoId = 10;
                         });
+                       
 
                         var kardex = await _context.KardexGeneral.Where(x=>x.ShipmentLine == item2.Id).ToListAsync();
                         kardex.ForEach(x=> {

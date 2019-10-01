@@ -1,9 +1,9 @@
 
 <div class="page-head">
-  <h2 class="page-head-title">Preliquidación por Cliente</h2>
+  <h2 class="page-head-title">Liquidación de Servicio</h2>
   <nav aria-label="breadcrumb" role="navigation">
     <ol class="breadcrumb page-head-nav">
-      <li class="breadcrumb-item"><a href="#">Preliquidación por Cliente</a></li>
+      <li class="breadcrumb-item"><a href="#">Liquidación de servicio por Propietario</a></li>
       <!-- <li class="breadcrumb-item">Listado de Órdenes de Recibo</li>
       <li class="breadcrumb-item active">Identificar Pallets</li> -->
     </ol>
@@ -20,7 +20,7 @@
         <div class="card-body">
             <div class="  row">
           
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="col-form-label text-sm-right" for="username">Propietario:</label>
                     
                     <mat-form-field class="input-form-field  col-sm-8 ">
@@ -71,7 +71,7 @@
   <div class="card card-border-color card-border-color-warning">
     <div class="card-header">
           <div>
-              <b> Preliquidación  </b> <span class="card-subtitle">  Productos pendientes de preliquidación  </span>
+              <b> Liquidación  </b> <span class="card-subtitle">  Liquidación de servicio por producto  </span>
           </div>
       </div>
       <div class="row">
@@ -79,15 +79,18 @@
               
             </div>
         <div  class="col-md-3">
-            <button type="button" [swal]='confirmarSwal' ngbTooltip="Agregar Ordenes"  (confirm)="generar()" class="btn btn-block btn-primary"><i class="fa fa-folder"></i> Generar Preliquidación</button>
+            <button type="button" [swal]='confirmarSwal' ngbTooltip="Generar"  (confirm)="generar()" class="btn btn-block btn-primary"><i class="fa fa-folder"></i> Generar Liquidación</button>
         </div>
+        <div  class="col-md-3">
+          <button type="button"  ngbTooltip="Preliminar"  (click)="preliminar()" class="btn btn-block btn-primary"><i class="fa fa-folder"></i> Vista preliminar</button>
+      </div>
       </div>
       <div class="card-body">
           
           <div  class="example-container">
     <div class="container">
         <angular-slickgrid gridId="grid1"
-            gridHeight="800" gridWidth="100%"
+            gridWidth="100%"
             [columnDefinitions]="columnDefinitions"
             [gridOptions]="gridOptions"
             [dataset]="dataset"
@@ -108,7 +111,7 @@
 <swal
   #confirmarSwal
   title="Confirmar Generación"
-  text="¿Esta seguro que desea generar la preliquidación?"
+  text="¿Esta seguro que desea generar la liquidación?"
   type="question"
   [showCancelButton]="true"
   [focusCancel]="true"
@@ -116,25 +119,8 @@
   >
 </swal>
 
+
+
+
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
 
-<!-- <mat-progress-bar
-          class="example-margin"
-          [color]="color"
-          [mode]="indeterminate"
-          [value]="value"
-          [bufferValue]="bufferValue">
-</mat-progress-bar> -->
-
-       <!-- <ag-grid-angular 
-            #agGrid
-            style="width: 500px; height: 500px;"
-            id="myGrid" 
-            class="ag-theme-balham"
-            [rowData]="rowData" 
-            [columnDefs]="columnDefs"
-            [context]="context"
-            [frameworkComponents]="frameworkComponents"
-            (gridReady)="onGridReady($event)"
-            >
-            </ag-grid-angular> -->
