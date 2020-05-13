@@ -1,12 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 import { InventarioGeneral } from 'src/app/_models/Inventario/inventariogeneral';
-import { Dropdownlist } from 'src/app/_models/Constantes';
-import { ReplaySubject, Subject } from 'rxjs';
-import { FormControl } from '@angular/forms';
 import { InventarioService } from 'src/app/_services/Inventario/inventario.service';
 import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service';
-import { takeUntil } from 'rxjs/operators';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
 
 @Component({
   selector: 'app-kardexgeneral',
@@ -15,63 +12,62 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class KardexgeneralComponent implements OnInit {
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  searchKey: string;
-  pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = [ 'select','almacen', 'numOrden' ,'propietario','nombreEstado','ubicacion' ,'equipotransporte','fechaEsperada','fechaRegistro','actionsColumn' ];
+  dateInicio: Date = new Date(Date.now()) ;
+  dateFin: Date = new Date(Date.now()) ;
+  es: any;
   
-  listData: MatTableDataSource<InventarioGeneral>;
   public loading = false;
-  ordenes: InventarioGeneral[] = [];
-  model: any;
 
-  clientes: Dropdownlist[] = [];
-  public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
-  public ClientesCtrl: FormControl = new FormControl();
-  public ClientesFilterCtrl: FormControl = new FormControl();
-  protected _onDestroy = new Subject<void>();
+  model: any = [];
+  ordenes: InventarioGeneral[] = [];
+  clientes: SelectItem[] = [];
+  almacenes: SelectItem[] = [];
+
   
   constructor(private inventarioService: InventarioService 
+    ,private generealService : GeneralService
     ,private clienteService: ClienteService) { }
 
   ngOnInit() {
-    this.model = {
-    };
+    this.es = {
+      firstDayOfWeek: 1,
+      dayNames: [ "domingo","lunes","martes","miércoles","jueves","viernes","sábado" ],
+      dayNamesShort: [ "dom","lun","mar","mié","jue","vie","sáb" ],
+      dayNamesMin: [ "D","L","M","X","J","V","S" ],
+      monthNames: [ "enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre" ],
+      monthNamesShort: [ "ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic" ],
+      today: 'Hoy',
+      clear: 'Borrar'
+  }
+
+    this.dateInicio.setDate((new Date()).getDate() - 31);
+    this.dateFin.setDate((new Date()).getDate() );
+
+    this.model.fec_ini =  this.dateInicio;
+    this.model.fec_fin =  this.dateFin ;
+
     
     this.clienteService.getAllPropietarios('').subscribe(resp => { 
+      
       resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+        this.clientes.push({ value: element.id , label: element.razonSocial});
       });
-      this.filteredClientes.next(this.clientes.slice());
-      this.ClientesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterBanks();
-          });
+     
+    });
 
+    this.generealService.getAllAlmacenes().subscribe(resp=> {
+      resp.forEach(element => {
+        this.almacenes.push({ value: element.id ,  label : element.descripcion});
+      });
 
     });
   }
-  protected filterBanks() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
+
+  buscar(){
     
-  }
-  buscar(id){
-    var url = "http://104.36.166.65/reptwh/Rep_Kardex.aspx?clienteid=" + String(id) ;
+    var url = "http://104.36.166.65/reptwh/Rep_Kardex.aspx?clienteid=" + String(this.model.PropietarioId) 
+    + "&almacenid=" + String(this.model.AlmacenId);
+
     window.open(url);
   }
 }

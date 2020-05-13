@@ -8,7 +8,7 @@ import { PAGES_ROUTES } from './pages.routes';
 import { CommonModule } from '@angular/common';
 import { AuthGuard } from '../_guards/auth.guard';
 import { ListausuariosComponent, NgbdModalConfirmAutofocus, DialogOverviewExampleDialog } from './seguridad/usuario/listausuarios/listausuarios.component';
-import { MatTableModule ,MatButtonModule, MatPaginatorModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSortModule, MatOptionModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatTreeModule, MatCheckboxModule, MatDialogModule, MatError } from '@angular/material';
+import { MatTableModule ,MatButtonModule, MatPaginatorModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSortModule, MatOptionModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatTreeModule, MatCheckboxModule, MatDialogModule, MatError, MatProgressSpinnerModule } from '@angular/material';
 import { UserService } from '../_services/user.service';
 import { NuevousuarioComponent } from './seguridad/usuario/nuevousuario/nuevousuario.component';
 import { EditarusuarioComponent } from './seguridad/usuario/editarusuario/editarusuario.component';
@@ -96,10 +96,17 @@ import { GestiontarifarioComponent } from './facturacion/preliquidacion/gestiont
 import { CellRendererProductos } from '../_common/Renderers/cellRendererProductos/cellRendererProductos.component';
 import { NuevatarifaComponent } from './facturacion/preliquidacion/nuevatarifa/nuevatarifa.component';
 import { EditartarifaComponent } from './facturacion/preliquidacion/editartarifa/editartarifa.component';
+import {DragDropModule} from 'primeng/dragdrop';
 
 
-
-
+import {ButtonModule} from 'primeng/button';
+import {DropdownModule} from 'primeng/dropdown';
+import {TableModule} from 'primeng/table';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ProgressBarModule} from 'primeng/progressbar';
+import { EditarproductoComponent } from './mantenimiento/producto/editarproducto/editarproducto.component';
+import {CalendarModule} from 'primeng/calendar';
+import { IdentificarrecibomultipleComponent } from './recibo/ordenrecibo/identificarrecibomultiple/identificarrecibomultiple.component';
 
 
 
@@ -129,6 +136,7 @@ import { EditartarifaComponent } from './facturacion/preliquidacion/editartarifa
     AsignarpuertaComponent,
     ListaordenrecibidaComponent,
     IdentificarreciboComponent,
+    IdentificarrecibomultipleComponent,
     ListadovehiculoComponent,
     ListadochoferComponent,
     ListadoproveedorComponent,
@@ -181,7 +189,9 @@ import { EditartarifaComponent } from './facturacion/preliquidacion/editartarifa
     GestiontarifarioComponent,
     CellRendererProductos,
     NuevatarifaComponent,
-    EditartarifaComponent 
+    EditartarifaComponent ,
+    EditarproductoComponent,
+    
 
   ],
   exports: [
@@ -209,16 +219,17 @@ import { EditartarifaComponent } from './facturacion/preliquidacion/editartarifa
     MatDialogModule,
     MatCheckboxModule,
     NgbModule,
+    CalendarModule,
     TreeviewModule.forRoot(),
     AngularSlickgridModule.forRoot(),
     TranslateModule.forRoot(),
     NgxLoadingModule.forRoot({
-      animationType: ngxLoadingAnimationTypes.wanderingCubes,
-      backdropBackgroundColour: 'rgba(0,0,0,0.1)', 
-      backdropBorderRadius: '4px',
-      primaryColour: '#ffffff', 
-      secondaryColour: '#ffffff', 
-      tertiaryColour: '#ffffff'
+      // animationType: ngxLoadingAnimationTypes.wanderingCubes,
+      // backdropBackgroundColour: 'rgba(0,0,0,0.1)', 
+      // backdropBorderRadius: '4px',
+      // primaryColour: '#ffffff', 
+      // secondaryColour: '#ffffff', 
+      // tertiaryColour: '#ffffff'
   }),
     NgxMaterialTimepickerModule.forRoot(),
     AngularDualListBoxModule ,
@@ -229,7 +240,14 @@ import { EditartarifaComponent } from './facturacion/preliquidacion/editartarifa
     MatProgressBarModule,
     AgGridModule.withComponents([
       CellRendererProductos
-    ])
+    ]),
+    TableModule,
+    ConfirmDialogModule,
+    ProgressBarModule,
+    MatProgressSpinnerModule,
+    ButtonModule,
+    DropdownModule,
+    DragDropModule,
     
   ],
   providers: [

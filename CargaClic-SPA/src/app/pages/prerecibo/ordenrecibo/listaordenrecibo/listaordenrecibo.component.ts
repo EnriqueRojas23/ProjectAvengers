@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource, MatProgressBar, MatSelect } from '@angular/material';
+import { Component, OnInit, ViewChild} from '@angular/core';
+import {  MatSelect } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrdenReciboService } from 'src/app/_services/Recepcion/ordenrecibo.service';
 import { Router } from '@angular/router';
@@ -8,10 +8,10 @@ import { Dropdownlist } from 'src/app/_models/Constantes';
 import { SpeedDialFabPosition } from '../../speed-dial-fab/speed-dial-fab.component';
 import { Data } from 'src/app/_providers/data';
 import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service';
-import { ReplaySubject, Subject } from 'rxjs';
-import { FormControl } from '@angular/forms';
-import { takeUntil, take } from 'rxjs/operators';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { SelectItem } from 'primeng/components/common/selectitem';
+
+import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
 
 
 
@@ -23,22 +23,20 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
   templateUrl: './listaordenrecibo.component.html',
   styleUrls: ['./listaordenrecibo.component.css']
 })
-export class ListaordenreciboComponent implements OnInit , AfterViewInit, OnDestroy {
+export class ListaordenreciboComponent implements OnInit  {
+  cols: any[];    
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  searchKey: string;
-  pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = [ 'select', 'numOrden' ,'propietario','nombreEstado','guiaRemision' ,'equipotransporte', 'placa','fechaEsperada','horaEsperada','fechaRegistro','actionsColumn' ];
-  
-  listData: MatTableDataSource<OrdenRecibo>;
+  dateInicio: Date = new Date(Date.now()) ;
+  dateFin: Date = new Date(Date.now()) ;
+  es: any;
   public loading = false;
   ordenes: OrdenRecibo[] = [];
   model: any;
   EstadoId : number;
+  selectedRow: OrdenRecibo[] = [];
   
-  protected clientes: Dropdownlist[] = [];
-
+ clientes: SelectItem[] = [];
+  selectedCar2 : string = 'NESTLE S.A.';
   titularAlerta: string = '';
 
   intervalo: Dropdownlist[] = [
@@ -48,23 +46,23 @@ export class ListaordenreciboComponent implements OnInit , AfterViewInit, OnDest
     {val: 7, viewValue: 'Hace una semana '},
     {val: 31, viewValue: 'Hace un mes '},
   ];
-  estados: Dropdownlist[] = [
-      {val: 4, viewValue: 'Planeado'},
-      {val: 5, viewValue: 'Asignado'},
-      {val: 6, viewValue: 'Recibiendo'},
-    {val: 12, viewValue: 'Almacenado'},
+  estados: SelectItem[] = [
+      {value: 4, label: 'Planeado'},
+      {value: 5, label: 'Asignado'},
+      {value: 6, label: 'Recibiendo'},
+      {value: 19, label: 'Pendiente Acomodo'},
+      {value: 20, label: 'Pendiente Almacenamiento'},
+      {value: 12, label: 'Almacenado'},
     
   ];
-  public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
-  public ClientesCtrl: FormControl = new FormControl();
-  public ClientesFilterCtrl: FormControl = new FormControl();
-  protected _onDestroy = new Subject<void>();
+  almacenes: SelectItem[] = [];
   
   @ViewChild('singleSelect') singleSelect: MatSelect;
 
   constructor(private ordenreciboService: OrdenReciboService,
     private router: Router,
     private clienteService: ClienteService,
+    private generealService : GeneralService,
     private data: Data,
     private alertify: AlertifyService
     
@@ -81,77 +79,84 @@ export class ListaordenreciboComponent implements OnInit , AfterViewInit, OnDest
 
    
   ngOnInit() {
+
+    this.model = {};
+    this.dateInicio.setDate((new Date()).getDate() - 5);
+    this.dateFin.setDate((new Date()).getDate() );
     this.loading = true;
-    this.clienteService.getAllPropietarios('').subscribe(resp => { 
-      resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
-      });
-        this.ClientesCtrl.setValue(this.clientes[0]);
-        this.filteredClientes.next(this.clientes.slice());
-        this.ClientesFilterCtrl.valueChanges
-        .pipe(takeUntil(this._onDestroy))
-        .subscribe(() => {
-              this.filterBanks();
-            });
-    });
-    this.model = {
-    };
-
-    if(localStorage.getItem('Estado') == null || localStorage.getItem('Estado') == 'undefined')
-       this.model.estadoIdfiltro = 4;
-    else
-      this.model.estadoIdfiltro = parseInt(localStorage.getItem('Estado'));
-
+    this.model.fec_ini =  this.dateInicio;
+    this.model.fec_fin =  this.dateFin ;
     
-      
-    if(localStorage.getItem('PropietarioId') == "" || localStorage.getItem('PropietarioId') == null )
-    {
-      this.model.PropietarioId = 1;
-      
-    }
-    else
-      this.model.PropietarioId = parseInt(localStorage.getItem('PropietarioId'));
-   
-      
 
-      
-    if(localStorage.getItem('Intervalo') == null || localStorage.getItem('Intervalo') == 'undefined')
-      this.model.intervalo = 3;
-    else
-      this.model.intervalo = parseInt(localStorage.getItem('Intervalo'));
-
-    
-    
-    
-    
-    this.EstadoId =this.model.estadoIdfiltro;
-
-    this.ordenreciboService.getAll(this.model).subscribe(list => {
-      
-    this.ordenes = list;
-    this.loading = false;
-    this.listData = new MatTableDataSource(this.ordenes);
-    this.listData.paginator = this.paginator;
-    this.listData.sort = this.sort;
+    this.es = {
+      firstDayOfWeek: 1,
+      dayNames: [ "domingo","lunes","martes","miércoles","jueves","viernes","sábado" ],
+      dayNamesShort: [ "dom","lun","mar","mié","jue","vie","sáb" ],
+      dayNamesMin: [ "D","L","M","X","J","V","S" ],
+      monthNames: [ "enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre" ],
+      monthNamesShort: [ "ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic" ],
+      today: 'Hoy',
+      clear: 'Borrar'
+  }
 
 
+    this.cols = 
+    [
+        {header: 'ACCIONES', field: 'numOrden' , width: '100px' },
+        {header: 'ORDEN', field: 'numOrden'  ,  width: '80px' },
+        {header: 'PROPIETARIO', field: 'propietario'  , width: '140px'   },
+        {header: 'ESTADO', field: 'nombreEstado'  ,  width: '100px'  },
+        {header: 'GR', field: 'guiaRemision' , width: '100px'  },
+        {header: 'EQ TRANSP', field: 'equipotransporte'  , width: '140px'  },
+        {header: 'F. ESPERADA', field: 'fechaEsperada'  , width: '130px'  },
+        // {header: 'H. ESPERADA', field: 'horaEsperada' , width: '120px'  },
+        {header: 'F. REGISTRO', field: 'fechaRegistro',width: '120px'    }, 
+        
+        
+  
+      ];
 
   
-    this.listData.filterPredicate = (data,filter) => {
-      return this.displayedColumns.some(ele => {
-        
-        if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-           {
-             
-              return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+      this.model.EstadoId = 4;
+          this.generealService.getAllAlmacenes().subscribe(resp=> {
+            resp.forEach(element => {
+              this.almacenes.push({ value: element.id ,  label : element.descripcion});
+            });
+
+
+
+    
+          this.clienteService.getAllPropietarios('').subscribe(resp => { 
+          resp.forEach(element => {
+            this.clientes.push({ label: element.razonSocial.toUpperCase() , value: element.id });
+          });
+           
          
-           }
-        })
-       }
+          if(localStorage.getItem('PropietarioId') == "undefined" || localStorage.getItem('PropietarioId') == null ) {
+              this.model.PropietarioId = 1;
+          }
+          else {
+            this.model.PropietarioId =  parseInt(localStorage.getItem('PropietarioId'));
+          }
+          if(localStorage.getItem('Estado') == null || localStorage.getItem('Estado') == 'undefined') {
+              this.model.EstadoId = 4;
+          }
+          else {
+              this.model.EstadoId = parseInt(localStorage.getItem('Estado'));
+          }
+          if(localStorage.getItem('AlmacenId') == null || localStorage.getItem('AlmacenId') == 'undefined') {
+            this.model.AlmacenId = 1;
+          }
+          else {
+              this.model.AlmacenId = parseInt(localStorage.getItem('AlmacenId'));
+          }
+          this.ordenreciboService.getAll(this.model).subscribe(list => {
+                  this.ordenes = list;
+                  this.loading = false;
+          });
+      });
+      
     });
-
-   
-
   }
   selection = new SelectionModel<OrdenRecibo>(true, []);
 
@@ -160,50 +165,6 @@ export class ListaordenreciboComponent implements OnInit , AfterViewInit, OnDest
     const numSelected = this.selection.selected.length;
     const numRows =  this.ordenes.length;
     return numSelected === numRows;
-  }
-  ngAfterViewInit(): void {
-    this.setInitialValue();
-  }
-  ngOnDestroy(): void {
-    this._onDestroy.next();
-    this._onDestroy.complete();
-  }
-
-  protected setInitialValue() {
-
-    this.filteredClientes
-      .pipe(take(1), takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.singleSelect.compareWith = (a: Dropdownlist, b: Dropdownlist) => a && b && a.val === b.val;
-      });
-  }
-  protected filterBanks() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
-    
-  
-    }
-  
-  masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.listData.data.forEach(row => this.selection.select(row));
-  }
-  selectedRowIndex: number = -1;
-  applyFilter() {
-    
-    this.listData.filter = this.searchKey.trim().toLowerCase();
   }
 
 
@@ -215,79 +176,42 @@ export class ListaordenreciboComponent implements OnInit , AfterViewInit, OnDest
      this.router.navigate(['/recibo/editarordenrecibo',id]);
    }
    delete(id){
-     
      this.ordenreciboService.deleteOrder(id).subscribe(resp => {
-
-        this.ordenreciboService.getAll(this.model).subscribe(list => {
-            
+     this.ordenreciboService.getAll(this.model).subscribe(list => {
           this.ordenes = list;
           this.loading = false;
-          this.listData = new MatTableDataSource(this.ordenes);
-          this.listData.paginator = this.paginator;
-          this.listData.sort = this.sort;
-
     });
      }, error => {
-       
       if(error = "err020")
-      this.alertify.error("Esta Orden de Recibo tiene productos asociados.");
+        this.alertify.error("Esta Orden de Recibo tiene productos asociados.");
       else
-      this.alertify.error("Ocurrió un error inesperado.");
-
+        this.alertify.error("Ocurrió un error inesperado.");
       }, () => { 
-
-        this.listData.filterPredicate = (data,filter) => {
-          return this.displayedColumns.some(ele => {
-            
-            if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-               {
-                 
-                  return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-             
-               }
-            })
-           };
       });
    }
 
-
    equipotransporte(){
-    let Id = this.selection.selected ;
-    this.data.storage = Id;
+    this.data.storage = this.selectedRow;
     this.router.navigate(['/recibo/vincularequipotransporte', ""] );
    }
-   openDoor(id){
+   openDoor(id) {
     this.router.navigate(['/recibo/asignarpuerta',id]);
    }
    buscar(){
-   this.EstadoId =this.model.estadoIdfiltro;
-   
+    this.selectedRow = [];
+
+    localStorage.setItem('AlmacenId', this.model.AlmacenId);
     localStorage.setItem('PropietarioId', this.model.PropietarioId);
     localStorage.setItem('Intervalo', this.model.intervalo);
     localStorage.setItem('Estado', this.model.estadoIdfiltro);
 
-
+    this.model.fec_ini =  this.dateInicio;
+    this.model.fec_fin =  this.dateFin ;
 
     this.ordenreciboService.getAll(this.model).subscribe(list => {
-
     this.ordenes = list;
     this.loading = false;
-    this.listData = new MatTableDataSource(this.ordenes);
-    this.listData.paginator = this.paginator;
-    this.listData.sort = this.sort;
-
   
-    this.listData.filterPredicate = (data,filter) => {
-      return this.displayedColumns.some(ele => {
-        
-        if(ele != 'ubicacion'  && ele != 'select' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-           {
-              
-              return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-         
-           }
-        })
-       }
     });
    }
    checkboxLabel(row?: OrdenRecibo): string {
@@ -326,8 +250,11 @@ export class ListaordenreciboComponent implements OnInit , AfterViewInit, OnDest
     
   }
   checkSelects() {
-    
-    return  this.selection.selected.length > 0 ?  false : true;
+    if ( this.selectedRow != null)
+    return this.selectedRow.length > 0 ? false : true;
+    else 
+    return false;
+    //return  this.selection.selected.length > 0 ?  false : true;
   }
   SelectsCount(){
     

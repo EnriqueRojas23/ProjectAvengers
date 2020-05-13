@@ -10,6 +10,8 @@ import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service'
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { takeUntil } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
 
 
 @Component({
@@ -30,6 +32,7 @@ export class PlanificarpickingComponent implements OnInit {
   ordenes: OrdenSalida[] = [];
 
   ordenesaux: OrdenSalida[] = [];
+  almacenes: SelectItem[] = [];
   model: any  = {};
   ids: string = "";
   idsCarga: string[] = [];
@@ -54,15 +57,15 @@ export class PlanificarpickingComponent implements OnInit {
 
 
   
-  clientes: Dropdownlist[] = [];
+//  clientes: Dropdownlist[] = [];
   EstadoId : number;
 
-  intervalo: Dropdownlist[] = [
-    {val: 1, viewValue: 'Mañana'},
-    {val: 3, viewValue: 'Próximos 3 días'},
-    {val: 7, viewValue: 'Próximos 7 días'},
-    {val: 30, viewValue: 'Próximos 30 días'},
-    {val: 0, viewValue: 'Todas'},
+  intervalo: SelectItem[] = [
+    {value: 1, label: 'Mañana'},
+    {value: 3, label: 'Próximos 3 días'},
+    {value: 7, label: 'Próximos 7 días'},
+    {value: 30, label: 'Próximos 30 días'},
+    {value: 0, label: 'Todas'},
   ];
   // estados: Dropdownlist[] = [
   //     {val: 21, viewValue: 'Planeado'},
@@ -71,10 +74,7 @@ export class PlanificarpickingComponent implements OnInit {
   //   {val: 12, viewValue: 'Almacenado'},
     
   // ];
-  public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
-  public ClientesCtrl: FormControl = new FormControl();
-  public ClientesFilterCtrl: FormControl = new FormControl();
-  protected _onDestroy = new Subject<void>();
+
 
 
 
@@ -82,34 +82,40 @@ export class PlanificarpickingComponent implements OnInit {
   constructor(private ordensalidaService: OrdenSalidaService,
     private router: Router,
     private clienteService: ClienteService,
+    private generealService : GeneralService,
     private alertify: AlertifyService
     ) { }
 
   ngOnInit() {
+
+
+    this.generealService.getAllAlmacenes().subscribe(resp=> {
+      resp.forEach(element => {
+        this.almacenes.push({ value: element.id ,  label : element.descripcion});
+      });
+
+    })
+
+    
     this.loading = true;
-    this.model.intervalo = 0;
-    this.model.estadoIdfiltro = 20;
-    this.model.PropietarioId = 1;
+    // this.model.intervalo = 0;
+    // this.model.estadoIdfiltro = 20;
+    // this.model.PropietarioId = 1;
     
     
-    this.EstadoId =this.model.estadoIdfiltro;
+    //this.EstadoId =this.model.estadoIdfiltro;
     //this.model.PropietarioId = this.model.PropietarioFiltroId;
 
 
-    this.clienteService.getAllPropietarios("").subscribe(resp => { 
-      resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
-      });
-      this.filteredClientes.next(this.clientes.slice());
-      this.ClientesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterBanks();
-          });
+    // this.clienteService.getAllPropietarios("").subscribe(resp => { 
+    //   resp.forEach(element => {
+    //     this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+    //   });
+
           this.loading = false;
 
 
-    });
+    //});
     this.model.PropietarioFiltroId = 1;
 
 
@@ -129,22 +135,7 @@ export class PlanificarpickingComponent implements OnInit {
     const numRows =  this.ordenes.length;
     return numSelected === numRows;
   }
-  protected filterBanks() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
-    
-  }
+
   ver(id){
     this.router.navigate(['/picking/verordensalida',id]);
    }
@@ -258,6 +249,10 @@ export class PlanificarpickingComponent implements OnInit {
   }
   planificar(){
     
+
+    this.model_pendientes = {};
+    this.ids = "";
+
     this.ordeneseleccionadas.forEach( element => {
       this.ids  = this.ids + ',' + String(element.ordenSalidaId);
     });
@@ -276,9 +271,12 @@ export class PlanificarpickingComponent implements OnInit {
   
   }
   buscar (){
+
+    this.model.EstadoId = 21;
+    this.model.PropietarioId = 1;
+
     this.ordensalidaService.getAllOrdenSalidaPendientes(this.model).subscribe(list => {
       
-     console.log(list);
 
     this.ordenes = list;
     this.loading = false;

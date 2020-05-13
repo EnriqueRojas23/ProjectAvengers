@@ -5,6 +5,7 @@ import { Producto } from 'src/app/_models/Mantenimiento/producto';
 import { ProductoService } from 'src/app/_services/Mantenimiento/producto.service';
 import { OrdenReciboService } from 'src/app/_services/Recepcion/ordenrecibo.service';
 import { DialogData } from 'src/app/_models/Common/dialogdata';
+import { NgForm } from '@angular/forms';
 
 
 

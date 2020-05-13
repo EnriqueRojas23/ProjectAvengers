@@ -24,13 +24,15 @@ namespace CargaClic.Handlers.Mantenimiento
         {
             using (var conn = new ConnectionFactory(_config).GetOpenConnection())
             {
-                 var parametros = new DynamicParameters();
-                  parametros.Add("DaysAgo", dbType: DbType.String, direction: ParameterDirection.Input, value: parameters.DaysAgo);
+                  var parametros = new DynamicParameters();
+                  parametros.Add("fecini", dbType: DbType.String, direction: ParameterDirection.Input, value: parameters.fec_ini);
+                  parametros.Add("fecfin", dbType: DbType.String, direction: ParameterDirection.Input, value: parameters.fec_fin);
                   parametros.Add("EstadoId", dbType: DbType.Int16, direction: ParameterDirection.Input, value: parameters.EstadoId);
                   parametros.Add("PropietarioId", dbType: DbType.String, direction: ParameterDirection.Input, value: parameters.PropietarioId);
+                  parametros.Add("AlmacenId", dbType: DbType.String, direction: ParameterDirection.Input, value: parameters.AlmacenId);
 
                   var result = new ListarEquipoTransporteResult();
-                    result.Hits =  conn.Query<ListarEquipoTransporteDto>("Mantenimiento.pa_listarequipotransportes"
+                    result.Hits =  conn.Query<ListarEquipoTransporteDto>("Mantenimiento.pa_listarequipotransportes_v"
                                                                         ,parametros
                                                                         ,commandType:CommandType.StoredProcedure);
                 return result;

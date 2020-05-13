@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using CargaClic.API.Dtos.Matenimiento;
@@ -59,7 +60,7 @@ namespace CargaClic.API.Controllers.Mantenimiento
             return Ok(createdInventario);
         }
         [HttpPost("asignar_ubicacion")]
-        public async Task<IActionResult> AsignarUbicacion(InventarioForAssingment inventarioGeneral)
+        public async Task<IActionResult> AsignarUbicacion(IEnumerable<InventarioForAssingment> inventarioGeneral)
         {
            var createdInventario = await _repoInventario.AssignarUbicacion(inventarioGeneral);
             return Ok(createdInventario);
@@ -76,7 +77,7 @@ namespace CargaClic.API.Controllers.Mantenimiento
             var createdInventario = await _repoInventario.MergeInventario(mergeInventarioRegister);
             return Ok();
         }
-         [HttpPost("almacenamiento")]
+        [HttpPost("almacenamiento")]
         public async Task<IActionResult> almacenamiento(InventarioForStorage inventarioForFinish)
         {
             var createdInventario = await _repoInventario.Almacenamiento(inventarioForFinish);
@@ -98,7 +99,26 @@ namespace CargaClic.API.Controllers.Mantenimiento
             var result = await _repo.Get(x=>x.Id == Id);
             return Ok(result);
         }
-  
+        
+        [HttpGet("GetPallet")]
+        public async Task<IActionResult> GetPallet(Guid OrdenReciboId)
+        {
+            var result = await _repoReadInventario.GetPallet(OrdenReciboId);
+            return Ok(result);
+        }
+
+        [HttpGet("GetGraficoStock")]
+        public async Task<IActionResult> GetPalGetGraficoStocklet(int PropietarioId, int AlmacenId)
+        {
+            var result = await _repoReadInventario.GetGraficosStock(PropietarioId, AlmacenId);
+            return Ok(result);
+        }
+        [HttpGet("GetGraficoRecepcion")]
+        public async Task<IActionResult> GetGraficosRecepcion(int PropietarioId, int AlmacenId)
+        {
+            var result = await _repoReadInventario.GetGraficosRecepcion(PropietarioId, AlmacenId);
+            return Ok(result);
+        }
         [HttpGet("GetAllInvetarioAjuste")]
         public async Task<IActionResult> GetAllInvetarioAjuste(Guid ProductoId , 
          int ClienteId, string FechaInicio, int EstadoId)

@@ -40,6 +40,7 @@ export class PagesComponent implements OnInit   {
     const token = localStorage.getItem('token');
     if (token) {
       this.authService.decodedToken = this.jwtHelper.decodeToken(token);
+      this.authService.menu =   JSON.parse(localStorage.getItem('menu'));
     }
   }
 

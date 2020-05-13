@@ -64,6 +64,7 @@ namespace CargaClic.Data
 
         public DbSet<Producto> Producto {get;set;}
         public DbSet<Tarifa> Tarifa {get;set;}
+        public DbSet<Almacen> Almacen {get;set;}
 
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -125,6 +126,7 @@ namespace CargaClic.Data
 
 
             builder.ApplyConfiguration(new TarifaConfiguration());
+            builder.ApplyConfiguration(new AlmacenConfiguration());
 
             base.OnModelCreating(builder);
 
@@ -159,6 +161,14 @@ namespace CargaClic.Data
                     .HasOne(rp => rp.InvLod)
                     .WithMany(g => g.inventario)
                     .HasForeignKey(s => s.LodId); 
+
+            
+            
+            builder.Entity<InvLod>()
+                    .HasOne(rp => rp.ubicacion)
+                    .WithMany(g => g.invlod)
+                    .HasForeignKey(s => s.UbicacionId); 
+
 
 
             builder.Entity<RolUser>()

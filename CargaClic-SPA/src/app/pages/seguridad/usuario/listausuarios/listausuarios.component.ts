@@ -1,19 +1,15 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation, Inject } from '@angular/core';
 import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
-import { NgForm } from '@angular/forms';
 import { User } from 'src/app/_models/user';
-import { DataSource } from '@angular/cdk/collections';
 import {MatPaginator, MatTableDataSource, MatSort , MatFormField   } from '@angular/material';
-import { AuthService } from 'src/app/_services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { AngularDualListBoxModule, DualListComponent } from 'angular-dual-listbox';
 import { RolService } from 'src/app/_services/rol.service';
 import { RolUserForRegisterResult } from 'src/app/_models/paginarol';
-import { OverlayContainer } from '@angular/cdk/overlay';
 import { DialogData } from 'src/app/_models/Common/dialogdata';
+import { DualListComponent } from 'angular-dual-listbox';
 
 
 

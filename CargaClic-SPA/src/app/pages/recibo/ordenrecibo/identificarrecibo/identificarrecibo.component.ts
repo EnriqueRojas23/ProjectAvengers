@@ -8,7 +8,6 @@ import { Dropdownlist } from 'src/app/_models/Constantes';
 import { ProductoService } from 'src/app/_services/Mantenimiento/producto.service';
 import { NgForm } from '@angular/forms';
 import { AlertifyService } from 'src/app/_services/alertify.service';
-import { InventarioService } from 'src/app/_services/Inventario/inventario.service';
 import { AppDateAdapter, APP_DATE_FORMATS } from 'src/app/pages/account-settings/datepicker.extend';
 
 declare var $: any;
@@ -183,12 +182,15 @@ CambioHuella(id){
   this.huellaDetalle = [];
       this.productoService.getHuellasDetalle(id).subscribe(resp=>
       {
-        
+        console.log(resp);
+
         resp.forEach(element => {
+          if(element.untQty != 1) {
           this.huellaDetalle.push({
             val: element.unidadMedidaId ,
             viewValue: element.unidadMedida + ' - ' + element.untQty + ' Unidades'
-          })
+            });
+          }
         });
       });
 

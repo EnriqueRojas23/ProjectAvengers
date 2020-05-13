@@ -82,38 +82,38 @@ export class DialogExcepciones {
     });
   }
 
-  asignarUbicacion(id){
-    //let ordenReciboId = this.activatedRoute.snapshot.params["uid"];
+  // asignarUbicacion(id){
+  //   //let ordenReciboId = this.activatedRoute.snapshot.params["uid"];
     
-    this.inventarioServicio.asignar_ubicacion(this.id,id).subscribe(resp => { 
-    }, error => {
-       //this.alertify.error(error);
-    }, () => { 
+  //   this.inventarioServicio.asignar_ubicacion(this.id,id).subscribe(resp => { 
+  //   }, error => {
+  //      //this.alertify.error(error);
+  //   }, () => { 
      
       
-      this.generalService.getAllUbicaciones(1,this.model.areaId).subscribe(list => {
-        this.ubicaciones = list;
+  //     this.generalService.getAllUbicaciones(1,this.model.areaId).subscribe(list => {
+  //       this.ubicaciones = list;
         
-      //this.loading = false;
-      this.listUbicaciones = new MatTableDataSource(this.ubicaciones);
-      this.listUbicaciones.paginator = this.paginator2;
-      this.listUbicaciones.sort = this.sort2;
+  //     //this.loading = false;
+  //     this.listUbicaciones = new MatTableDataSource(this.ubicaciones);
+  //     this.listUbicaciones.paginator = this.paginator2;
+  //     this.listUbicaciones.sort = this.sort2;
   
   
-      this.listUbicaciones.filterPredicate = (data,filter) => {
-        return this.displayedColumns2.some(ele => {
+  //     this.listUbicaciones.filterPredicate = (data,filter) => {
+  //       return this.displayedColumns2.some(ele => {
           
-          if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-             {
-                return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+  //         if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
+  //            {
+  //               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
            
-             }
-          })
-         }
-      });
+  //            }
+  //         })
+  //        }
+  //     });
   
-    });
-   }
+  //   });
+  //  }
 }
 
 
@@ -180,12 +180,8 @@ export class AlmacenamientoComponent implements OnInit {
 
   ngOnInit() {
     this.id  = this.activatedRoute.snapshot.params["uid"];
-//    this.model.EquipoTransporteId  = this.activatedRoute.snapshot.params["uid2"];
-    
-    
 
     this.inventarioServicio.getAll(this.id).subscribe(resp => { 
-      
        this.model = resp;
        this.listData = new MatTableDataSource(this.model);
        this.listData.paginator = this.paginator;

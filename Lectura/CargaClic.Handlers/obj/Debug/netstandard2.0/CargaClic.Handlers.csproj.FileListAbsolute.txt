@@ -10,7 +10,6 @@ D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.Handlers\bin\Debug\netst
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.Handlers\bin\Debug\netstandard2.0\CargaClic.Domain.pdb
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.Handlers\bin\Debug\netstandard2.0\CargaClic.Data.pdb
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.csprojAssemblyReference.cache
-D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.csproj.CoreCompileInputs.cache
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.AssemblyInfoInputs.cache
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.AssemblyInfo.cs
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.Handlers\obj\Debug\netstandard2.0\CargaClic.Handlers.csproj.CopyComplete

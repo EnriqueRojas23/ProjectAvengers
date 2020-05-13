@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CargaClic.API.Controllers.Recepcion
 {
+    
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -72,13 +73,16 @@ namespace CargaClic.API.Controllers.Recepcion
         }
        //////////////////// Obtener Listado de ordenes /////
       [HttpGet]
-      public IActionResult GetOrders(int? PropietarioId, int? EstadoId , int? DaysAgo)
+      public IActionResult GetOrders(int? PropietarioId, int? EstadoId , int? DaysAgo , string fec_ini , string fec_fin , int? AlmacenId)
       {
           var param = new ListarOrdenReciboParameter
           {   
               PropietarioId = PropietarioId,
               EstadoId = EstadoId,
-              DaysAgo = DaysAgo
+              DaysAgo = DaysAgo,
+              fec_fin = fec_fin,
+              fec_ini = fec_ini,
+              AlmacenId = AlmacenId
           };
           var resp = (ListarOrdenReciboResult)  _handler.Execute(param);
           return Ok(resp.Hits);
@@ -142,14 +146,7 @@ namespace CargaClic.API.Controllers.Recepcion
       }
 
 
-      ///////////////// Obtener Orden (incluye detalles) /////////
-    //   [HttpGet("ValidarPendientes")]
-    //   public async  Task<IActionResult> ValidarPendientes(Guid Id)
-    //   {
-    //       var orden = await _repository.Get(x=>x.Id == Id);
 
-    //     return Ok(resp);
-    //   }
 
 #region _Registros
 
@@ -163,7 +160,7 @@ namespace CargaClic.API.Controllers.Recepcion
                 NumOrden = (Convert.ToInt64(NumOrden.NumOrden) + 1).ToString().PadLeft(7,'0'),
                 PropietarioId = ordenReciboForRegisterDto.PropietarioId,
                 Propietario = ordenReciboForRegisterDto.Propietario,
-                AlmacenId = 1, //ordenReciboForRegisterDto.AlmacenId,
+                AlmacenId = ordenReciboForRegisterDto.AlmacenId,
                 GuiaRemision = ordenReciboForRegisterDto.GuiaRemision,
                 FechaEsperada  = Convert.ToDateTime(ordenReciboForRegisterDto.FechaEsperada),
                 FechaRegistro = DateTime.Now,
@@ -186,6 +183,7 @@ namespace CargaClic.API.Controllers.Recepcion
             orden.GuiaRemision = ordenReciboForRegisterDto.GuiaRemision;
             orden.FechaEsperada  = Convert.ToDateTime(ordenReciboForRegisterDto.FechaEsperada);
             orden.HoraEsperada = ordenReciboForRegisterDto.HoraEsperada;
+             orden.AlmacenId = ordenReciboForRegisterDto.AlmacenId;
 
             var createdUser = await _repository.SaveAll();
             return Ok(createdUser);
@@ -226,6 +224,13 @@ namespace CargaClic.API.Controllers.Recepcion
                 return Ok(id);
      
       }
+      [HttpPost("identify_detail_mix")]
+      public async Task<IActionResult> Identify_detail_mix(IEnumerable<OrdenReciboDetalleForIdentifyDto> ordenReciboDetalleForIdentifyDto)
+      {
+                var id = await _repoOrdenRecibo.identifyDetailMix(ordenReciboDetalleForIdentifyDto);
+                return Ok(id);
+     
+      }
       [HttpPost("close_details")]
       public async Task<IActionResult> Close_Details(Guid Id)
       {
@@ -263,13 +268,16 @@ namespace CargaClic.API.Controllers.Recepcion
 
         }
         [HttpGet("ListEquipoTransporte")]
-        public IActionResult ListEquipoTransporte(int? PropietarioId, int EstadoId , int? DaysAgo)
+        public IActionResult ListEquipoTransporte(int? PropietarioId, int EstadoId  
+        , string fec_fin, string fec_ini, int? AlmacenId)
         {
             var param = new ListarEquipoTransporteParameter
             {
                 EstadoId = EstadoId
                 ,PropietarioId = PropietarioId
-                ,DaysAgo = DaysAgo
+                ,fec_fin =fec_fin
+                ,fec_ini = fec_ini
+                ,AlmacenId = AlmacenId
             };
             var result = (ListarEquipoTransporteResult)  _handlerListarEqTransporte.Execute(param);
             return Ok(result.Hits.OrderByDescending(x=>x.EquipoTransporte));
@@ -292,8 +300,6 @@ namespace CargaClic.API.Controllers.Recepcion
                   vehiculo = await _repoVehiculo.AddAsync(vehiculo);
                }
                
-              
-
               var proveedor = await _repoProveedor.Get(x=>x.Ruc == equipotrans.Ruc);
               if(proveedor == null)
               {
@@ -320,6 +326,7 @@ namespace CargaClic.API.Controllers.Recepcion
               param.PropietarioId = equipotrans.PropietarioId;
 
              var createdEquipoTransporte = await _repoOrdenRecibo.RegisterEquipoTransporte(param,equipotrans.OrdenReciboId);
+             
              return Ok(createdEquipoTransporte);
         }
         [HttpPost("MatchTransporteOrdenIngreso")]

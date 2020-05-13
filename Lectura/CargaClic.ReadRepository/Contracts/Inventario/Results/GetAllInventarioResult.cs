@@ -24,5 +24,6 @@ namespace CargaClic.ReadRepository.Contracts.Inventario.Results
             public string CodigoHuella{get;set;}
             public bool Almacenado {get;set;}
             public string Area {get;set;}
+            public int ClienteId {get;set;}
     }
 }

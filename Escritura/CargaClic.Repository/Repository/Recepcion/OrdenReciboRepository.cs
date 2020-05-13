@@ -104,121 +104,159 @@ namespace CargaClic.Repository
                 return equipoTransporteBd;
             }
         }
-
+        
         public async Task<long> identifyDetail(OrdenReciboDetalleForIdentifyDto command)
         {
-             InventarioGeneral dominio = null;
+            InventarioGeneral dominio = null;
              
-             //Agrupación...
-             InvLod invLod = null;
+            InvLod invLod = null;
+            DateTime Fecha_out ;
+            List<int> cajas  , pallets= new List<int>();
+            
+            int cantidad_pallets = 0, r = 0 ,  iteracion = 0 , UntQty = 0;
+            decimal CasQty_Aux = 0;
 
 
-             DateTime Fecha_out ;
+            var huelladetalles = await _context.HuellaDetalle.Where(x=>x.HuellaId == command.HuellaId).ToListAsync();
 
-            var huelladetalle = await _context.HuellaDetalle.SingleOrDefaultAsync(x=>x.HuellaId == command.HuellaId 
-            && x.UnidadMedidaId == command.UnidadMedidaId);
+            var pallet = huelladetalles.Where(x=>x.Pallet).Single();
+            var cas = huelladetalles.Where(x=>x.Cas).SingleOrDefault();
 
-            var huelladetalle_aux = await _context.HuellaDetalle.Where(x=>x.HuellaId == command.HuellaId).ToListAsync();
-
-            int interacciones = 0;
-            int cantidadTotal = 0;
+            cantidad_pallets  =    command.untQty / pallet.UntQty ; // Cantidad de pallets
 
 
-            if(huelladetalle.Pallet) // pallet 
-            {
-                cantidadTotal =   huelladetalle.UntQty  * command.CantidadRecibida;
-                interacciones  =    cantidadTotal / huelladetalle.UntQty ;
-                command.CantidadRecibida = huelladetalle.UntQty;
-            }
-            else
-            {
-                cantidadTotal = huelladetalle.UntQty * command.CantidadRecibida;
-                interacciones = 1;
-            }   
+            #region Calculo de cantidad de paletas *** #palletunitarios ***
+                if(cantidad_pallets > 0)
+                { 
+                    r=  command.untQty%pallet.UntQty; 
+                    for (int i = 0; i < cantidad_pallets; i++)
+                    {
+                        pallets.Add(pallet.UntQty);
+                    }
+                    if(r > 0) 
+                    pallets.Add(r);
+                }
+                else {
+                    pallets.Add(command.untQty );
+                }
+            #endregion
+
+ 
             var linea = await _context.OrdenesReciboDetalle.SingleOrDefaultAsync(x=>x.Id == command.Id);
             var cab = await _context.OrdenesRecibo.SingleOrDefaultAsync(x=>x.Id ==  linea.OrdenReciboId);
             var ubicacion  = await _context.Ubicacion.Where(x=>x.Id ==cab.UbicacionId).SingleAsync();
              
              
              if(linea.CantidadRecibida == null)
-               linea.CantidadRecibida  = 0;
-
+                linea.CantidadRecibida  = 0;
+             
             using(var transaction = _context.Database.BeginTransaction())
             {
                     try
                     {
-
-                            for (int i = 0; i < interacciones ; i++)
+                            foreach (var cantidadXpallet in pallets)
                             {
+                                cajas = new List<int>();
 
+                                if(cas != null)
+                                {     
+                                    CasQty_Aux =  Convert.ToDecimal(cantidadXpallet) / Convert.ToDecimal(cas.UntQty);
+                                    iteracion   = Convert.ToInt32( Math.Floor(CasQty_Aux));
+
+                                    r= cantidadXpallet%cas.UntQty; 
+
+                                    for (int h = 0; h < iteracion; h++)
+                                    {
+                                        cajas.Add(cas.UntQty);
+                                    }
+                                    if(r > 0) {
+                                        cajas.Add(r);
+                                    }
+                                }
+                                else 
+                                {
+                                    cajas.Add(cantidadXpallet);
+                                    iteracion   = 1;
+                                }
+
+                                invLod = new InvLod();
+                                invLod.FechaHoraRegistro = DateTime.Now;
+                                invLod.LodNum = "";
+                                //En el origen, Stage de entrada.
+                                invLod.UbicacionId = cab.UbicacionId.Value;
+                                await _context.AddAsync<InvLod>(invLod);
+                                await _context.SaveChangesAsync();
+
+                                // Secuencia de LPN
+                                invLod.LodNum =   'E' + (invLod.Id).ToString().PadLeft(8,'0');
                                     
-                                    invLod = new InvLod();
-                                    invLod.FechaHoraRegistro = DateTime.Now;
-                                    invLod.LodNum = "";
-                                    //En el origen, Stage de entrada.
-                                    invLod.UbicacionId = cab.UbicacionId.Value;
-                                    await _context.AddAsync<InvLod>(invLod);
-                                    await _context.SaveChangesAsync();
 
-                                    // Secuencia de LPN
-                                    invLod.LodNum =   'E' + (invLod.Id).ToString().PadLeft(8,'0');
-                                    
-                                    dominio = new InventarioGeneral();
-                                    //Vinculo INVLOD
-                                    dominio.LodId = invLod.Id;
-                                    dominio.FechaRegistro = DateTime.Now;
-                                    dominio.HuellaId = huelladetalle_aux.Where(x=>x.Cas == true).SingleOrDefault().Id;    //command.HuellaId;
-                                    dominio.LotNum = (command.Lote == null?null:command.Lote.Trim());
-                                    dominio.ProductoId = linea.ProductoId;
-                                    dominio.UsuarioIngreso = 1;
-                                    dominio.LineaId = linea.Id;
-                                    dominio.OrdenReciboId = linea.OrdenReciboId;
-                                    dominio.EstadoId = command.EstadoID;
-                                    dominio.UntCas = huelladetalle_aux.Where(x=>x.Cas == true).SingleOrDefault().UntQty; 
-                                    dominio.Peso = command.Peso;
-                                    linea.EstadoID = command.EstadoID;
-                                    dominio.ClienteId = cab.PropietarioId;
-                                    linea.Lote = command.Lote;
+                                    foreach (var item in cajas)
+                                    {
 
-                                    #region validar Fechas
+                                        UntQty = item;
 
-                                    if(command.FechaExpire == "" || command.FechaExpire == null)
-                                         dominio.FechaExpire= null;
-                                    else
-                                        if(!DateTime.TryParse(command.FechaExpire, out Fecha_out))
-                                         throw new ArgumentException("Fecha de Expiración incorrecta");
-                                    else
-                                        dominio.FechaExpire = Convert.ToDateTime(command.FechaExpire);
+                                        dominio = new InventarioGeneral();
+                                        //Vinculo INVLOD
+                                        dominio.LodId = invLod.Id;
+                                        dominio.FechaRegistro = DateTime.Now;
+                                        dominio.HuellaId = command.HuellaId;
+                                        dominio.LotNum = (command.LotNum == null?null:command.LotNum.Trim());
+                                        dominio.ProductoId = linea.ProductoId;
+                                        dominio.UsuarioIngreso = 1;
+                                        dominio.LineaId = linea.Id;
+                                        dominio.OrdenReciboId = linea.OrdenReciboId;
+                                        dominio.EstadoId = command.EstadoID;
 
+                                        if(cas != null)
+                                        dominio.UntCas = cas.UntQty;
+                                        else 
+                                        dominio.UntCas = 1;
 
-                                    if(command.FechaManufactura == "" || command.FechaManufactura == null)
-                                        dominio.FechaManufactura= null;
-                                    else
-                                        if(!DateTime.TryParse(command.FechaExpire, out Fecha_out))
-                                         throw new ArgumentException("Fecha de Expiración incorrecta");
-                                    else
-                                        dominio.FechaManufactura = Convert.ToDateTime(command.FechaManufactura);
+                                        dominio.Peso = command.Peso;
+                                        dominio.Almacenado = false;
+                                        linea.EstadoID = command.EstadoID;
+                                        dominio.ClienteId = cab.PropietarioId;
+                                        linea.Lote = command.LotNum;
 
-                                    #endregion
+                                        #region validar Fechas
+
+                                        if(command.FechaExpire == "" || command.FechaExpire == null)
+                                            dominio.FechaExpire= null;
+                                        else
+                                            if(!DateTime.TryParse(command.FechaExpire, out Fecha_out))
+                                            throw new ArgumentException("Fecha de Expiración incorrecta");
+                                        else
+                                            dominio.FechaExpire = Convert.ToDateTime(command.FechaExpire);
 
 
-                                    linea.CantidadRecibida = linea.CantidadRecibida + command.CantidadRecibida;
+                                        if(command.FechaManufactura == "" || command.FechaManufactura == null)
+                                            dominio.FechaManufactura= null;
+                                        else
+                                            if(!DateTime.TryParse(command.FechaManufactura, out Fecha_out))
+                                            throw new ArgumentException("Fecha de Manufactura incorrecta");
+                                        else
+                                            dominio.FechaManufactura = Convert.ToDateTime(command.FechaManufactura);
 
-                                    if(linea.Cantidad < linea.CantidadRecibida)
-                                    throw new ArgumentException("err010");
-                                    else if(linea.Cantidad == linea.CantidadRecibida)
-                                    linea.Completo = true;
-                                    dominio.UntQty = command.CantidadRecibida;
-                                    await _context.AddAsync<InventarioGeneral>(dominio);
-                            }
-                            cab.EstadoId =(Int16) Constantes.EstadoOrdenIngreso.Recibiendo;
-                            ubicacion.EstadoId = 10; // Libre
-                            await _context.SaveChangesAsync();
+                                        #endregion
+
+
+                                        linea.CantidadRecibida = linea.CantidadRecibida + UntQty;
+
+                                        if(linea.Cantidad < linea.CantidadRecibida)
+                                        throw new ArgumentException("err010");
+                                        else if(linea.Cantidad == linea.CantidadRecibida)
+                                        linea.Completo = true;
+                                        dominio.UntQty = UntQty; //command.untQty;
+                                        await _context.AddAsync<InventarioGeneral>(dominio);
+                                    }
+                         }
                           
-                             
+                        cab.EstadoId =(Int16) Constantes.EstadoOrdenIngreso.PendienteAcomodo;
+                        ubicacion.EstadoId = 10; // Libre
+                        await _context.SaveChangesAsync();
 
-
-                            transaction.Commit();
+                        transaction.Commit();
                             
                         
                     }
@@ -233,7 +271,7 @@ namespace CargaClic.Repository
                     }
                 }
                 
-                return interacciones;
+                return 2;
 
                 
             
@@ -247,33 +285,13 @@ namespace CargaClic.Repository
 
             var Equipo =  _context.EquipoTransporte.SingleOrDefaultAsync(x=>x.Id ==  cab.EquipoTransporteId).Result;
             var ordenes = _context.OrdenesRecibo.Where(x=>x.EquipoTransporteId == Equipo.Id);
-            
-            var pendientes = ordenes.Where(x=>x.EstadoId  == (int)Constantes.EstadoOrdenIngreso.PendienteAcomodo).ToList();
-            
-
-
-
-            IQueryable<InventarioGeneral> list = null;
            
-            cab.EstadoId  = (int)  Constantes.EstadoOrdenIngreso.Terminado;
+            cab.EstadoId  = (int)  Constantes.EstadoOrdenIngreso.PendienteAcomodo;
 
             using(var transaction = _context.Database.BeginTransaction())
             {
-                    // if(pendientes.Count == 0){
-                    //     Equipo.EstadoId = (Int16)Constantes.EstadoEquipoTransporte.Cerrado ;
-                    // }
-                    //else {
+              
                     Equipo.EstadoId = (Int16)Constantes.EstadoEquipoTransporte.EnDescarga;
-                    //}
-                    foreach (var item in detalles)
-                    {
-                        list =   _context.InventarioGeneral.Where(x=>x.LineaId == item.Id);
-                        foreach (var item1 in list)
-                        {
-                             //item1.UbicacionId = cab.UbicacionId.Value ;
-                        }
-                    }
-                    cab.EstadoId = (Int16) Constantes.EstadoOrdenIngreso.PendienteAcomodo;
                     await _context.SaveChangesAsync();
                     transaction.Commit();
                     return OrdenReciboId;
@@ -298,6 +316,164 @@ namespace CargaClic.Repository
 
                 return eq.OrdenReciboId;
             }
+        }
+
+        public async Task<long> identifyDetailMix(IEnumerable<OrdenReciboDetalleForIdentifyDto> commanda)
+        {
+
+            var command = commanda.ToList();
+            InventarioGeneral dominio = null;
+            List<HuellaDetalle> huelladetalle = null;
+
+            InvLod invLod = null;
+            DateTime Fecha_out ;
+            Decimal CasQty_Aux = 0;
+            int iteracion = 0;
+            int r;
+            List<int> cantidad_almacenada = new List<int>();
+
+
+            var cab = await _context.OrdenesRecibo.SingleOrDefaultAsync(x=>x.Id ==  command[0].OrdenReciboId);
+            var ubicacion  = await _context.Ubicacion.Where(x=>x.Id ==cab.UbicacionId).SingleAsync();
+
+            using(var transaction = _context.Database.BeginTransaction())
+            {
+                    try
+                    {
+                            invLod = new InvLod();
+                            invLod.FechaHoraRegistro = DateTime.Now;
+                            invLod.LodNum = "";
+                            invLod.UbicacionId = cab.UbicacionId.Value;
+                            await _context.AddAsync<InvLod>(invLod);
+                            await _context.SaveChangesAsync();
+                                // Secuencia de LPN
+                            invLod.LodNum =   'E' + (invLod.Id).ToString().PadLeft(8,'0');
+
+                            for (int i = 0; i < command.Count ; i++)
+                            {
+
+                                    cantidad_almacenada = new List<int>();
+
+                                    var linea = 
+                                    await _context.OrdenesReciboDetalle.SingleOrDefaultAsync(x=>x.Id == command[i].OrdenReciboDetalleId);
+
+
+                                    huelladetalle = await _context.HuellaDetalle.Where(x=>x.HuellaId == command[i].HuellaId).ToListAsync();
+                                    var huelladetalles = huelladetalle.OrderBy(x=>x.Id);
+                                                                    
+                                    
+                                    if(linea.CantidadRecibida == null)
+                                        linea.CantidadRecibida  = 0;
+
+                                    if(linea.Cantidad < command[i].untQty) 
+                                        throw new ArgumentException("Superó la cantidad de orden de recibo"); 
+                                        
+                                    if(linea.Cantidad < command[i].untQty + linea.CantidadRecibida)
+                                       throw new ArgumentException("Superó la cantidad de orden de recibo"); 
+
+                                     var cas = huelladetalles.Where(x=>x.Cas).SingleOrDefault();
+                                     if(cas != null)
+                                     {     
+                                        CasQty_Aux = command[i].untQty / cas.UntQty;
+                                        iteracion   = Convert.ToInt32( Math.Floor(CasQty_Aux));
+
+                                        r= command[i].untQty%cas.UntQty; // 
+
+                                        for (int h = 0; h < iteracion; h++)
+                                        {
+                                            cantidad_almacenada.Add(cas.UntQty);
+                                        }
+                                        if(r > 0) {
+                                            var tot =   iteracion * cas.UntQty;
+                                           cantidad_almacenada.Add( command[i].untQty - tot );
+                                        }
+                                         
+                                     }
+                                     else 
+                                     {
+                                          cantidad_almacenada.Add(command[i].untQty);
+                                          iteracion   = 1;
+                                     }
+                                    foreach (var item in cantidad_almacenada)
+                                    {
+
+                                        dominio = new InventarioGeneral();
+                                        dominio.LodId = invLod.Id;
+                                        dominio.FechaRegistro = DateTime.Now;
+                                        dominio.HuellaId = command[i].HuellaId;   
+                                        dominio.LotNum = command[i].LotNum;
+                                        dominio.ProductoId = command[i].ProductoId;
+                                        dominio.UsuarioIngreso = 1;
+                                        dominio.LineaId = command[i].OrdenReciboDetalleId;
+                                        dominio.OrdenReciboId = command[i].OrdenReciboId;
+                                        dominio.EstadoId = command[i].EstadoID;
+
+                                        if(cas != null)
+                                        dominio.UntCas = cas.UntQty;
+                                        else 
+                                        dominio.UntCas = 1;
+                                        
+                                        dominio.Peso =  command[i].Peso;
+                                        dominio.Almacenado = false;
+                                        linea.EstadoID = command[i].EstadoID;
+                                        dominio.ClienteId = cab.PropietarioId;
+                                        linea.Lote = command[i].LotNum;
+
+                                        #region validar Fechas
+
+                                        if(command[i].FechaExpire == "" || command[i].FechaExpire == null)
+                                            dominio.FechaExpire= null;
+                                        else
+                                            if(!DateTime.TryParse(command[i].FechaExpire, out Fecha_out))
+                                            throw new ArgumentException("Fecha de Expiración incorrecta");
+                                        else
+                                            dominio.FechaExpire = Convert.ToDateTime(command[i].FechaExpire);
+
+
+                                        if(command[i].FechaManufactura == "" || command[i].FechaManufactura == null)
+                                            dominio.FechaManufactura= null;
+                                        else
+                                            if(!DateTime.TryParse(command[i].FechaManufactura, out Fecha_out))
+                                            throw new ArgumentException("Fecha de Manufactura incorrecta");
+                                        else
+                                            dominio.FechaManufactura = Convert.ToDateTime(command[i].FechaManufactura);
+
+                                        #endregion
+                                        
+                                        linea.CantidadRecibida = linea.CantidadRecibida + item;
+
+                                        if(linea.Cantidad < linea.CantidadRecibida)
+                                            throw new ArgumentException("err010");
+                                        else if(linea.Cantidad == linea.CantidadRecibida){
+                                            linea.Completo = true;
+                                            linea.CantidadRecibida = linea.Cantidad ;
+                                        }
+                                        dominio.UntQty = item;
+                                        await _context.SaveChangesAsync();
+                                        await _context.AddAsync<InventarioGeneral>(dominio);
+                                    }
+                            }
+                            cab.EstadoId =(Int16) Constantes.EstadoOrdenIngreso.Recibiendo;
+                            ubicacion.EstadoId = 10; // Libre
+                            await _context.SaveChangesAsync();
+
+                            transaction.Commit();
+                            
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();  
+                        throw ex; 
+                    }
+                    finally
+                   {
+                        transaction.Dispose();
+                    }
+                }
+                
+                return command.Count;
+
         }
     }
 }

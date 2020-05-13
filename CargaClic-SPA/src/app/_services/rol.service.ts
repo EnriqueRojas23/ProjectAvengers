@@ -46,6 +46,10 @@ export class RolService {
   let body = JSON.stringify(model);   
   return this.http.post(this.baseUrl + 'addroluser?UserId=' + UserId, body,httpOptions)
 };
+saveRol(model: any){
+  let body = JSON.stringify(model);   
+  return this.http.post(this.baseUrl + 'register', body,httpOptions)
+};
 }
 
 

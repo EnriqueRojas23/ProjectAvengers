@@ -43,7 +43,7 @@
               <div class="input-div">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="codigo">Código</label>
                 <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                  <input matInput autocomplete="off"  minlength="5" maxlength="10" required [(ngModel)]="model.codigo"  #codigo="ngModel" placeholder="SKU - Código de producto"  name="codigo" type="text">
+                  <input matInput autocomplete="off"  minlength="5" maxlength="50" required [(ngModel)]="model.codigo"  #codigo="ngModel" placeholder="SKU - Código de producto"  name="codigo" type="text">
                 </mat-form-field>
                 <!-- <div class="alert alert-danger" *ngIf="codigo.errors.minlength"> 
                     <div *ngIf="codigo.errors.minlength">

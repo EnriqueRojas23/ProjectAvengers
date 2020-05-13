@@ -229,7 +229,8 @@ marcaVehiculo: Dropdownlist[] = [
    private data: Data ) { }
 
   ngOnInit() {
-    
+    //console.log(this.data.storage);
+
     this.model.PropietarioId =  (this.data.storage[0].propietarioID);
 
     this.general.getValorTabla(4).subscribe(resp=> 

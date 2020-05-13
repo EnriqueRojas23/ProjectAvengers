@@ -5,7 +5,7 @@ import { Estado } from 'src/app/_models/Mantenimiento/Estado';
 import { Vehiculo } from 'src/app/_models/Mantenimiento/vehiculo';
 import { Proveedor } from 'src/app/_models/Mantenimiento/proveedor';
 import { Chofer } from 'src/app/_models/Mantenimiento/chofer';
-import { Area, Ubicacion } from 'src/app/_models/Mantenimiento/ubicacion';
+import { Area, Ubicacion, Almacen } from 'src/app/_models/Mantenimiento/ubicacion';
 import { ValorTabla } from 'src/app/_models/Mantenimiento/valortabla';
 import { environment } from 'src/environments/environment';
 
@@ -45,7 +45,11 @@ export class GeneralService {
       getAllUbicaciones(AlmacenId: number, AreaId: number): Observable<Ubicacion[]> {
         let params = "AlmacenId=" + AlmacenId + "&AreaId=" + AreaId;
         return this.http.get<Ubicacion[]>(this.baseUrl +"GetUbicaciones?" + params, httpOptions);
-    }
+      }
+
+      getAllAlmacenes(): Observable<Almacen[]> {
+        return this.http.get<Almacen[]>(this.baseUrl +"GetAlmacenes" , httpOptions);
+      }
     
   
 }

@@ -10,7 +10,7 @@
           <!-- <li class="divider"></li>  -->
           <li ><a  [routerLink]="['/dashboard']"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
           </li>
-          <li  [ngClass]="{active: activeRouteMenu(menu.link)}"  *ngFor="let menu of _sidebar.menu" >
+          <li  [ngClass]="{active: activeRouteMenu(menu.link)}"  *ngFor="let menu of authService.menu" >
               <!--  -->
               <a><i [class]="menu.icono"></i><span> {{ menu.descripcion }} </span></a>
             <ul class="sub-menu">

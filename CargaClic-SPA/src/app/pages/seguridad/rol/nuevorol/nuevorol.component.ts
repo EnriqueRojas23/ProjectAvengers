@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Dropdownlist } from 'src/app/_models/Constantes';
 import { NgForm } from '@angular/forms';
 import { RolService } from 'src/app/_services/rol.service';
+import { AlertifyService } from 'src/app/_services/alertify.service';
+import { Router } from '@angular/router';
 
 export interface TipoRol {
   value: string;
@@ -24,7 +26,9 @@ export class NuevorolComponent implements OnInit {
 
 
 
-  constructor(private rolService:  RolService ) {
+  constructor(private rolService:  RolService,
+    private alertify: AlertifyService,
+    private router: Router ) {
 
    }
 
@@ -34,13 +38,13 @@ export class NuevorolComponent implements OnInit {
     if (form.invalid) {
       return; 
     }
-    // this.rolService.saveRoles(this.model).subscribe(resp => { 
-    // }, error => {
-    //    this.alertify.error(error);
-    // }, () => { 
-    //   this.alertify.success("Se registró correctamente.");
-    //   this.router.navigate(['/listausuarios']);
-    // });
+    this.rolService.saveRol(this.model).subscribe(resp => { 
+    }, error => {
+       this.alertify.error(error);
+    }, () => { 
+      this.alertify.success("Se registró correctamente.");
+      this.router.navigate(['seguridad/listaroles']);
+    });
 
   }
 }

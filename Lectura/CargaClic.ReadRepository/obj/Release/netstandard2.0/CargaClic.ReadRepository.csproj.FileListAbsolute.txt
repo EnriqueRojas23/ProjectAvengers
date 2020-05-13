@@ -8,7 +8,6 @@ D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.ReadRepository\bin\Relea
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.ReadRepository\bin\Release\netstandard2.0\CargaClic.Domain.pdb
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.ReadRepository\bin\Release\netstandard2.0\CargaClic.Data.pdb
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.ReadRepository\obj\Release\netstandard2.0\CargaClic.ReadRepository.csprojAssemblyReference.cache
-D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.ReadRepository\obj\Release\netstandard2.0\CargaClic.ReadRepository.csproj.CoreCompileInputs.cache
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.ReadRepository\obj\Release\netstandard2.0\CargaClic.ReadRepository.AssemblyInfoInputs.cache
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.ReadRepository\obj\Release\netstandard2.0\CargaClic.ReadRepository.AssemblyInfo.cs
 D:\RIA\RIA\2018\Proyecto Avengers\app\Lectura\CargaClic.ReadRepository\obj\Release\netstandard2.0\CargaClic.ReadRepository.csproj.CopyComplete

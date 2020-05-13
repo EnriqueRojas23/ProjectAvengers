@@ -1,6 +1,6 @@
 
 <div class="page-head">
-  <h2 class="page-head-title">Gestión de preliquidación </h2>
+  <h2 class="page-head-title">Gestión de Liquidación </h2>
   <nav aria-label="breadcrumb" role="navigation">
     <ol class="breadcrumb page-head-nav">
       <li class="breadcrumb-item"><a href="#">Generar Comprobantes</a></li>
@@ -20,39 +20,43 @@
         <div class="card-body">
             <div class="row">
           
+              <div class="col-md-1">
+                <label class="col-form-label text-sm-right" for="username">Propietario:</label>
+              </div>
                 <div class="col-md-3">
-                    <label class="col-form-label text-sm-right" for="username">Propietario:</label>
-                    
-                    <mat-form-field class="input-form-field  col-sm-8 ">
-                        <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
-                         <mat-option>
-                             <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
-                          </mat-option>
-                          <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
-                              {{pow.viewValue}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
+                    <p-dropdown [options]="clientes"  [(ngModel)]="model.PropietarioId" 
+                    scrollHeight="40vh" class="input-form-field  col-sm-8"    [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="true" 
+                    [hideTransitionOptions]="'0ms'"
+                    [showTransitionOptions]="'0ms'" 
+                    placeholder="seleccione un cliente"  
+                    filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle;">{{item.label}}</span>
+                        </ng-template>
+                     </p-dropdown>
+
+
                   </div>
-                    <div class="col-md-3">
-                      <label class="control-label" for="username">Intervalo:</label>
-                       <mat-form-field class="input-form-field  col-sm-8 ">
-                          <mat-select  [(value)]="model.intervalo" >
-                            <mat-option  *ngFor="let pow of intervalo"  [value]="pow.val">
-                                {{pow.viewValue}}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
+                 
+                    <div class="col-md-1">
+                      <label class="col-form-label text-sm-right" for="username">Estado:</label>
                     </div>
                     <div class="col-md-3">
-                        <label class="control-label" for="username">Estado:</label>
-                        <mat-form-field class="input-form-field  col-sm-8 ">
-                            <mat-select  [(value)]="model.estadoIdfiltro" >
-                              <mat-option  *ngFor="let pow of estados"  [value]="pow.val">
-                                  {{pow.viewValue}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                        <!-- <label class="control-label" for="username">Estado:</label> -->
+                        
+
+                        <p-dropdown [options]="estados"  [(ngModel)]="model.estadoIdfiltro" 
+                        scrollHeight="40vh" class="input-form-field  col-sm-8"    [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="true" 
+                        [hideTransitionOptions]="'0ms'"
+                        [showTransitionOptions]="'0ms'" 
+                        placeholder="seleccione un estado"  
+                        filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle;">{{item.label}}</span>
+                            </ng-template>
+                         </p-dropdown>
+
+
                       </div>
   
                 <div class="col-md-3">
@@ -66,15 +70,15 @@
   </div>
 <div class="col-md-12">
 
-
+  <!-- [hidden]="checkSelects()" -->
   <div class="card card-border-color card-border-color-warning">
     <div class="card-header">
-          <div  [hidden]="!checkSelects()">
+          <div>
               <b> Órdenes de Salida  </b> <span class="card-subtitle">   Listado de ordenes de salida del sistema</span>
           </div>
-          <div  [hidden]="checkSelects()" >
+          <!-- <div>
               <b> Órdenes seleccionadas  :  {{selection.selected.length}} </b>  <span class="card-subtitle">   Listado de ordenes de salida del sistema</span>
-          </div>
+          </div> -->
       </div>
      
     <div class="row">
@@ -83,132 +87,70 @@
       <div  class="col-md-3">
           <button type="button" [swal]='confirmarSwal' ngbTooltip="Generar Factura"  (confirm)="generar()" class="btn btn-block btn-primary"><i class="fa fa-folder"></i> Generar Factura</button>
       </div>
-        <div  class="col-md-4 offset-md-2" >
-            <div class="input-container">
-                <i class="fa fa-search"></i>
-                <mat-form-field class="search-form-field" >
-                  <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" (keyup)="applyFilter()">
-                </mat-form-field>
-                </div>
-          </div>
+     
     </div>
 
  
     <div class="card-body">
         <div  class="example-container">
      
-            <mat-table #table [dataSource] = "listData" matSort >
-             
-              <ng-container matColumnDef="select">
-                <mat-header-cell *matHeaderCellDef>
-                  <mat-checkbox (change)="$event ? masterToggle() : null"
-                                [checked]="selection.hasValue() && isAllSelected()"
-                                [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                [aria-label]="checkboxLabel()">
-                  </mat-checkbox>
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row">
-                  <mat-checkbox (click)="$event.stopPropagation()"
-                                (change)="$event ? selection.toggle(row) : null"
-                                [checked]="selection.isSelected(row)"
-                                [aria-label]="checkboxLabel(row)">
-                  </mat-checkbox>
-                </mat-cell>
-            </ng-container>
-
-               <ng-container matColumnDef="numLiquidacion">
-                <mat-header-cell *matHeaderCellDef mat-sort-header> N° Liquidación</mat-header-cell>
-                <mat-cell  *matCellDef="let orden" > 
-                    
-                      <span class="label label-info pull-xs-center">{{orden.numLiquidacion}}</span>
-                    
-            
-                </mat-cell>
-              </ng-container>
+          <p-table  [columns]="cols"  [scrollable]="true"  [style]="{width:'100%'}" 
+          [value]="preliquidaciones" #dt [paginator]="true" [rows]="20" [resizableColumns]="true" 
+          selectionMode="single" [responsive]="true" [(selection)]="selectedRow" >  
+          
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns"   [ngStyle]="{'width': col.width}" >
+            </colgroup>
+        </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                  <th  [ngStyle]="{'width': col.width}" *ngFor="let col of columns" pResizableColumn [pSortableColumn]="col.field">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                  </th>
+              </tr>
+              <!-- <tr>
+                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input *ngSwitchCase="'shipment'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input *ngSwitchCase="'delivery'" pInputText type="text"  (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    </th>
+                  </tr> -->
+          </ng-template>
         
-          
-                <ng-container matColumnDef="propietario" >
-                    <mat-header-cell *matHeaderCellDef mat-sort-header >  Propietario </mat-header-cell>
-                    <mat-cell *matCellDef="let user"> {{user.propietario}} </mat-cell>
-                  </ng-container>
-          
-                  
-          
-               
-                <ng-container matColumnDef="estado">
-                      <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
-                      <mat-cell *matCellDef="let user"> 
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr  [pSelectableRow]="rowData">
+            <!-- <td *ngIf="rowGroupMetadata[rowData.brand].index === rowIndex" [attr.rowspan]="rowGroupMetadata[rowData.brand].size">
+                {{rowData.fecha_incidencia}}
+            </td> -->
+            <td class="ui-resizable-column">  
+              <div class="ui-inputgroup">
+                <!-- <button class="ui-button-secondary" type="button"  pButton (click)="ver(rowData.id)" icon="fa fa-search"></button> -->
+                <button class="ui-button-secondary" type="button"  pButton (click)="eliminar(rowData.id)" icon="fa fa-trash"></button>
 
-                    <div *ngIf="user.estado == 'Planeado' then thenBlock else elseBlock"></div>
-                    <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.nombreEstado}}     </div>     </ng-template>
-                    <ng-template #elseBlock>   <div>{{user.estado}}     </div>   </ng-template>  
-                      </mat-cell>
-                </ng-container>
-
-
-              <ng-container matColumnDef="equipotransporte">
-                <mat-header-cell *matHeaderCellDef> Equipo de Transporte </mat-header-cell>
-                <mat-cell *matCellDef="let user"> 
-                  <div *ngIf="user.equipotransporte then thenBlock else elseBlock"></div>
-                  <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.equipotransporte}}     </div>     </ng-template>
-                  <ng-template #elseBlock>  
-                     Sin equipo 
-                   </ng-template>  
-                
-                  
-                
-                </mat-cell>
-              </ng-container>
-
-                    <ng-container matColumnDef="FechaLiquidacion">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Liquidación</mat-header-cell>
-                        <mat-cell *matCellDef="let user"> 
-                            {{user.fechaLiquidacion | date:'dd-MM-yyyy' }} 
-                        </mat-cell>
-                      </ng-container>
-                      
-                  <ng-container matColumnDef="SubTotal">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header > SubTotal </mat-header-cell>
-                    <mat-cell *matCellDef="let user"> S/. {{user.subTotal | number:'1.0-2'}} </mat-cell>
-                  </ng-container>
-
-                  <ng-container matColumnDef="Igv">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header > Igv </mat-header-cell>
-                    <mat-cell *matCellDef="let user"> S/. {{user.igv | number:'1.0-2'}} </mat-cell>
-                  </ng-container>
-
-                  <ng-container matColumnDef="Total">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header > Total </mat-header-cell>
-                    <mat-cell *matCellDef="let user"> S/. {{user.total | number:'1.0-2' }} </mat-cell>
-                  </ng-container>
-
-                     
-           
-                  <ng-container matColumnDef="actionsColumn">
-                      <mat-header-cell *matHeaderCellDef>
-                           <!-- <button mat-fab ngbTooltip="Nueva Orden de Salida" color="primary"  routerLink="/despacho/nuevaordensalida"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>  -->
-                      </mat-header-cell>
-                      <mat-cell *matCellDef="let row">
-                          <button   class="btn btn-space btn-outline-primary" ngbTooltip="Editar Orden" (click)="edit(row.ordenReciboId)" type="button"><i class="fas fa-edit"></i></button>
-                          <button [swal]="deleteSwal" (confirm)="delete(row.ordenSalidaId)"  [disabled]="row.nombreEstado != 'Creado'"  class="btn btn-space btn-outline-primary" ngbTooltip="Eliminar Orden" type="button"><i class="fas fa-trash"></i></button>
-                          <button  class="btn btn-space btn-outline-primary" (click)="ver(row.ordenSalidaId)" type="button"><i class="fas fa-search"></i></button>
-                        </mat-cell>
-                  </ng-container>
-         
-          
-            <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;" 
+              </div>
+          </td>
+            <!-- <td class="ui-resizable-column"> {{rowData.id }}</td> -->
+            <td class="ui-resizable-column"> {{rowData.numLiquidacion  }}</td>
+            <td class="ui-resizable-column"> {{rowData.propietario}} </td>
+            <td  [ngClass]="rowData.estado == 'Programado' ? 'old-car' :  (rowData.estado == 'Entregado'?'very-old-car': null) "> {{rowData.estado}}</td>
             
-            [ngClass]="{ 'highlight': selectedRowIndex == row.id}"
-             (click)="highlight(row)"> 
+            <td class="ui-resizable-column"> {{rowData.fechaInicio | date: 'dd/MM/yyyy'}}</td>
+            <td class="ui-resizable-column"> {{rowData.fechaFin | date: 'dd/MM/yyyy'}}</td>
+            
+            <!-- <td class="ui-resizable-column"> {{rowData.destinatario}}</td> -->
+    
+            <td class="ui-resizable-column"> {{rowData.fechaLiquidacion   | date: 'dd/MM/yyyy'}}</td>
+            <td class="ui-resizable-column"> {{rowData.subTotal | number : '1.2-2' }} </td>
+            <td class="ui-resizable-column"> {{rowData.igv | number : '1.2-2' }} </td>
+            <td class="ui-resizable-column"> {{rowData.total | number : '1.2-2' }} </td>
+            
+        </tr>
+        </ng-template>
+        </p-table>  
 
-            </mat-row>
-          
-          
-            </mat-table> 
 
-
-           <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+         
 
           </div> 
         
@@ -231,25 +173,9 @@
   >
 </swal>
 
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
+<!-- <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading> -->
 
-<!-- <mat-progress-bar
-          class="example-margin"
-          [color]="color"
-          [mode]="indeterminate"
-          [value]="value"
-          [bufferValue]="bufferValue">
-</mat-progress-bar> -->
+<p-confirmDialog acceptLabel="Si" rejectLabel="No" [style]="{ width: '30vw'}">
+    
+</p-confirmDialog>
 
-       <!-- <ag-grid-angular 
-            #agGrid
-            style="width: 500px; height: 500px;"
-            id="myGrid" 
-            class="ag-theme-balham"
-            [rowData]="rowData" 
-            [columnDefs]="columnDefs"
-            [context]="context"
-            [frameworkComponents]="frameworkComponents"
-            (gridReady)="onGridReady($event)"
-            >
-            </ag-grid-angular> -->

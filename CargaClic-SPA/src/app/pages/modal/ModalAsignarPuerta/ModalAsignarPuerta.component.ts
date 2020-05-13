@@ -31,13 +31,17 @@ export class DialogAsignarPuerta implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private alertify: AlertifyService,
     private generalService: GeneralService) { 
+      this.model =  data.codigo[0];
+      
+
       
 
     }
 
   ngOnInit() {
+    console.log(this.model);
 
-    this.generalService.getAllUbicaciones(1,1).subscribe(list => {
+    this.generalService.getAllUbicaciones(this.model.almacenId,1).subscribe(list => {
       this.ubicaciones = list;
       this.loading = false;
       this.listData = new MatTableDataSource(this.ubicaciones);

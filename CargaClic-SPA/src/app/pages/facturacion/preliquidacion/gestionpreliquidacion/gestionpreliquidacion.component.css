@@ -1,34 +1,27 @@
-.mat-row {
-    cursor: pointer;
-  }
-  
-  .mat-column-select {
-    flex: 0 0 30px;
-    text-align: right;
-    
-  }
-  .mat-column-descripcionLarga {
-    flex: 0 0 310px;
-    justify-content: left;
-  }
-  .mat-column-ultimaLiquidacion {
-    flex: 0 0 140px;
-    
-  }
-  .mat-column-cantidad {
-    flex: 0 0  70px;
-  }
-  .mat-column-paletas {
-    flex: 0 0  70px;
-  }
-  .mat-column-fechaIngreso {
-    flex: 0 0 80px;
-    
-  }
-  .mat-column-posTotal {
-    flex: 0 0 100px;
-    
-  }
 
+  .mat-fab.mat-primary, .mat-flat-button.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary {
+    position: absolute !important; 
+    top:40px !important; 
+    left:-30px !important; 
+    z-index: 1000 !important;
+    background: #fdd835 !important; 
+    color: #000000 !important;
+  }
+  th, td {
+    text-align: left;
+    font-size: 0.85em;
+    height : 5px;
+    /* font-family: "Quicksand", "Trebuchet MS", Arial, Helvetica, sans-serif; */
+    
+  }
+  .old-car {
+    background-color: #1CA979 !important;
+    color: #ffffff !important;
+}
+
+.very-old-car {
+    background-color: #f12a2a !important;
+    color: #ffffff !important;
+}
   
  

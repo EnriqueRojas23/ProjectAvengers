@@ -1,17 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+
 using System.Threading.Tasks;
 using AutoMapper;
-using CargaClic.API.Dtos;
 using CargaClic.API.Dtos.Recepcion;
-using CargaClic.Common;
-using CargaClic.Contracts.Parameters.Mantenimiento;
-using CargaClic.Contracts.Parameters.Prerecibo;
-using CargaClic.Contracts.Results.Mantenimiento;
-using CargaClic.Contracts.Results.Prerecibo;
 using CargaClic.Data.Interface;
 using CargaClic.Repository.Interface;
 using Microsoft.AspNetCore.Authorization;
@@ -35,20 +25,20 @@ namespace CargaClic.API.Controllers.Facturacion
         private readonly IFacturacionRepository _repo_Facturacion;
         private readonly IMapper _mapper;
         private readonly IRepository<Tarifa> _repositoryTarifa;
-
-
+        private readonly IRepository<Preliquidacion> _repo_Preliquidacion;
 
         public FacturacionController(
          IFacturacionReadRepository repo_read_Facturacion,
          IFacturacionRepository repo_Facturacion,
          IRepository<Documento> repo_Documento,
          IRepository<Tarifa> repositoryTarifa,
-
+         IRepository<Preliquidacion> repo_Preliquidacion,
          IMapper mapper) {
             _repo_Read_Facturacion = repo_read_Facturacion;
             _repo_Facturacion = repo_Facturacion;
             _repository_Documento = repo_Documento;
             _repositoryTarifa = repositoryTarifa;
+            _repo_Preliquidacion = repo_Preliquidacion;
             _mapper = mapper;
         }
         [HttpGet("GetPendientesLiquidacion")]
@@ -115,6 +105,14 @@ namespace CargaClic.API.Controllers.Facturacion
             await _repositoryTarifa.SaveAll();
             return Ok (_tar);
         }  
+        [HttpDelete("DeletePreliquidacion")]
+        public async Task<IActionResult> DeletePreliquidacion(int id)
+        {
+            var preliquidacion = await _repo_Preliquidacion.Get(x=>x.Id == id);
+             _repo_Preliquidacion.Delete(preliquidacion);
+             return Ok();
+
+        }
 
         [HttpPost("UpdateTarifa")]
         public async  Task<IActionResult> UpdateTarifa(TarifaForRegister tarifaForRegister)

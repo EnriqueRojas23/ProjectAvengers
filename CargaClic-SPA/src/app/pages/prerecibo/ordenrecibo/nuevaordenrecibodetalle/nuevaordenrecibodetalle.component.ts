@@ -36,6 +36,8 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
 		defaultOpen: true
   }
   
+  loading = false;
+
   clientes: Dropdownlist[] = [
     // {val: 1, viewValue: 'Habilitado'},
     // {val: 2, viewValue: 'Bloqueado'},
@@ -84,6 +86,7 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
   }
 
   registrar(form: NgForm){
+    this.loading = true;
     if (form.invalid) {
       return; 
     }
@@ -93,6 +96,7 @@ export class NuevaordenrecibodetalleComponent implements OnInit {
     },error => {
       this.alertify.error(error);
     },() => {
+      this.loading = false;
       this.alertify.success("Se actualizó correctamente.");
       this.router.navigate(['/recibo/verordenrecibo',  this.model.OrdenReciboId ]);
     })

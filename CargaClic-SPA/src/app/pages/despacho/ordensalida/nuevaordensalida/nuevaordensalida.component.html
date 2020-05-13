@@ -15,40 +15,61 @@
       <div class="card card-border-color card-border-color-danger">
         <div class="card-header card-header-divider">Nueva Orden de Salida<span class="card-subtitle"> Datos de cabecera de la orden de salida</span></div>
         <div class="card-body ">
+
+          
+          <div class="ui-g ui-fluid">
+            <div class="col-md-5 offset-md-3">
           <form #f="ngForm"  (ngSubmit)="registrar(f)" >
 
-              <div class="input-div">
-                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="power">Cliente Propietario</label>
-                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                    <mat-select required (selectionChange)="onChangeDepartamento($event)" [formControl]="PropietariosCtrl" [(value)]="model.PropietarioControl"   placeholder="Selección" #singleSelect>
-                        <mat-option>
-                            <ngx-mat-select-search [placeholderLabel]="'Buscar'" [formControl]="PropietariosFilterCtrl"></ngx-mat-select-search>
-                          </mat-option>
-                      <mat-option  *ngFor="let pow of filteredPropietarios | async" [value]="pow">
-                          {{pow.viewValue}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-              </div> 
 
-              <div class="input-div">
-                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="FechaEsperada">Fecha de requerida</label>
-                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                      <input matInput required type="datetime" [matDatepicker]="picker" autocomplete="off" [(ngModel)]="model.FechaRequerida" name="FechaRequerida" #FechaEsperada="ngModel" >
-                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                      <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-             </div>
 
-              <div class="input-div">
-                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="HoraRequerida">Hora requerida</label>
-                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                  <input matInput required  placeholder="Hora Requerida" [(ngModel)]="model.HoraRequerida" name="HoraRequerida" aria-label="12hr format" [ngxTimepicker]="default" >
-                </mat-form-field>
-                  <ngx-material-timepicker #default></ngx-material-timepicker>
-             </div>
+            <div class="form-group">
+              <label for="almacenes">Almacén:</label>
+              <p-dropdown name="almacenes" [options]="almacenes" name="almacenes" [(ngModel)]="model.AlmacenId"  required
+              scrollHeight="40vh" class="input-form-field  col-sm-5"  required   [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+              [hideTransitionOptions]="'0ms'"
+              [showTransitionOptions]="'0ms'" 
+              placeholder="seleccione un almacen"  
+              filter="false">
+                  <ng-template let-item pTemplate="selectedItem">
+                      <span style="vertical-align:left;">{{item.label}}</span>
+                  </ng-template>
+                </p-dropdown>
+           </div>
 
-             <div class="input-div">
+
+
+           <div class="form-group">
+            <label  for="clientes">Propietario</label>
+              <p-dropdown name="propietarios" [options]="propietarios" name="propietarios"  [(ngModel)]="model.PropietarioId"  required
+              scrollHeight="40vh" class="input-form-field  col-md-12"  (onChange)="onChangePropietario($event)"   [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+              [hideTransitionOptions]="'0ms'"
+              [showTransitionOptions]="'0ms'" 
+              placeholder="seleccione un propietario"  
+              filter="false">
+                  <ng-template let-item pTemplate="selectedItem">
+                      <span style="vertical-align:left;">{{item.label}}</span>
+                  </ng-template>
+                </p-dropdown>
+           </div> 
+
+      
+             
+             <div class="form-group">
+              <label for="fechaesperada">Fecha de requerida</label>
+              <p-calendar required name="FechaRequerida"  baseZIndex=100 class="input-form-field col-md-3"  [(ngModel)]="model.FechaRequerida"  [locale]="es" dateFormat="dd/mm/yy"></p-calendar>
+           </div>
+
+
+ 
+
+             <div class="form-group">
+              <label  for="HoraRequerida">Hora requerida</label>
+              <input pInputText type="text" size="15" name="HoraEsperada" aria-label="12hr format" required class="form-control col-md-12"  #HoraEsperada="ngModel"  [style]="{'width':'100%'}"  [(ngModel)]="model.HoraRequerida"  [ngxTimepicker]="default" >                
+              <ngx-material-timepicker #default></ngx-material-timepicker>
+          </div>
+
+             <!-- <div class="input-div">
               <label class="col-12 col-sm-3 col-form-label text-sm-right" for="power">Cliente </label>
                <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                 <mat-select required [formControl]="ClientesCtrl" (selectionChange)="onChangeCliente($event)"  [(value)]="model.ClienteControl"   placeholder="Selección" #singleSelect>
@@ -60,9 +81,39 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-            </div> 
+            </div>  -->
 
-            <div class="input-div">
+            
+           <div class="form-group">
+            <label  for="clientes">Cliente</label>
+              <p-dropdown name="clientes" [options]="clientes" name="clientes"  [(ngModel)]="model.ClienteId"  required
+              scrollHeight="40vh" class="input-form-field  col-md-12"  (onChange)="onChangeCliente($event)"   [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+              [hideTransitionOptions]="'0ms'"
+              [showTransitionOptions]="'0ms'" 
+              placeholder="seleccione un propietario"  
+              filter="false">
+                  <ng-template let-item pTemplate="selectedItem">
+                      <span style="vertical-align:left;">{{item.label}}</span>
+                  </ng-template>
+                </p-dropdown>
+        </div> 
+
+          <div class="form-group">
+            <label  for="clientes">Dirección Entrega</label>
+              <p-dropdown name="direcciones" [options]="direcciones" name="direcciones"  [(ngModel)]="model.IdDireccion"  required
+              scrollHeight="40vh" class="input-form-field  col-md-12"   [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+              [hideTransitionOptions]="'0ms'"
+              [showTransitionOptions]="'0ms'" 
+              placeholder="seleccione un propietario"  
+              filter="false">
+                  <ng-template let-item pTemplate="selectedItem">
+                      <span style="vertical-align:left;">{{item.label}}</span>
+                  </ng-template>
+                </p-dropdown>
+        </div> 
+
+
+            <!-- <div class="input-div">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="power">Dirección Entrega </label>
                  <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                   <mat-select required [formControl]="DireccionesCtrl" [(value)]="model.DireccionesControl"   placeholder="Selección" #singleSelect>
@@ -74,10 +125,35 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-              </div> 
+              </div>  -->
+
+              
+              <!-- <div class="form-group">
+                <label  for="clientes">Propietario</label>
+                  <p-dropdown name="clientes" [options]="clientes" name="clientes"  [(ngModel)]="model.PropietarioId"  required
+                  scrollHeight="40vh" class="input-form-field  col-md-12"    [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+                  [hideTransitionOptions]="'0ms'"
+                  [showTransitionOptions]="'0ms'" 
+                  placeholder="seleccione un propietario"  
+                  filter="false">
+                      <ng-template let-item pTemplate="selectedItem">
+                          <span style="vertical-align:left;">{{item.label}}</span>
+                      </ng-template>
+                    </p-dropdown>
+              </div>  -->
+
+              <div class="form-group">
+                <label for="guiaremision">OC del Cliente</label>
+                <input pInputText  minlength="5" maxlength="12" class="form-control col-md-12"  autocomplete="off" [(ngModel)]="model.OrdenCompraCliente" name="OrdenCompraCliente" #OrdenCompraCliente="ngModel" type="text">
+                <div class="alert alert-danger" *ngIf="OrdenCompraCliente.errors"> 
+                  <div *ngIf="OrdenCompraCliente.errors.minlength">
+                  Debe tener mas de 5 caracteres.
+                </div>
+              </div>
+            </div>
 
 
-             <div class="input-div">
+             <!-- <div class="input-div">
               <label class="col-12 col-sm-3 col-form-label text-sm-right" for="guiaremision">OC del Cliente</label>
               <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                 <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.OrdenCompraCliente" name="OrdenCompraCliente" #OrdenCompraCliente="ngModel" type="text">
@@ -87,10 +163,10 @@
                   Debe tener mas de 5 caracteres.
                 </div>
               </div>
-            </div>
+            </div> -->
 
 
-            <div class="input-div">
+            <!-- <div class="input-div">
               <label class="col-12 col-sm-3 col-form-label text-sm-right" for="guiaremision">Guía de Remisión</label>
               <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
                 <input matInput  minlength="5" maxlength="12"  autocomplete="off" [(ngModel)]="model.guiaremision" name="guiaremision" #guiaremision="ngModel" type="text">
@@ -100,8 +176,16 @@
                   Debe tener mas de 5 caracteres.
                 </div>
               </div>
+            </div> -->
+            <div class="form-group">
+              <label for="guiaremision">Guía de Remisión</label>
+              <input pInputText  minlength="5" maxlength="12" class="form-control col-md-12"  autocomplete="off" [(ngModel)]="model.guiaremision" name="guiaremision" #guiaremision="ngModel" type="text">
+              <div class="alert alert-danger" *ngIf="OrdenCompraCliente.errors"> 
+                <div *ngIf="OrdenCompraCliente.errors.minlength">
+                Debe tener mas de 5 caracteres.
+              </div>
             </div>
-
+          </div>
             
           
 
@@ -123,7 +207,8 @@
   
 
 
-
+    </div>
+  </div>
  
 
 </div>

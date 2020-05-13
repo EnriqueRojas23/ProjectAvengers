@@ -34,6 +34,7 @@ import { AngularSlickgridModule } from 'angular-slickgrid';
 import { NgxUiLoaderModule, NgxUiLoaderConfig, SPINNER, POSITION,
    PB_DIRECTION, NgxUiLoaderRouterModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 import { NgxUiLoaderDemoService } from './_services/ngx-ui-loader-demo.service.service';
+import { NgxLoadingModule } from 'ngx-loading';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
    bgsColor: '#e2000f',
@@ -94,7 +95,12 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
      NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
      NgxUiLoaderRouterModule, // import this module for showing loader automatically when navigating between app routes
      NgxUiLoaderHttpModule,
-      
+
+     NgxLoadingModule.forRoot({}),
+//     NgxUiLoaderModule,
+     
+     
+     
    
       
    ],

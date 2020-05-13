@@ -80,6 +80,9 @@ export class ListaordenrecibidaComponent implements OnInit {
   identificar(id){
     this.router.navigate(['recibo/identificarrecibo',id, this.model.EquipoTransporteId ]);
   }
+  identificar_multiple(id){
+    this.router.navigate(['recibo/identificarrecibomultiple',id, this.model.EquipoTransporteId ]);
+  }
   acomodo(id){
     this.router.navigate(['recibo/acomodopallets',id,  this.model.EquipoTransporteId ]);
   }

@@ -1,132 +1,58 @@
 
 <div class="page-head">
-    <h2 class="page-head-title">Paletizar</h2>
+    <h2 class="page-head-title">Acomodo de Pallets</h2>
     <nav aria-label="breadcrumb" role="navigation">
       <ol class="breadcrumb page-head-nav">
         <li class="breadcrumb-item"><a [routerLink]="['/recibo/listaordenrecibida', this.EquipoTransporteId]" routerLinkActive="router-link-active" >Equipos de Transporte</a></li>
-        <li class="breadcrumb-item ">Listado de Órdenes de Recibo</li>
-        <li class="breadcrumb-item active">Identificar Pallets</li>
+        <li class="breadcrumb-item active">Acomodo</li>
       </ol>
     </nav>
  </div>
 
 <div class="main-content container-fluid">
-  
     <div class="row">
-      
-        <div  class="col-md-12">
+        <div  class="col-md-5">
             <div class="card card-border-color card-border-color-primary">
               <div class="card-header card-header-divider">
 
-              <div  [hidden]="!checkSelects()" class="row">
-                <b> Inventario de la Orden de Recibo |  </b>  <span class="card-subtitle">  Detalle del inventario</span>
-              </div>
-              <div  [hidden]="checkSelects()" class="row">
-                  <b> Pallets seleccionados  :  {{selection.selected.length}} </b> 
+              <div class="row">
+                <b> Inventario de la Orden de Recibo  </b>  
               </div>
               </div>
 
 
 
 
-              <div class="card-body ">
-                  <div  class="mat-elevation-z8">
-                    
-
-                      <mat-table #table [dataSource] = "listData" matSort >
-                        
-                           <!-- Checkbox Column -->
-                              <ng-container matColumnDef="select">
-                                <mat-header-cell *matHeaderCellDef>
-                                  <mat-checkbox (change)="$event ? masterToggle() : null"
-                                                [checked]="selection.hasValue() && isAllSelected()"
-                                                [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                                [aria-label]="checkboxLabel()">
-                                  </mat-checkbox>
-                                </mat-header-cell>
-                                <mat-cell *matCellDef="let row">
-                                  <mat-checkbox (click)="$event.stopPropagation()"
-                                                (change)="$event ? selection.toggle(row) : null"
-                                                [checked]="selection.isSelected(row)"
-                                                [aria-label]="checkboxLabel(row)">
-                                  </mat-checkbox>
-                                </mat-cell>
-                            </ng-container>
-                        <!-- Checkbox Column -->
-                          <ng-container matColumnDef="lodNum">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header > LPN  </mat-header-cell>
-                              <mat-cell *matCellDef="let orden"> {{orden.lodNum}} </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="descripcionLarga">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header > Producto  </mat-header-cell>
-                              <mat-cell *matCellDef="let orden"> {{orden.descripcionLarga}} </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="untQty">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header > Cantidad  </mat-header-cell>
-                              <mat-cell *matCellDef="let orden"> {{orden.untQty}} </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="ubicacion">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header > Ubicación  </mat-header-cell>
-                                <mat-cell *matCellDef="let orden"> {{orden.ubicacion}} </mat-cell>
-                             </ng-container>
-
-                             
-                            <ng-container matColumnDef="proximaubicacion">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header > Ubicación Destino  </mat-header-cell>
-                              <mat-cell *matCellDef="let orden"> {{orden.ubicacionProxima}} </mat-cell>
-                           </ng-container>
-
-                           
-                         
-
-                            <ng-container matColumnDef="actionsColumn">
-                                <mat-header-cell *matHeaderCellDef>
-                                    <button class="btn btn-space btn-primary" (click)="terminar()">Terminar</button>
-                                </mat-header-cell>
-                                <mat-cell *matCellDef="let orden">
-                                  <div *ngIf="orden.completo then thenBlock else elseBlock"></div>
-                                  <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">     </div>     </ng-template>
-                                  <ng-template #elseBlock><button class="btn  btn-outline-primary" ngbTooltip="Identificar" (click)="identificar(orden.id)" type="button"><i class="fa fa-check"></i></button></ng-template>  
-                              </mat-cell>
-                                <mat-cell *matCellDef="let row">
-                                    
-                                </mat-cell>
-                            </ng-container>
-
-                            <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: displayedColumns;" 
-                            [ngClass]="{'highlight': selectedRowIndex == row.id}"
-                            (click)="highlight(row)">
-
-                            </mat-row>
-
-                            
-                        </mat-table>
-                        <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
-                  </div>
+              <div class="card-body  ui-g">
                   
-                
-        </div>
-      </div>
-    
+                    <div *ngIf="inventarios" style="overflow-y: scroll; height:400px;" class="ui-g-12 ui-md-12 ui-g-nopad drag-column">
+                      <ul  style="margin:0;padding:0">
+                          <li *ngFor="let car of inventarios" class="ui-helper-clearfix" pDraggable="inventario"
+                              (onDragStart)="dragStart($event,car)" (onDragEnd)="dragEnd($event)">
+                              <i class="pi pi-plus" style="float:right;font-size: 32px;"></i>
+                               <img width="60px" height="60px" src="assets/img/pallet.png" style="float:left" draggable="false"> 
+                              <div style="margin:2px 0 0 8px;float:left">{{car.lodNum}} - {{car.lotNum}}</div>
+                              <div style="margin:2px 0 0 8px;float:left">{{car.descripcionLarga}} - {{car.codigoHuella}} : {{car.untQty}}</div>
+                          </li>
+                      </ul>
+                   </div>
+                   <div *ngIf="inventarios == null" style="overflow-y: scroll; height:400px;" class="ui-g-12 ui-md-12 ui-g-nopad drag-column">
+                    <ul  style="margin:0;padding:0">
+                      <li  class="ui-helper-clearfix"     >
+                           
+                          <div style="margin:2px 0 0 8px;float:left">No hay mas pallets pendientes de acomodo</div>
+                          
+                      </li>
+                  </ul>
+                 </div>
+                   
+             </div>
+          </div>
        </div>
-        <div class="col-md-12">
+       <div class="col-md-7">
             <div class="card card-border-color card-border-color-primary">
                 <div class="card-header card-header-divider">Acomodo<span class="card-subtitle">Selecciona una ubicación para el pallet</span></div>
                   <div class="card-body">
-
-
-                      <div class="input-div">
-                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="propietario">LPN</label>
-                        <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">
-                          <input matInput readonly   autocomplete="off" [(ngModel)]="modeldetail.lodNum" name="linea" type="text">
-                          <input  autocomplete="off" [(ngModel)]="modeldetail.id" name="linea" type="hidden">
-                        </mat-form-field>
-                      </div>
-
        
                       <div class="input-div">
                           <label class="col-12 col-sm-3 col-form-label text-sm-right" for="username">Área</label>
@@ -139,93 +65,30 @@
                             </mat-form-field>
                         </div>
                       <div  class="mat-elevation-z8">
-                          <mat-table #table [dataSource] = "listUbicaciones" matSort >
-                             <!-- Checkbox Column -->
-                             <ng-container matColumnDef="ubicacion">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header >  Ubicación </mat-header-cell>
-                                <mat-cell *matCellDef="let user"> {{user.ubicacion}} </mat-cell>
-                              </ng-container>
-               
-               
-                             <ng-container matColumnDef="almacen">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header> Almacén</mat-header-cell>
-                              <mat-cell  *matCellDef="let orden" > 
-                                  <!-- <button class="btn btn-space btn-outline-primary" (click)="ver(orden.ordenReciboId)"  type="button"> -->
-                                    <!-- <i class="mdi mdi-search"></i> -->
-                                    <!-- <a class="router-link"  (click)="ver(orden.ordenReciboId)"> OR{{orden.numOrden}}  </a> -->
-                                    <span class="label label-info pull-xs-center">{{orden.almacen}}</span>
-                                  <!-- </button> -->
-                          
-                              </mat-cell>
-                            </ng-container>
-                      
-                        
-                              <ng-container matColumnDef="area">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Área </mat-header-cell>
-                                  <mat-cell *matCellDef="let user"> {{user.area}} </mat-cell>
-                                </ng-container>
-                        
-                                <!-- [style.color]="'#ff0000'" -->
-                        
-                                
-                                <ng-container matColumnDef="sugerido">
-                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Sugerido  </mat-header-cell>
-                                        <mat-cell *matCellDef="let user"> 
-                    
-                                      <div *ngIf="user.estado == 'Lleno' then thenBlock else elseBlock"></div>
-                                      <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">Sugerido     </div>     </ng-template>
-                                      <ng-template #elseBlock>    <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">Sugerido     </div>   </ng-template>  
-                                        </mat-cell>
-                                  </ng-container>
-                              
-                                  <ng-container matColumnDef="estado">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
-                                      <mat-cell *matCellDef="let user"> 
-                  
-                                    <div *ngIf="user.estado == 'Lleno' then thenBlock else elseBlock"></div>
-                                    <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.estado}}     </div>     </ng-template>
-                                    <ng-template #elseBlock>   <div>{{user.estado}}     </div>   </ng-template>  
-                                      </mat-cell>
-                                </ng-container>
-               
-               
-                          
-               
-                         
-                                <ng-container matColumnDef="actionsColumn">
-                                    <mat-header-cell *matHeaderCellDef>
-                                        <!-- <div class="example-button-row">
-                                            <button mat-fab ngbTooltip="Nueva Orden de Recibo" color="primary"  routerLink="/nuevaordenrecibo"> <i aria-hidden="true" class="fa fa-plus fa-1x"></i></button>
-                                        </div>
-                              -->
-                                       
-                                       
-                                    </mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                       <div *ngIf="row.estado == 'Libre' || row.estado  ==  'Parcial' then thenBlock else elseBlock"></div>
-                                       <ng-template #thenBlock>  <button  class="btn btn-space btn-outline-primary" ngbTooltip="Asignar Ubicación" (click)="asignarUbicacion(row.id)" type="button"><i class="fas fa-check"></i></button>     </ng-template>
-                                       <ng-template #elseBlock>   <div>    </div>   </ng-template>  
-                                        
-                                    </mat-cell>
-                                </ng-container>
-                       
-                        
-                          <mat-header-row *matHeaderRowDef="displayedColumns2; " ></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumns2;" >
-                    
-               
-                          </mat-row>
-                        
-                        
-                          </mat-table>
-               
-               
-                         <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+                        <div class="p-grid" style="margin-top: .5em"> 
+                          <!-- [@animation]="'visible'" -->
+                          <div class="p-col" *ngFor="let col of ubicaciones; let i=index" >
+                              <div  pDroppable="inventario"   (onDrop)="drop(col)" [className]="condition ? 'active' : 'inactive'" (click)="select_ubicacion(i)" class="box">{{col.ubicacion}}</div>
+                          </div>
+                      </div>
+
+
+                     
                
                         </div>
                       
                   </div>
 
           </div>
+          <div class="row pt-2 pt-sm-5 mt-1">
+            <div class="col-sm-6 pl-0">
+              <p class="text-right">
+                <button  (click)="asignarUbicacion()"   [disabled]="inventarios != null" class="btn btn-space btn-primary" type="button">Guardar</button>
+                <button (click)="deshacer()" class="btn btn-space btn-secondary"> Deshacer</button>
+              </p>
+            </div>
+          </div>
       </div> 
+      
   </div>
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

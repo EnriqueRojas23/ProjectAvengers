@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using CargaClic.Common;
+using CargaClic.Domain.Inventario;
 
 namespace CargaClic.Domain.Mantenimiento
 {
@@ -13,5 +15,6 @@ namespace CargaClic.Domain.Mantenimiento
         public int AlmacenId { get; set; }
         public int EstadoId {get;set;}
         public int TipoUbicacionId{get;set;}
+        public ICollection<InvLod> invlod {get;set;}
     }
 }

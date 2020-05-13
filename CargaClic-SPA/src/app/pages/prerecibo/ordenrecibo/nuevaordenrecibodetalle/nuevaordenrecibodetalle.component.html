@@ -69,7 +69,7 @@
                       <div class="input-div">
                           <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidad">Cantidad</label>
                           <mat-form-field  class="input-form-field col-12 col-sm-8 col-lg-6">
-                            <input matInput autocomplete="off" type="text" (keypress)="numberOnly($event)" maxlength="5" required [(ngModel)]="model.cantidad"  #cantidad="ngModel"  name="cantidad" >
+                            <input matInput autocomplete="off" type="text" (keypress)="numberOnly($event)" maxlength="6" required [(ngModel)]="model.cantidad"  #cantidad="ngModel"  name="cantidad" >
                           </mat-form-field>
                          
                         </div>
@@ -90,4 +90,4 @@
         </div>
       </div>
   </div>
-    
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

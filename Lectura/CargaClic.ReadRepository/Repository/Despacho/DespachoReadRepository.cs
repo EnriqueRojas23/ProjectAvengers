@@ -31,16 +31,18 @@ namespace CargaClic.ReadRepository.Repository.Despacho
                 }
             }
 
-        public async Task<IEnumerable<GetAllOrdenSalida>> GetAllOrdenSalida(int PropietarioId, int EstadoId, int DaysAgo)
+        public async Task<IEnumerable<GetAllOrdenSalida>> GetAllOrdenSalida(int AlmacenId, int PropietarioId, int EstadoId, string fec_ini, string fec_fin)
         {
             var parametros = new DynamicParameters();
             parametros.Add("PropietarioId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: PropietarioId);
+            parametros.Add("AlmacenId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: AlmacenId);
             parametros.Add("EstadoId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: EstadoId);
-            parametros.Add("DaysAgo", dbType: DbType.Int64, direction: ParameterDirection.Input, value: DaysAgo);
+            parametros.Add("fecini", dbType: DbType.String, direction: ParameterDirection.Input, value: fec_ini);
+            parametros.Add("fecfin", dbType: DbType.String, direction: ParameterDirection.Input, value: fec_fin);
 
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "[Despacho].[pa_listar_ordenessalida]";
+                string sQuery = "[Despacho].[pa_listar_ordenessalida_v]";
                 conn.Open();
                 var result = await conn.QueryAsync<GetAllOrdenSalida>(sQuery,
                                                                     parametros
@@ -114,10 +116,11 @@ namespace CargaClic.ReadRepository.Repository.Despacho
 
         }
 
-        public async Task<IEnumerable<GetAllOrdenSalida>> GetAllOrdenSalidaPendiente(int PropietarioId, int EstadoId, int DaysAgo)
+        public async Task<IEnumerable<GetAllOrdenSalida>> GetAllOrdenSalidaPendiente(int AlmacenId, int PropietarioId, int EstadoId, int DaysAgo)
         {
              var parametros = new DynamicParameters();
             parametros.Add("PropietarioId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: PropietarioId);
+            parametros.Add("AlmacenId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: AlmacenId);
             parametros.Add("EstadoId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: EstadoId);
             parametros.Add("DaysAgo", dbType: DbType.Int64, direction: ParameterDirection.Input, value: DaysAgo);
 
@@ -142,6 +145,24 @@ namespace CargaClic.ReadRepository.Repository.Despacho
             using (IDbConnection conn = Connection)
             {
                 string sQuery = "[Despacho].[pa_listarTrabajo]";
+                conn.Open();
+                var result = await conn.QueryAsync<ListarTrabajoResult>(sQuery,
+                                                                    parametros
+                                                                    ,commandType:CommandType.StoredProcedure
+                  ); 
+                return result;
+            }
+        }
+        
+        public async Task<IEnumerable<ListarTrabajoResult>> ListarTrabajo_TrabajoAsignado( int PropietarioId, int EstadoId )
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("PropietarioId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: PropietarioId);
+            parametros.Add("EstadoId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: EstadoId);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[Despacho].[pa_listarTrabajo_asignado]";
                 conn.Open();
                 var result = await conn.QueryAsync<ListarTrabajoResult>(sQuery,
                                                                     parametros
@@ -215,6 +236,25 @@ namespace CargaClic.ReadRepository.Repository.Despacho
                   );
                 return result;
             }
+        }
+
+        public async Task<IEnumerable<GetAllCargas>> GetAllCargas_Pendientes_Salida(int PropietarioId, int EstadoId)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("PropietarioId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: PropietarioId);
+            parametros.Add("EstadoId", dbType: DbType.Int64, direction: ParameterDirection.Input, value: EstadoId);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[Despacho].[pa_listar_cargas_pendientes_salida]";
+                conn.Open();
+                var result = await conn.QueryAsync<GetAllCargas>(sQuery,
+                                                                           parametros
+                                                                          ,commandType:CommandType.StoredProcedure
+                  );
+                return result;
+            }
+            
         }
     }
 }

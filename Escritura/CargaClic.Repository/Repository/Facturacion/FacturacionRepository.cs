@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using CargaClic.API.Dtos.Recepcion;
@@ -134,7 +135,7 @@ namespace CargaClic.Repository
 
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "[Facturacion].[pa_listarpendientespreliquidacion]";
+                string sQuery = "[Facturacion].[facturacion.pa_listarpendientesliquidacion_fase2_agrupado]";
                  result = await conn.QueryAsync<GetPendientesLiquidacion    >(sQuery,
                                                                            parametros
                                                                           ,commandType:CommandType.StoredProcedure
@@ -157,6 +158,12 @@ namespace CargaClic.Repository
                 preliquidacion.Igv = Convert.ToDecimal(Convert.ToDouble(SubTo) * 0.18);
                 preliquidacion.Total = preliquidacion.SubTotal + preliquidacion.Igv;
                 preliquidacion.EstadoId = (int) Constantes.EstadoPreliquidacion.Pendiente;
+                
+                DateTime dtInicioCorte =DateTime.ParseExact(command.InicioCorte, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                preliquidacion.FechaInicio = dtInicioCorte ;
+
+                DateTime dtInicioFin =DateTime.ParseExact(command.FinCorte, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                preliquidacion.FechaFin = dtInicioFin;
                 
                 await _context.AddAsync<Preliquidacion>(preliquidacion);
                 await _context.SaveChangesAsync();

@@ -13,6 +13,7 @@ using Common.QueryHandlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CargaClic.ReadRepository;
+using CargaClic.ReadRepository.Interface.Mantenimiento;
 
 namespace CargaClic.API.Controllers.Mantenimiento
 {
@@ -33,8 +34,10 @@ namespace CargaClic.API.Controllers.Mantenimiento
         private readonly IQueryHandler<ListarProveedorParameter> _handlerProveedor;
         private readonly IQueryHandler<ObtenerEquipoTransporteParameter> _handlerEqTransporte;
         private readonly IQueryHandler<ListarUbicacionesParameter> _handlerUbicaciones;
-        
+        private readonly IRepository<Almacen> _repoAlmacen;
+        private readonly IMantenimientoRepository _repoMantenimientoRepository;
         private readonly IMapper _mapper;
+        //private readonly IUbicacionReadRepository _repo_Read_Despacho;
 
         public GeneralController(IRepository<Estado> repo
         ,IInventarioRepository repoInventario
@@ -47,6 +50,8 @@ namespace CargaClic.API.Controllers.Mantenimiento
         ,IQueryHandler<ListarProveedorParameter> handlerProveedor
         ,IQueryHandler<ObtenerEquipoTransporteParameter> handlerEqTransporte
         ,IQueryHandler<ListarUbicacionesParameter> handlerUbicaciones
+        ,IRepository<Almacen> repoAlmacen
+        ,IMantenimientoRepository repoMantenimientoRepository
         
         ,IMapper mapper
         )
@@ -62,7 +67,8 @@ namespace CargaClic.API.Controllers.Mantenimiento
             _handlerProveedor = handlerProveedor;
             _handlerEqTransporte = handlerEqTransporte;
             _handlerUbicaciones = handlerUbicaciones;
-            
+            _repoAlmacen = repoAlmacen;
+            _repoMantenimientoRepository = repoMantenimientoRepository;
             _mapper = mapper;
         }
         [HttpGet]
@@ -147,12 +153,24 @@ namespace CargaClic.API.Controllers.Mantenimiento
 
 #endregion          
 #region _repoUbicion/Area
+
+        [HttpGet("GetAlmacenes")]
+        public async Task<IActionResult> GetAlmacenes()
+        {
+            var result = await _repoAlmacen.GetAll();
+            return Ok(result);
+        }
         [HttpGet("GetAreas")]
         public async Task<IActionResult> GetAreas()
         {
             var result = await _repoArea.GetAll();
             return Ok(result);
         }
+        // [HttpGet]
+        // public IActionResult GetUbicacionesMatriz(int AlmacenId, int AreaId)
+        // {
+        //     var result = _repoMantenimientoRepository
+        // }
    
         [HttpGet("GetUbicaciones")]
         public IActionResult GetUbicaciones(int AlmacenId, int AreaId)

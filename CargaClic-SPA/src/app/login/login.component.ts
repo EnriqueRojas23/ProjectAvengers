@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
     if (form.invalid) {
       return; 
     }
+    this.loading = true;
     this.authService.login(this.model).subscribe(resp => { 
       
 
@@ -42,6 +43,10 @@ export class LoginComponent implements OnInit {
 
     }, () => { 
       this.router.navigate(['/dashboard']);
+   
+    
+      //this.router.navigate(['login'])
+   
     });
   }
 

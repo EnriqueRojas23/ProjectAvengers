@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -56,6 +57,59 @@ namespace CargaClic.ReadRepository.Repository.Inventario
             using (IDbConnection conn = Connection)
             {
                 string sQuery = "[inventario].[pa_listainventario_ajuste_detalle]";
+                conn.Open();
+                var result = await conn.QueryAsync<GetAllInventarioResult>(sQuery,
+                                                                           parametros
+                                                                          ,commandType:CommandType.StoredProcedure
+                  );
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<GetGraficoRecepcionResult>> GetGraficosRecepcion(int PropietarioId, int AlmacenId)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("propietarioid", dbType: DbType.Int32, direction: ParameterDirection.Input, value: PropietarioId);
+            parametros.Add("almacenid", dbType: DbType.Int32, direction: ParameterDirection.Input, value: AlmacenId);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[inventario].[pa_grafica_recepciones]";
+                conn.Open();
+                var result = await conn.QueryAsync<GetGraficoRecepcionResult>(sQuery,
+                                                                           parametros
+                                                                          ,commandType:CommandType.StoredProcedure
+                  );
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<GetGraficoStockResult>> GetGraficosStock(int PropietarioId, int AlmacenId)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("propietarioid", dbType: DbType.Int32, direction: ParameterDirection.Input, value: PropietarioId);
+            parametros.Add("almacenid", dbType: DbType.Int32, direction: ParameterDirection.Input, value: AlmacenId);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[inventario].[pa_grafica_stock]";
+                conn.Open();
+                var result = await conn.QueryAsync<GetGraficoStockResult>(sQuery,
+                                                                           parametros
+                                                                          ,commandType:CommandType.StoredProcedure
+                  );
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<GetAllInventarioResult>> GetPallet(Guid OrdenReciboId)
+        {
+              var parametros = new DynamicParameters();
+            parametros.Add("OrdenReciboId", dbType: DbType.Guid, direction: ParameterDirection.Input, value: OrdenReciboId);
+
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "[inventario].[pa_listarPallets]";
                 conn.Open();
                 var result = await conn.QueryAsync<GetAllInventarioResult>(sQuery,
                                                                            parametros

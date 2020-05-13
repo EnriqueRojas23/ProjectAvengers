@@ -73,12 +73,8 @@ namespace CargaClic.API.Controllers
                 {
                  idRol = rol.RolId
                 };
-
                 pantallas.AddRange(  ((ListarMenusxRolResult)  _repo_Menu.Execute(Param)).Hits  );
-               
-                
             }
-              
               
              //Eliminar duplicados [multiples Roles]
              foreach (var item in pantallas)
@@ -110,7 +106,7 @@ namespace CargaClic.API.Controllers
              var tokenDescriptor = new SecurityTokenDescriptor
              {
                  Subject = new ClaimsIdentity(claims),
-                 Expires = DateTime.Now.AddDays(1),
+                 Expires = DateTime.Now.AddDays(365),
                  SigningCredentials = creds
              };
 

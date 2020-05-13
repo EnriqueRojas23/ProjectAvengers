@@ -53,6 +53,21 @@ namespace CargaClic.Repository.Repository.Mantenimiento
             huellaDetalle.UntQty = huellaDetalleForRegister.UntQty;
             huellaDetalle.Width = huellaDetalleForRegister.Width;
 
+            if(huellaDetalle.UnidadMedidaId == 128){
+                   huellaDetalle.Cas = false;
+                    huellaDetalle.Pallet = true;
+            }
+            else if (huellaDetalle.UntQty == 1)
+            {
+                 huellaDetalle.Cas = false;
+                 huellaDetalle.Pallet = false;
+            }
+            else {
+                    huellaDetalle.Cas = true;
+                    huellaDetalle.Pallet = false;
+            }
+                 
+
             using(var transaction = _context.Database.BeginTransaction())
             {
                   try

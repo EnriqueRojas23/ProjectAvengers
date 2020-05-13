@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { CellRendererProductos } from 'src/app/_common/Renderers/cellRendererProductos/cellRendererProductos.component';
 import { ProductoService } from 'src/app/_services/Mantenimiento/producto.service';
 import { Router } from '@angular/router';
+import { SelectItem } from 'primeng/components/common/selectitem';
 
 @Component({
   selector: 'app-gestiontarifario',
@@ -36,7 +37,7 @@ export class GestiontarifarioComponent implements OnInit {
   public context;
 
   //productos: Dropdownlist[] = [];
-  clientes: Dropdownlist[] = [];
+  clientes: SelectItem[] = [];
   productos2: Dropdownlist[] = [];
 
   public productos: any = {};
@@ -108,7 +109,10 @@ rowData: any;
 
   ngOnInit() {
 
-    this.model.PropietarioId = 1;
+    //this.model.PropietarioId = 1;
+
+
+    
 
     this.productoService.getAll("",this.model.PropietarioId ).subscribe(resp=> {
        
@@ -119,21 +123,28 @@ rowData: any;
     // });  
 
        this.productosForDropdown = this.productos.map(x => x.descripcionLarga);
-       console.log(this.productosForDropdown);
+       
     });
    
 
     this.clienteService.getAllPropietarios("").subscribe(resp => { 
       resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+        this.clientes.push({ value: element.id , label: element.razonSocial});
       });
-      this.filteredClientes.next(this.clientes.slice());
-      this.ClientesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterBanks();
+      
+         this.model.PropietarioId =  parseInt(localStorage.getItem('PropietarioId'));
+         
+          this.loading = true;
+
+          this.model.PropietarioFiltroId =this.model.PropietarioId ;
+
+          this.facturacionService.getTarifas(this.model.PropietarioFiltroId).subscribe(list => {
+           
+      
+            this.rowData = list;
+            this.loading = false;
           });
-          this.loading = false;
+      
 
 
     });
@@ -159,25 +170,12 @@ rowData: any;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }  
-  protected filterBanks() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
-    
-  }
+
   buscar(){
     
-   
+    localStorage.setItem('PropietarioId', this.model.PropietarioId);
+
+
     if(this.model.PropietarioId == undefined)
     {
         this.alertify.error("Seleccione un propietario");
@@ -217,7 +215,10 @@ rowData: any;
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 
-    this.model.PropietarioFiltroId = 1;
+    if(this.model.PropietarioFiltroId == undefined){
+      this.rowData = null;
+        return ;
+    }
 
     this.facturacionService.getTarifas(this.model.PropietarioFiltroId).subscribe(list => {
         this.rowData = list;

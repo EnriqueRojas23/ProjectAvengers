@@ -35,8 +35,9 @@ export class AsignarpuertaComponent implements OnInit {
   ngOnInit() {
 
     this.model.EquipoTransporteId =  this.activatedRoute.snapshot.params["uid"];
+    this.model.AlmacenId =  this.activatedRoute.snapshot.params["uid2"];
 
-    this.generalService.getAllUbicaciones(1,1).subscribe(list => {
+    this.generalService.getAllUbicaciones(this.model.AlmacenId,1).subscribe(list => {
         this.ubicaciones = list;
         this.loading = false;
         this.listData = new MatTableDataSource(this.ubicaciones);

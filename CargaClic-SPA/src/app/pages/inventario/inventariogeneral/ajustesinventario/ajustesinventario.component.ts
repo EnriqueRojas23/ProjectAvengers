@@ -265,61 +265,61 @@ export class AjustesinventarioComponent implements OnInit {
 }
   asignarUbicacion(id){
   
-    this.inventarioService.asignar_ubicacion(this.modeldetail.id,id).subscribe(resp => { 
-    }, error => {
+    // this.inventarioService.asignar_ubicacion(this.modeldetail.id,id).subscribe(resp => { 
+    // }, error => {
        
-    }, () => { 
+    // }, () => { 
      
       
-      this.generalService.getAllUbicaciones(1,this.model.areaId).subscribe(list => {
-        this.ubicaciones = list;
+    //   this.generalService.getAllUbicaciones(1,this.model.areaId).subscribe(list => {
+    //     this.ubicaciones = list;
         
-      //this.loading = false;
-      this.listUbicaciones = new MatTableDataSource(this.ubicaciones);
-      this.listUbicaciones.paginator = this.paginator2;
-      this.listUbicaciones.sort = this.sort2;
+    //   //this.loading = false;
+    //   this.listUbicaciones = new MatTableDataSource(this.ubicaciones);
+    //   this.listUbicaciones.paginator = this.paginator2;
+    //   this.listUbicaciones.sort = this.sort2;
   
   
-      this.listUbicaciones.filterPredicate = (data,filter) => {
-        return this.displayedColumns.some(ele => {
+    //   this.listUbicaciones.filterPredicate = (data,filter) => {
+    //     return this.displayedColumns.some(ele => {
           
-          if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-             {
-                return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+    //       if(ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
+    //          {
+    //             return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
            
-             }
-          })
-         }
-      });
+    //          }
+    //       })
+    //      }
+    //   });
   
-      let areatemp =  this.model.areaId;
-      this.inventarioService.getAll(id).subscribe(resp => { 
-        this.model = resp;
+    //   let areatemp =  this.model.areaId;
+    //   this.inventarioService.getAll(id).subscribe(resp => { 
+    //     this.model = resp;
         
-        this.listData = new MatTableDataSource(this.model);
-        this.listData.paginator = this.paginator;
-        this.listData.sort = this.sort;
+    //     this.listData = new MatTableDataSource(this.model);
+    //     this.listData.paginator = this.paginator;
+    //     this.listData.sort = this.sort;
         
-        this.listData.filterPredicate = (data,filter) => {
-          return this.displayedColumns.some(ele => {
+    //     this.listData.filterPredicate = (data,filter) => {
+    //       return this.displayedColumns.some(ele => {
             
-            if(ele !='Id' && ele != 'activo' && ele != 'publico')
-               {
-                  return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+    //         if(ele !='Id' && ele != 'activo' && ele != 'publico')
+    //            {
+    //               return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
              
-               }
-            })
-           }
-           this.model.areaId = areatemp;
+    //            }
+    //         })
+    //        }
+    //        this.model.areaId = areatemp;
         
-      }, error => {
+    //   }, error => {
          
-      }, () => { 
+    //   }, () => { 
             
-      });
-      $("html,body").animate({ scrollTop: 0 }, "slow");
+    //   });
+    //   $("html,body").animate({ scrollTop: 0 }, "slow");
   
-    });
+    // });
    }
    onChange(value){
     

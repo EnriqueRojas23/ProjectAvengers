@@ -23,11 +23,12 @@ namespace CargaClic.API.Controllers.Mantenimiento
         private readonly IRepository<Huella> _repositoryHuella;
         private readonly IMantenimientoRepository _repoMantenimiento;
         private readonly IProductoRepository _repoProducto;
-        
+        private readonly IRepository<Producto> _repositoryProducto;
 
         public ProductoController(IQueryHandler<ListarProductosParameter> handler,
         IMantenimientoRepository repoMantenimiento,
         IProductoRepository repoProducto,
+        IRepository<Producto> repositoryProducto,
         IRepository<Huella> repositoryHuella)
         {
             
@@ -35,6 +36,7 @@ namespace CargaClic.API.Controllers.Mantenimiento
             _repositoryHuella = repositoryHuella;
             _repoMantenimiento = repoMantenimiento;
             _repoProducto = repoProducto;
+            _repositoryProducto = repositoryProducto;
         }
         [HttpGet("Get")]
         public async Task<IActionResult> Get(Guid ProductId)
@@ -81,6 +83,19 @@ namespace CargaClic.API.Controllers.Mantenimiento
         {
             var result = await _repoProducto.ProductRegister(productoForRegister) ;
             return Ok(result);
+        }
+        [HttpPost("ProductEdit")]
+        public async Task<IActionResult> ProductEdit(ProductoForRegister productoForRegister)
+        {
+            var producto = await _repositoryProducto.Get(x=>x.Id == productoForRegister.Id);
+            //producto.AlmacenId = productoForRegister.AlmacenId;
+            producto.Codigo = productoForRegister.Codigo;
+            producto.DescripcionLarga = productoForRegister.DescripcionLarga;
+            producto.FamiliaId = productoForRegister.FamiliaId;
+            producto.UnidadMedidaId = productoForRegister.UnidadMedidaId;
+            await _repositoryProducto.SaveAll();
+            //var result = await _repoProducto.ProductRegister(productoForRegister) ;
+            return Ok(producto);
         }
         [HttpPost("HuellaDetalleRegister")]
         public async Task<IActionResult> HuellaDetalleRegister(HuellaDetalleForRegister huellaDetalleForRegister)

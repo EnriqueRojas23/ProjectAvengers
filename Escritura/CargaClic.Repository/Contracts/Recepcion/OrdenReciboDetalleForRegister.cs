@@ -7,14 +7,14 @@ namespace CargaClic.API.Dtos.Recepcion
     {
 
         public Int64 Id {get;set;}
-        public string Lote {get;set;}
+        public string LotNum {get;set;}
         public int HuellaId {get;set;}
         [Required]
         public int EstadoID {get;set;}
         [Required]
-        public int CantidadRecibida {get;set;}
-        public int? CantidadSobrante {get;set;}
-        public int? CantidadFaltante { get;set;}
+        public int untQty {get;set;}
+        // public int? CantidadSobrante {get;set;}
+        // public int? CantidadFaltante { get;set;}
         public int? UbicacionId { get; set; }
         public String FechaExpire { get;set; }
         public String FechaManufactura { get;set; }
@@ -22,6 +22,10 @@ namespace CargaClic.API.Dtos.Recepcion
         public int? HuellaDetalleId {get;set;}
         public int PropietarioId {get;set;}
         public decimal? Peso {get;set;}
+
+        public Guid ProductoId {get;set;}
+        public Guid OrdenReciboId {get;set;}
+        public long OrdenReciboDetalleId {get;set;}
 
         
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { OrdenSalida } from 'src/app/_models/Despacho/ordenrecibo';
 import { Dropdownlist } from 'src/app/_models/Constantes';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { DialogAsignarPuerta } from 'src/app/pages/modal/ModalAsignarPuerta/ModalAsignarPuerta.component';
 import { DialogAsignarTrabajador } from 'src/app/pages/modal/ModalAsignarTrabajador/ModalAsignarTrabajador.component';
 import { AuthService } from 'src/app/_services/auth.service';
+import { SelectItem } from 'primeng/components/common/selectitem';
 
 
 @Component({
@@ -24,23 +25,16 @@ import { AuthService } from 'src/app/_services/auth.service';
 export class ListadoTrabajoPendienteComponent implements OnInit {
 
 
-
-
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  searchKey: string;
-  pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = [ 'select' , 'workNum' ,'propietario','FechaRegistro','FechaAsignacion','FechaTermino', 'Estado', 'ubicacion' , 'CantidadLPN' , 'cantidadTotal' ,'Direccion' ];
   el: any[] = [];
-  listData: MatTableDataSource<Carga>;
+  
   public loading = false;
   cargas: Carga[] = [];
 
   ordenesaux: OrdenSalida[] = [];
   model: any  = {};
 
-
-  clientes: Dropdownlist[] = [];
+  cols: any[];   
+  clientes: SelectItem[] = [];
   EstadoId : number;
 
 
@@ -56,6 +50,7 @@ export class ListadoTrabajoPendienteComponent implements OnInit {
   public ClientesFilterCtrl: FormControl = new FormControl();
   protected _onDestroy = new Subject<void>();
 
+  selectedRow: Carga[] = [];
 
 
   constructor(private ordensalidaService: OrdenSalidaService,
@@ -70,16 +65,31 @@ export class ListadoTrabajoPendienteComponent implements OnInit {
 
   ngOnInit() {
 
+    this.cols = 
+    [
+        // {header: 'ACCIONES', field: 'workNum' , width: '100px' },
+        {header: 'Almacén', field: 'almacen'  ,  width: '150px' },
+        {header: 'N° Trabajo', field: 'workNum'  ,  width: '120px' },
+        {header: 'Propietario', field: 'propietario'  , width: '160px'   },
+        {header: 'Ubicación', field: 'ubicacion'  , width: '160px'   },
+        {header: 'F.Asignación', field: 'fechaAsignacion'  ,  width: '120px'  },
+        {header: 'F.Término', field: 'fechaTermino' , width: '120px'  },
+        {header: '# Pallets', field: 'cantidadLPN'  , width: '100px'  },
+        {header: '# Bultos', field: 'cantidadTotal'  , width: '100px'  },
+        {header: 'Estado', field: 'estado',width: '120px'    }, 
+        
+        
+        
+  
+      ];
+
+
+
     this.clienteService.getAllPropietarios("").subscribe(resp => { 
       resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+        this.clientes.push({ value: element.id ,  label : element.razonSocial});
       });
-      this.filteredClientes.next(this.clientes.slice());
-      this.ClientesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterBanks();
-          });
+
           this.loading = false;
 
 
@@ -108,82 +118,52 @@ export class ListadoTrabajoPendienteComponent implements OnInit {
 
 
       this.cargas = list;
+
+      console.log(this.cargas);
       
       this.loading = false;
-      this.listData = new MatTableDataSource(this.cargas);
-      this.listData.paginator = this.paginator;
-      this.listData.sort = this.sort;
+    
       
         
-      this.listData.filterPredicate = (data,filter) => {
-        return this.displayedColumns.some(ele => {
-          
-          if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-             {
-               
-                return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-           
-             }
-          })
-         }
+
       });
 
   
   
   }
-  selection = new SelectionModel<Carga>(true, []);
 
-  protected filterBanks() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
-    
-  }
+
+
   
+
+
+  selection = new SelectionModel<Carga>(true, []);
   checkSelects() {
     return  this.selection.selected.length > 0 ?  false : true;
   }
-  checkboxLabel(row?: Carga): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id+ 1}`;
-  }
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows =  this.cargas.length;
-    return numSelected === numRows;
-  }
- 
 
   asignarPuerta(): void {
    
-
-
-    if(this.selection.selected.length > 1 || this.selection.selected.length ==  0){
+    if(this.selectedRow.length > 1 || this.selectedRow.length ==  0){
       this.alertify.error("Debe seleccionar solo un Trabajo");
       return ;
     }
+
+
+    //if(this.selection.selected.length > 1 || this.selection.selected.length ==  0){
+      // this.alertify.error("Debe seleccionar solo un Trabajo");
+      // return ;
+    //}
     
 
     const dialogRef = this.dialog.open(DialogAsignarPuerta, {
       width: '700px',
       height: '350px',
-      data: {codigo: this.selection.selected, descripcion: ""}
+      data: {codigo: this.selectedRow, descripcion: ""}
     });
     dialogRef.afterClosed().subscribe(result => {
  
-      this.model.PropietarioId = 1;
+      //this.model.PropietarioId = 1;
       this.model.EstadoId = 30;
    
   
@@ -191,37 +171,24 @@ export class ListadoTrabajoPendienteComponent implements OnInit {
       this.ordensalidaService.getAllWork(this.model).subscribe(list => {
         
         this.cargas = list;
-        this.selection.clear() ;
+      //  this.selection.clear() ;
         this.loading = false;
-        this.listData = new MatTableDataSource(this.cargas);
-        this.listData.paginator = this.paginator;
-        this.listData.sort = this.sort;
-          
-        this.listData.filterPredicate = (data,filter) => {
-          return this.displayedColumns.some(ele => {
-            
-            if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-               {
-                 
-                  return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-             
-               }
-            })
-           }
+        this.selectedRow = [];
+
           
         });
     });
   }
   asignarTrabajador(): void {
 
+    
 
-
-    if(this.selection.selected.length > 1 || this.selection.selected.length ==  0){
+    if(this.selectedRow.length > 1 || this.selectedRow.length ==  0){
       this.alertify.error("Debe seleccionar solo un Trabajo");
       return ;
     }
 
-    if(this.selection.selected[0].ubicacion == null)
+    if(this.selectedRow[0].ubicacion == null)
     {
       this.alertify.error("Debe asignar un Área de Despacho");
       return;
@@ -230,45 +197,37 @@ export class ListadoTrabajoPendienteComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogAsignarTrabajador, {
       width: '700px',
       height: '350px',
-      data: {codigo: this.selection.selected, descripcion: ""}
+      data: {codigo: this.selectedRow, descripcion: ""}
     });
     dialogRef.afterClosed().subscribe(result => {
      
-      this.model.PropietarioId = 1;
+     // this.model.PropietarioId = 1;
       this.model.EstadoId = 30;
   
       this.ordensalidaService.getAllWork(this.model).subscribe(list => {
         this.cargas = list;
-        this.selection.clear() ;
+     //   this.selection.clear() ;
         this.loading = false;
-        this.listData = new MatTableDataSource(this.cargas);
-        this.listData.paginator = this.paginator;
-        this.listData.sort = this.sort;
-        
-        this.listData.filterPredicate = (data,filter) => {
-          return this.displayedColumns.some(ele => {
-            if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-               {
-                  return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-               }
-            })
-           }
-           
+      
         });
     });
   }
-  highlight(row){
-    this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row)
-  }
-  masterToggle() {
-      this.isAllSelected() ?
-        this.selection.clear() :
-        this.listData.data.forEach(row => this.selection.select(row));
-  }
-  buscar(){
+  // highlight(row){
+  //   this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row)
+  // }
 
+  buscar(){
+        
+
+    this.ordensalidaService.getAllWork(this.model).subscribe(list => {
+            
+
+      this.cargas = list;
+      console.log(this.cargas);
+      
+      this.loading = false;
+
+      });
   }
-  applyFilter() {
-    this.listData.filter = this.searchKey.trim().toLowerCase();
-  }
+
 }

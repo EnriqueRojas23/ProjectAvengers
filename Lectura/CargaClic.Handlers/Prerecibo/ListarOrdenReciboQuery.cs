@@ -25,9 +25,13 @@ namespace CargaClic.Handlers.Precibo
                  var parametros = new DynamicParameters();
                  parametros.Add("EstadoId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: parameters.EstadoId);
                  parametros.Add("PropietarioId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: parameters.PropietarioId);
-                 parametros.Add("DaysAgo", dbType: DbType.Int32, direction: ParameterDirection.Input, value: parameters.DaysAgo);
+                 parametros.Add("AlmacenId", dbType: DbType.Int32, direction: ParameterDirection.Input, value: parameters.AlmacenId);
+                 parametros.Add("fecini", dbType: DbType.String, direction: ParameterDirection.Input, value: parameters.fec_ini);
+                 parametros.Add("fecfin", dbType: DbType.String, direction: ParameterDirection.Input, value: parameters.fec_fin);
+
+
                  var result = new ListarOrdenReciboResult();
-                 result.Hits =  conn.Query<ListarOrdenReciboDto>("Recepcion.pa_listarordenesrecibo"
+                 result.Hits =  conn.Query<ListarOrdenReciboDto>("Recepcion.pa_listarordenesrecibo_v"
                                                                         ,parametros
                                                                         ,commandType:CommandType.StoredProcedure);
                 return result;

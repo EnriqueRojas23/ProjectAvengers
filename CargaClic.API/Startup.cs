@@ -92,8 +92,13 @@ namespace CargaClic.API
             services.AddScoped<IRepository<Proveedor>, Repository<Proveedor>>();
             services.AddScoped<IRepository<Vehiculo>, Repository<Vehiculo>>();
             services.AddScoped<IRepository<Huella>, Repository<Huella>>();
+            services.AddScoped<IRepository<Producto>, Repository<Producto>>();
             services.AddScoped<IRepository<Chofer>, Repository<Chofer>>();
             services.AddScoped<IRepository<ValorTabla>, Repository<ValorTabla>>();
+            services.AddScoped<IRepository<Preliquidacion>, Repository<Preliquidacion>>();
+            services.AddScoped<IRepository<Almacen>, Repository<Almacen>>();
+
+            
             services.AddScoped<IProductoRepository, ProductoRepository>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
 

@@ -20,21 +20,24 @@
         <div class="card-body">
             <div class="  row">
           
-                <div class="col-md-4">
-                    <label class="col-form-label text-sm-right" for="username">Propietario:</label>
-                    
-                    <mat-form-field class="input-form-field  col-sm-8 ">
-                        <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
-                         <mat-option>
-                             <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
-                          </mat-option>
-                          <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
-                              {{pow.viewValue}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                  </div>
-
+              <div class="col-md-3">
+                <h5>Propietario :</h5>
+                <p-dropdown  [options]="clientes"  [(ngModel)]="model.PropietarioId" 
+                scrollHeight="40vh" class="input-form-field  col-sm-5"    [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+                [hideTransitionOptions]="'0ms'"
+                [showTransitionOptions]="'0ms'" 
+                placeholder="seleccione un cliente"  
+                filter="true">
+                    <ng-template let-item pTemplate="selectedItem">
+                        <span style="vertical-align:left;">{{item.label}}</span>
+                    </ng-template>
+                    <!-- <ng-template let-item pTemplate="item">
+                      <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                          <div style="font-size:14px;float:left;margin-top:4px">{{item.label}}</div>
+                      </div>
+                  </ng-template> -->
+                  </p-dropdown>
+                </div>
               
                    
                  

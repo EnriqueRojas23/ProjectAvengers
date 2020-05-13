@@ -42,6 +42,13 @@ registrarProducto(model: any){
     
   }))  
 };
+editarProducto(model: any){
+  return this.http.post(this.baseUrl + 'productEdit', model, httpOptions)
+  .pipe(map((response: any) => {
+     console.log(response);
+    
+  }))  
+};
 registrarHuellaDetalle(model: any){
   return this.http.post(this.baseUrl + 'HuellaDetalleRegister', model, httpOptions)
   .pipe(map((response: any) => {

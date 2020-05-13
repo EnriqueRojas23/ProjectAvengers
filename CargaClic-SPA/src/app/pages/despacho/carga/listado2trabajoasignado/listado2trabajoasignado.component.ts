@@ -14,6 +14,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { DialogAsignarPuerta } from 'src/app/pages/modal/ModalAsignarPuerta/ModalAsignarPuerta.component';
 import { DialogAsignarTrabajador } from 'src/app/pages/modal/ModalAsignarTrabajador/ModalAsignarTrabajador.component';
 import { AuthService } from 'src/app/_services/auth.service';
+import { SelectItem } from 'primeng/components/common/selectitem';
 
 @Component({
   selector: 'app-Listado2trabajoasignado',
@@ -36,8 +37,9 @@ export class Listado2trabajoasignadoComponent implements OnInit {
   ordenesaux: OrdenSalida[] = [];
   model: any  = {};
 
-
-  clientes: Dropdownlist[] = [];
+  selectedRow: Carga[] = [];
+  cols: any[];   
+  clientes: SelectItem[] = [];
   EstadoId : number;
 
 
@@ -48,10 +50,7 @@ export class Listado2trabajoasignadoComponent implements OnInit {
     {val: 12, viewValue: 'Almacenado'},
     
   ];
-  public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
-  public ClientesCtrl: FormControl = new FormControl();
-  public ClientesFilterCtrl: FormControl = new FormControl();
-  protected _onDestroy = new Subject<void>();
+
 
 
   constructor(private ordensalidaService: OrdenSalidaService,
@@ -63,20 +62,29 @@ export class Listado2trabajoasignadoComponent implements OnInit {
 
     ngOnInit() {
 
+      this.cols = 
+      [
+          {header: 'ACCIONES', field: 'workNum' , width: '110px' },
+          {header: 'N° Trabajo', field: 'workNum'  ,  width: '110px' },
+          {header: 'Propietario', field: 'propietario'  , width: '160px'   },
+          {header: 'F.Asignación', field: 'fechaAsignacion'  ,  width: '100px'  },
+          {header: 'F.Término', field: 'fechaTermino' , width: '100px'  },
+          {header: '# Pallets', field: 'cantidadLPN'  , width: '100px'  },
+          {header: '# Bultos', field: 'cantidadTotal'  , width: '100px'  },
+          {header: 'Estado', field: 'estado',width: '120px'    }, 
+          
+          
+          
+          
+    
+        ];
+ 
       this.clienteService.getAllPropietarios("").subscribe(resp => { 
         resp.forEach(element => {
-          this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+          this.clientes.push({ value: element.id , label: element.razonSocial});
         });
-        this.filteredClientes.next(this.clientes.slice());
-        this.ClientesFilterCtrl.valueChanges
-        .pipe(takeUntil(this._onDestroy))
-        .subscribe(() => {
-              this.filterBanks();
-            });
-            this.loading = false;
-  
-  
-      });
+      
+
       const token = this.authService.jwtHelper.decodeToken(localStorage.getItem('token'));
       console.log(token.nameid);
   
@@ -84,20 +92,20 @@ export class Listado2trabajoasignadoComponent implements OnInit {
       this.loading = true;
       this.model.intervalo = 3;
       this.model.estadoIdfiltro = 30;
-      this.model.PropietarioFiltroId = 1;
+      
       
       
       this.EstadoId =this.model.estadoIdfiltro;
-      this.model.PropietarioId = this.model.PropietarioFiltroId;
+      this.model.PropietarioId = 0;
   
       
-      this.model.PropietarioId = 1;
+      //this.model.PropietarioId = 1;
       this.model.EstadoId = 31;
       
   
   
   
-      this.ordensalidaService.getAllWork(this.model).subscribe(list => {
+      this.ordensalidaService.getAllWork_Asignado(this.model).subscribe(list => {
         
         this.cargas = list;
         console.log(this.cargas);
@@ -107,70 +115,29 @@ export class Listado2trabajoasignadoComponent implements OnInit {
         this.listData.sort = this.sort;
         
           
-        this.listData.filterPredicate = (data,filter) => {
-          return this.displayedColumns.some(ele => {
-            
-            if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-               {
-                 
-                  return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-             
-               }
-            })
-           }
+ 
         });
-  
-    
-    
-    }
-    selection = new SelectionModel<Carga>(true, []);
-  
-    protected filterBanks() {
-      if (!this.clientes) {
-        return;
-      }
-      let search = this.ClientesFilterCtrl.value;
-      if (!search) {
-        this.filteredClientes.next(this.clientes.slice());
-        return;
-      } else {
-        search = search.toLowerCase();
-      }
-      this.filteredClientes.next(
-        this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-      );
-      
-    }
-    
+
+    });
+  }
     checkSelects() {
-      return  this.selection.selected.length > 0 ?  false : true;
-    }
-    checkboxLabel(row?: Carga): string {
-      if (!row) {
-        return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-      }
-      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id+ 1}`;
-    }
-    isAllSelected() {
-      const numSelected = this.selection.selected.length;
-      const numRows =  this.cargas.length;
-      return numSelected === numRows;
+      return  this.selectedRow.length > 0 ?  false : true;
     }
     asignar() {
-       if(this.selection.selected.length > 1)
+       if(this.selectedRow.length > 1)
        {
           this.alertify.warning("Debe seleccionar solo un elemento");
           return;
        } 
-      let idcarga = this.selection.selected[0].id ;
+      let idcarga = this.selectedRow[0].id ;
       //  this.alertify.success("Se registró correctamente.");
        this.router.navigate(['/despacho/equipotransportesalida', idcarga]);
        
-    }
+       }
   
     asignarPuerta(): void {
   
-      if(this.selection.selected.length > 1 || this.selection.selected.length ==  0){
+      if(this.selectedRow.length > 1 || this.selectedRow.length ==  0){
         this.alertify.error("Debe seleccionar solo una liquidación");
         return ;
       }
@@ -179,7 +146,7 @@ export class Listado2trabajoasignadoComponent implements OnInit {
       const dialogRef = this.dialog.open(DialogAsignarPuerta, {
         width: '700px',
         height: '350px',
-        data: {codigo: this.selection.selected, descripcion: ""}
+        data: {codigo: this.selectedRow, descripcion: ""}
       });
       dialogRef.afterClosed().subscribe(result => {
         this.model.descripcionLarga = result.descripcionLarga;
@@ -189,7 +156,7 @@ export class Listado2trabajoasignadoComponent implements OnInit {
     }
     asignarTrabajador(): void {
   
-      if(this.selection.selected.length > 1 || this.selection.selected.length ==  0){
+      if(this.selectedRow.length > 1 || this.selectedRow.length ==  0){
         this.alertify.error("Debe seleccionar solo una liquidación");
         return ;
       }
@@ -198,7 +165,7 @@ export class Listado2trabajoasignadoComponent implements OnInit {
       const dialogRef = this.dialog.open(DialogAsignarTrabajador, {
         width: '700px',
         height: '350px',
-        data: {codigo: this.selection.selected, descripcion: ""}
+        data: {codigo: this.selectedRow, descripcion: ""}
       });
       dialogRef.afterClosed().subscribe(result => {
         this.model.descripcionLarga = result.descripcionLarga;
@@ -213,7 +180,15 @@ export class Listado2trabajoasignadoComponent implements OnInit {
       this.listData.filter = this.searchKey.trim().toLowerCase();
     }
     buscar(){
-      
+      this.loading = true;
+      this.ordensalidaService.getAllWork_Asignado(this.model).subscribe(list => {
+        
+        this.cargas = list;
+        this.loading = false;
+
+        console.log(this.model);
+ 
+        });
     }
     
   }

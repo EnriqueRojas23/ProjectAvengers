@@ -79,7 +79,7 @@
 
                      </mat-header-cell>
                      <mat-cell *matCellDef="let row">
-                        <button class="btn btn-space btn-outline-primary" ngbTooltip="Editar Usuario" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button>
+                        <!-- <button class="btn btn-space btn-outline-primary" ngbTooltip="Editar Usuario" (click)="edit(row.id)"  type="button"><i class="icon mdi mdi-edit"></i></button> -->
                         <button [swal]="deleteSwal"  class="btn  btn-outline-primary" (confirm)="delete(row.id)" ngbTooltip="Eliminar Detalle"  type="button"><i class="fa fa-trash"></i></button>
                      </mat-cell>
                  </ng-container>

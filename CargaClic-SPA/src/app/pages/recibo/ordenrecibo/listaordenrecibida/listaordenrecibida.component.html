@@ -137,9 +137,10 @@
 
                        </mat-header-cell>
                        <mat-cell *matCellDef="let row">
-                           <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Pendiente Acomodo' || row.nombreEstado == 'Pendiente Almacenamiento' " class="btn btn-space btn-outline-primary" ngbTooltip="Iniciar recibo"  (click)="identificar(row.ordenReciboId)"  type="button"><i class="fas fa-sign-in-alt"></i></button>
-                           <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Recibiendo' || row.nombreEstado == 'Pendiente Almacenamiento'" class="btn btn-space btn-outline-primary" ngbTooltip="Acomodo"  (click)="acomodo(row.ordenReciboId)"  type="button"><i class="fas fa-archive"></i></button>
-                           <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Pendiente Acomodo' || row.nombreEstado == 'Recibiendo'"  class="btn btn-space btn-outline-primary" ngbTooltip="Almacenamiento"  (click)="almacenar(row.ordenReciboId)"  type="button"><i class="fas fa-warehouse"></i></button>
+                           <!-- <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Pendiente Acomodo' || row.nombreEstado == 'Pendiente Almacenamiento' " class="btn btn-space btn-outline-primary" ngbTooltip="Iniciar recibo"  (click)="identificar(row.ordenReciboId)"  type="button"><i class="fas fa-sign-in-alt"></i></button> -->
+                           <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Pendiente Acomodo' || row.nombreEstado == 'Pendiente Almacenamiento' " class="btn btn-space btn-outline-primary" ngbTooltip="Iniciar recibo múltiple"  (click)="identificar_multiple(row.ordenReciboId)"  type="button"><i class="fas fa-sign-in-alt"></i></button>
+                           <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Recibiendo' || row.nombreEstado == 'Pendiente Almacenamiento' || row.nombreEstado == 'Asignado' " class="btn btn-space btn-outline-primary" ngbTooltip="Acomodo"  (click)="acomodo(row.ordenReciboId)"  type="button"><i class="fas fa-archive"></i></button>
+                           <button  [disabled]="row.nombreEstado == 'Almacenado' || row.nombreEstado == 'Pendiente Acomodo' || row.nombreEstado == 'Recibiendo' || row.nombreEstado == 'Asignado'"  class="btn btn-space btn-outline-primary" ngbTooltip="Almacenamiento"  (click)="almacenar(row.ordenReciboId)"  type="button"><i class="fas fa-warehouse"></i></button>
                        </mat-cell>
                    </ng-container>
           

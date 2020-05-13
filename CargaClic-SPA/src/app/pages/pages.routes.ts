@@ -58,6 +58,8 @@ import { KardexgeneralComponent } from './inventario/inventariogeneral/kardexgen
 import { GestiontarifarioComponent } from './facturacion/preliquidacion/gestiontarifario/gestiontarifario.component';
 import { NuevatarifaComponent } from './facturacion/preliquidacion/nuevatarifa/nuevatarifa.component';
 import { EditartarifaComponent } from './facturacion/preliquidacion/editartarifa/editartarifa.component';
+import { EditarproductoComponent } from './mantenimiento/producto/editarproducto/editarproducto.component';
+import { IdentificarrecibomultipleComponent } from './recibo/ordenrecibo/identificarrecibomultiple/identificarrecibomultiple.component';
 
 
 
@@ -80,10 +82,14 @@ const pagesRoutes: Routes = [
     {path : 'recibo/nuevaordenrecibodetalle/:uid', component : NuevaordenrecibodetalleComponent, canActivate: [AuthGuard]} ,
     {path : 'recibo/verordenrecibo/:uid', component : VerordenreciboComponent, canActivate: [AuthGuard]} ,
     {path : 'recibo/editarordenrecibo/:uid', component : EditarordenreciboComponent, canActivate: [AuthGuard]} ,
-    {path : 'recibo/asignarpuerta/:uid', component : AsignarpuertaComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/asignarpuerta/:uid/:uid2', component : AsignarpuertaComponent, canActivate: [AuthGuard]} ,
     {path : 'recibo/vincularequipotransporte/:uid', component : VincularequipotransporteComponent, canActivate: [AuthGuard]} ,
     {path : 'recibo/listaordenrecibida/:uid', component : ListaordenrecibidaComponent, canActivate: [AuthGuard]} ,
+    
     {path : 'recibo/identificarrecibo/:uid/:uid2', component : IdentificarreciboComponent, canActivate: [AuthGuard]} ,
+    {path : 'recibo/identificarrecibomultiple/:uid/:uid2', component : IdentificarrecibomultipleComponent, canActivate: [AuthGuard]} ,
+
+
     {path : 'recibo/acomodopallets/:uid/:uid2', component : AcomodopalletsComponent, canActivate: [AuthGuard]} ,
     {path : 'recibo/almacenamiento/:uid/:uid2', component : AlmacenamientoComponent, canActivate: [AuthGuard]} ,
     {path : 'recibo/equipotransporteentrante', component : ListadoequipotransporteentranteComponent, canActivate: [AuthGuard]} ,
@@ -97,6 +103,7 @@ const pagesRoutes: Routes = [
     {path : 'mantenimiento/verdetallecliente/:uid', component : VerdetalleclienteComponent, canActivate: [AuthGuard]} ,
     {path : 'mantenimiento/nuevoproducto', component : NuevoproductoComponent, canActivate: [AuthGuard] } ,
     {path : 'mantenimiento/verproducto/:uid', component : VerproductoComponent, canActivate: [AuthGuard]} ,
+    {path : 'mantenimiento/editarproducto/:uid', component : EditarproductoComponent, canActivate: [AuthGuard]} ,
     {path : 'mantenimiento/nuevahuelladetalle/:uid/:uid2', component : NuevahuelladetalleComponent, canActivate: [AuthGuard]} ,
 
     {path : 'inventario/inventariogeneral', component : ListadoinventarioComponent, canActivate: [AuthGuard]} ,

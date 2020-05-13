@@ -1,0 +1,204 @@
+<h2 class="page-head-title">Recepción de Órdenes</h2>
+<div class="light-font">
+    <nav aria-label="breadcrumb" role="navigation">
+        <ol class="breadcrumb primary-color">
+            <li class="breadcrumb-item" [routerLink]="['/recibo/listaordenrecibida' , this.EquipoTransporteId ]" >Listado de órdenes de recibo</li>
+            <li class="breadcrumb-item  active" [routerLink]="['/recibo/Asignarpuerta' , this.EquipoTransporteId ]" routerLinkActive="router-link-active" >Paletizado Múltiples Productos</li>
+          </ol>
+    </nav>
+  </div>
+  <div class="main-content container-fluid">
+    <div class="row">
+      <div  class="col-md-12">
+        <div class="card card-border-color card-border-color-primary">
+          <div class="card-header card-header-divider">Líneas Orden de Recibo<span class="card-subtitle">Líneas de la Orden de Recibo</span></div>
+          <div class="card-body ">
+              <div  class="mat-elevation-z8">
+                <p-table [style]="{width:'100%'}" 
+                [scrollable]="true" [columns]="cols" [value]="ordenes"
+                [(selection)]="selectedRow"  #dt [paginator]="true"  
+                (onRowSelect)="identificar($event)" 
+                [rows]="40" [resizableColumns]="true" selectionMode="single" [responsive]="true"  >
+
+                <ng-template pTemplate="colgroup" let-columns>
+                  <colgroup>
+                      <col *ngFor="let col of columns"   [ngStyle]="{'width': col.width}" >
+                  </colgroup>
+                </ng-template>
+
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th  [ngStyle]="{'width': col.width}" *ngFor="let col of columns" pResizableColumn [pSortableColumn]="col.field">
+                          {{col.header}}
+                          <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                      </th>
+                  </tr>
+                </ng-template>  
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr  [pSelectableRow]="rowData">
+                      <td class="ui-resizable-column"> {{rowData.linea  }}</td>
+                      <td class="ui-resizable-column"> {{rowData.codigo}} </td>
+                      <td class="ui-resizable-column"> {{rowData.producto  }} </td>
+                      <td class="ui-resizable-column"> {{rowData.cantidad  }}  </td>
+                      <td class="ui-resizable-column"> {{rowData.cantidad - rowData.cantidadRecibida }}  </td>
+                      <td class="ui-resizable-column">  {{rowData.estado  }}      </td>
+                  </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="col-md-6">
+        <div class="card card-border-color card-border-color-primary">
+          <div class="card-body ">
+            <div class="ui-g ui-fluid">
+             <form #f="ngForm"  (ngSubmit)="actualizar(f)" >
+              <div class="timeline-avatar"><img class="circle" src="assets/img/Product_icon.png" alt="Avatar"></div>
+              <div class="timeline-header"><span class="timeline-autor"> {{ modeldetail.producto }}  </span>
+                <p class="timeline-activity"> <a href="#">{{ modeldetail.familia }}</a>.</p><span class="timeline-time">SKU -  {{ modeldetail.codigo }}</span>
+              </div>
+              <div class="be-booking-desc">
+                  <h4 class="be-booking-desc-title"> </h4><span class="be-booking-desc-details">Seleccione solo la cantidad que ingresará en un pallet.</span>
+              </div>
+              <div class="row">
+                    <div class="col-md-6">
+                          <label for="LotNum">Lote</label>
+                          <input pInputText    autocomplete="off" [(ngModel)]="modeldetail.LotNum" class="form-control col-md-12"  name="LotNum" type="text">
+                    </div>
+                    <div class="col-md-6">
+                              <label  for="fechaManufactura">Fecha de Manufactura</label>
+                              <p-calendar  type="datetime" baseZIndex=100 class="input-form-field col-md-3" autocomplete="off" [(ngModel)]="modeldetail.fechaManufactura" name="fechaManufactura"  [locale]="es" dateFormat="dd/mm/yy"></p-calendar>
+                    </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-md-6">
+                        <label  for="fechaExpire">Fecha de Expiración</label>
+                        <p-calendar  type="datetime" baseZIndex=100 class="input-form-field col-md-3" autocomplete="off" [(ngModel)]="modeldetail.fechaExpire" name="fechaExpire"  [locale]="es" dateFormat="dd/mm/yy"></p-calendar>
+                  </div>
+                  <div class="col-md-6">
+                      <label  for="estadoId">Estado</label>
+                      <p-dropdown name="estados" [options]="estados"  required [(ngModel)]="modeldetail.estadoId" 
+                      scrollHeight="40vh" class="input-form-field  col-sm-5"    [style]="{'width':'100%'}" [autoWidth]="false"  
+                      [hideTransitionOptions]="'0ms'"
+                      [showTransitionOptions]="'0ms'" 
+                      placeholder="seleccione un estado"  
+                      >
+                          <ng-template let-item pTemplate="selectedItem">
+                              <span style="vertical-align:middle;">{{item.label}}</span>
+                          </ng-template>
+                      </p-dropdown>
+                  </div>
+              </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label  for="huellaid">Huella</label>                  
+                    <p-dropdown [options]="huellas" name="huellas" required  [(ngModel)]="modeldetail.huellaId" 
+                    scrollHeight="40vh" class="input-form-field  col-sm-5" (onChange)="onChangeHuella($event)"    [style]="{'width':'100%'}" [autoWidth]="false"  
+                    [hideTransitionOptions]="'0ms'"
+                    [showTransitionOptions]="'0ms'" 
+                    placeholder="seleccione una huella"  
+                    >
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle;">{{item.label}}</span>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                    <div class="col-md-6">
+                        <label for="cantidad">Peso </label>
+                          <input pInputText type="text" class="form-control col-md-12" appTwoDigitDecimaNumber maxlength="10" [(ngModel)]="modeldetail.peso"  #cantidad="ngModel"  name="cantidad" >
+                      </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-md-6">
+                            <label  for="untQty">Cantidad Recibida</label>
+                              <input pInputText required type="text" class="form-control col-md-12"  (keypress)="numberOnly($event)" maxlength="6"  [(ngModel)]="modeldetail.untQty"  #untQty="ngModel"  name="untQty" >
+                        </div>
+                   </div>
+                  <div class="row pt-2 pt-sm-5 mt-1">
+                      <div class="col-sm-6 pl-0">
+                        <p class="text-right">
+                         
+                          <button [disabled]="!f.valid" [swal]='deleteSwal'  (confirm)="generarPallets()" class="btn btn-space btn-primary" type="button">Generar Pallets</button>
+                        </p>
+                      </div>
+                      <div class="col-sm-6 pl-0">
+                      <button  [disabled]="!f.valid" class="btn btn-space btn-warning" type="submit">Es parte de una Pallet</button>
+                    </div>
+                  </div>
+         </form>
+        </div>
+      </div>
+        </div>
+        </div> 
+        <div  class="col-md-6">
+          <div class="card-full-success">
+            <div class="card-header card-header-divider">Pallet -  Detalle del pallet </div>
+            <div class="card-body ">
+                <div  class="mat-elevation-z8">
+  
+                  <p-table [style]="{width:'100%'}" 
+                  [scrollable]="true" [columns]="cols2" [value]="AddInventario"
+                   #dt [paginator]="true"  
+                  [rows]="40" [resizableColumns]="true"  [responsive]="true"  >
+  
+                  <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col *ngFor="let col of columns"   [ngStyle]="{'width': col.width}" >
+                    </colgroup>
+                  </ng-template>
+  
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th  [ngStyle]="{'width': col.width}" *ngFor="let col of columns" pResizableColumn [pSortableColumn]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                        </th>
+                    </tr>
+                  </ng-template>  
+                  <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr  [pSelectableRow]="rowData">
+                        <td class="ui-resizable-column">  
+                          <div class="ui-inputgroup">
+                            <button  class="ui-button-secondary" ngbTooltip="Eliminar Orden"  (click)="delete(rowData.id)"   type="button"><i class="fa fa-trash"></i></button>
+                          </div>
+                         </td> 
+                        
+                        
+                        <td class="ui-resizable-column"> {{rowData.codigo}} </td>
+                        <td class="ui-resizable-column"> {{rowData.descripcionLarga  }} </td>
+                        <td class="ui-resizable-column"> {{rowData.untQty  }}  </td>
+                        <td class="ui-resizable-column"> {{rowData.estado  }}  </td>
+                    </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+                <div class="row pt-2 pt-sm-5 mt-1">
+                  <div class="col-sm-6 pl-0">
+                    <p class="text-right">
+                      <button  class="btn btn-space btn-primary" (click)="generarPallet()" type="button">Generar Pallet</button>
+                      <button class="btn btn-space btn-primary" (click)="terminar()">Terminar</button>
+                      <!-- <button (click)="regresar()" class="btn btn-space btn-secondary">Regresar</button> -->
+                    </p>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px' }" ></ngx-loading>
+
+     <swal
+      #deleteSwal
+      title="Generar la línea"
+      text="¿Esta seguro que desea generar la línea?"
+      type="question"
+      [showCancelButton]="true"
+      [focusCancel]="true"
+      [options]="{ confirmButtonText: 'Generar' }"
+      >
+    </swal>

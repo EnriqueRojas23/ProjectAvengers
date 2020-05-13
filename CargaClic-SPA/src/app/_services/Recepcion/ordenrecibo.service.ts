@@ -7,6 +7,7 @@ import { Ubicacion } from 'src/app/_models/Mantenimiento/ubicacion';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { EquipoTransporte } from 'src/app/_models/Recepcion/equipotransporte';
 import { environment } from 'src/environments/environment';
+import { InventarioGeneral } from 'src/app/_models/Inventario/inventariogeneral';
 
 
 const httpOptions = {
@@ -26,11 +27,12 @@ constructor(private http: HttpClient) { }
 
 getAll(model: any) : Observable<OrdenRecibo[]> {
 
-  console.log(localStorage.getItem('token'));
-
   let params = "?PropietarioID=" + model.PropietarioId +
-  "&EstadoId=" + model.estadoIdfiltro +
-  "&DaysAgo=" + model.intervalo;
+  "&EstadoId=" + model.EstadoId +
+  "&fec_ini=" + model.fec_ini.toLocaleDateString() +
+  "&fec_fin=" + model.fec_fin.toLocaleDateString() +
+  "&AlmacenId=" + model.AlmacenId;
+
   return this.http.get<OrdenRecibo[]>(this.baseUrl + params,httpOptions)
 };
 getAllByEquipoTransporte(model: any) : Observable<OrdenRecibo[]> {
@@ -73,10 +75,12 @@ getEquipoTransporte(placa: string) : Observable<EquipoTransporte> {
 getAllEquipoTransporte(model:any) : Observable<EquipoTransporte[]> {
 
   let params = "?PropietarioID=" + model.PropietarioId +
-  "&EstadoId=" + model.estadoIdfiltro +
-  "&DaysAgo=" + model.intervalo;
-  
-  return this.http.get<EquipoTransporte[]>(this.baseUrl + 'ListEquipoTransporte' + params,httpOptions);
+  "&EstadoId=" + model.EstadoId +
+  "&fec_ini=" + model.fec_ini.toLocaleDateString() +
+  "&fec_fin=" + model.fec_fin.toLocaleDateString() +
+  "&AlmacenId=" + model.AlmacenId;
+
+  return this.http.get<EquipoTransporte[]>(this.baseUrl + 'ListEquipoTransporte' + params ,httpOptions);
 }
 deleteOrder(id:any) : Observable<OrdenRecibo[]> {
   let params = "?OrdenReciboId=" + id ;
@@ -106,12 +110,24 @@ obtenerOrdenDetalle(id: any): Observable<OrdenReciboDetalle> {
    }
 
 identificar_detalle(model: any){
+   console.log(model);
   return this.http.post(this.baseUrl + 'identify_detail', model,httpOptions)
   .pipe(
     map((response: any) => {
     } 
    )
 )};
+
+identificar_detallemultiple(model: InventarioGeneral[]){
+  let body = JSON.stringify(model);  
+  return this.http.post(this.baseUrl + 'identify_detail_mix', body,httpOptions)
+  .pipe(
+    map((response: any) => {
+      
+    } 
+   )
+)};
+
 cerrar_identificacion(Id: any){
   
   let model: any;

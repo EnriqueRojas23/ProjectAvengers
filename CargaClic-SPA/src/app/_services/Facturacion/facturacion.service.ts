@@ -46,6 +46,13 @@ generar_preliquidacion(model: any){
     } 
    )
 )};
+delete_preliquidacion(id: number){
+  return this.http.delete(this.baseUrl + 'DeletePreliquidacion?id=' + id,httpOptions)
+  .pipe(
+    map((response: any) => {
+    } 
+   )
+)};
 
 generar_comprobante(model: any){
   return this.http.post(this.baseUrl + 'GenerarComprobante',model,httpOptions)

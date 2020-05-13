@@ -8,25 +8,56 @@
    <div class="card card-border-color card-border-color-primary">
        <div class="card-body">
            <div class="row">
-         
-               <div class="col-md-4">
-                   <label class="control-label" for="username">Propietario:</label>
-                   <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                       <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
-                        <mat-option>
-                            <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
-                         </mat-option>
-                         <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
-                             {{pow.viewValue}}
-                         </mat-option>
-                       </mat-select>
-                     </mat-form-field>
-                 </div>
-      
- 
+
+
+            <div class="col-md-3">
+              <h5>Almacén :</h5>
+              <p-dropdown name="almacenes" [options]="almacenes" name="almacenes" [(ngModel)]="model.AlmacenId"  required
+                  scrollHeight="40vh" class="input-form-field"  required   [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+                  [hideTransitionOptions]="'0ms'"
+                  [showTransitionOptions]="'0ms'" 
+                  placeholder="seleccione un almacén"  
+                  filter="false">
+                      <ng-template let-item pTemplate="selectedItem">
+                          <span style="vertical-align:left;">{{item.label}}</span>
+                      </ng-template>
+                </p-dropdown>
+           </div>
+
+             
+                  <div class="col-md-2">
+                    <h5>Propietario :</h5>
+                    <p-dropdown  [options]="clientes"  [(ngModel)]="model.PropietarioId" 
+                    scrollHeight="40vh" class="input-form-field"    [style]="{'width':'80%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+                    [hideTransitionOptions]="'0ms'"
+                    [showTransitionOptions]="'0ms'" 
+                    placeholder="seleccione un cliente"  
+                    filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:left;">{{item.label}}</span>
+                        </ng-template>
+                        <!-- <ng-template let-item pTemplate="item">
+                          <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                              <div style="font-size:14px;float:left;margin-top:4px">{{item.label}}</div>
+                          </div>
+                      </ng-template> -->
+                      </p-dropdown>
+                    </div>
+
+                    <!-- <div class="col-md-2">
+                      <h5>Inicio:</h5>
+                      <p-calendar [(ngModel)]="dateInicio"  [locale]="es" dateFormat="dd/mm/yy"></p-calendar>
+                      </div>
+                      <div class="col-md-2">
+                      <h5>Fin:</h5>
+                      <p-calendar [(ngModel)]="dateFin"  [locale]="es" dateFormat="dd/mm/yy"></p-calendar>
+                      </div> -->
+  
+           </div>
+           <div class="row">
                <div class="col-md-2 offset-md-10">
                    
-                     <button class="btn btn-block btn-primary"  (click)="buscar(model.PropietarioId)"  type="button">Buscar</button>
+                     <button class="btn btn-block btn-primary"  (click)="buscar()"  type="button">Buscar</button>
                    
                </div>
             

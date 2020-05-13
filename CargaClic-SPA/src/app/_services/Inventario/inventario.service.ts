@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Ubicacion, Area } from 'src/app/_models/Mantenimiento/ubicacion';
 import { InventarioGeneral } from 'src/app/_models/Inventario/inventariogeneral';
 import { environment } from 'src/environments/environment';
+import { GraficoStock, GraficoRecepcion } from 'src/app/_models/Inventario/GraficoStock';
 
 
 
@@ -47,30 +48,26 @@ return this.http.post(this.baseUrl + 'merge_ajuste', model,httpOptions)
     } 
   )
 )}
-asignar_ubicacion (Id:number, UbicacionId: number ){
-  //RegisterInventario
-  let model: any = {};
-  model.Id = Id;
-  model.UbicacionId = UbicacionId;
+asignar_ubicacion (model: InventarioGeneral[] ){
+  let body = JSON.stringify(model); 
 
-  return this.http.post(this.baseUrl + 'asignar_ubicacion', model,httpOptions)
+  return this.http.post(this.baseUrl + 'asignar_ubicacion', body,httpOptions)
   .pipe(
     map((response: any) => {
     } 
    )
-  )}
+  )};
   
   terminar_acomodo(Id:number){
-    //RegisterInventario
-    let model: any = {};
-    model.OrdenReciboId = Id;
+        let model: any = {};
+        model.OrdenReciboId = Id;
 
     return this.http.post(this.baseUrl + 'terminar_acomodo', model,httpOptions)
     .pipe(
       map((response: any) => {
-      } 
-    )
-    )}
+        } 
+      )
+      )}
     almacenamiento(Id:number){
       //RegisterInventario
       let model: any = {};
@@ -86,8 +83,22 @@ asignar_ubicacion (Id:number, UbicacionId: number ){
 
   getAll(LineaId: number): Observable<InventarioGeneral[]> {
       let params = "Id=" + LineaId ;
-      
       return this.http.get<InventarioGeneral[]>(this.baseUrl +"GetAll?" + params, httpOptions);
+  }
+  getPallet(id: any): Observable<InventarioGeneral[]> {
+    let params = "OrdenReciboId=" + id ;
+    return this.http.get<InventarioGeneral[]>(this.baseUrl +"GetPallet?" + params, httpOptions);
+  }
+
+  getGraficoStock(PropietarioId: number, AlmacenId: number): Observable<GraficoStock[]> {
+    let params = "PropietarioId=" + PropietarioId +
+    "&AlmacenId=" + AlmacenId;
+    return this.http.get<GraficoStock[]>(this.baseUrl +"GetGraficoStock?" + params, httpOptions);
+  }
+  getGraficoRecepcion(PropietarioId: number, AlmacenId: number): Observable<GraficoRecepcion[]> {
+    let params = "PropietarioId=" + PropietarioId +
+    "&AlmacenId=" + AlmacenId;
+    return this.http.get<GraficoRecepcion[]>(this.baseUrl +"GetGraficoRecepcion?" + params, httpOptions);
   }
 
   get(InventarioId: number): Observable<InventarioGeneral[]> {
@@ -110,11 +121,12 @@ asignar_ubicacion (Id:number, UbicacionId: number ){
     
     return this.http.get<InventarioGeneral[]>(this.baseUrl +"GetAllInvetarioAjuste?" + params, httpOptions);
   }
-registrar_ajuste(model: any) {
-  return this.http.post(this.baseUrl + 'register_ajuste', model,httpOptions)
-  .pipe(
-    map((response: any) => {
-    } 
-  )
-)}
+  registrar_ajuste(model: any) {
+    return this.http.post(this.baseUrl + 'register_ajuste', model,httpOptions)
+    .pipe(
+      map((response: any) => {
+      } 
+    )
+  )}
+
 }

@@ -1,0 +1,76 @@
+
+
+  .ui-datepicker {
+    top: 129px !important;
+    }
+  
+  
+    .mat-fab.mat-primary, .mat-flat-button.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary {
+      position: absolute !important; 
+      top:40px !important; 
+      left:-30px !important; 
+      z-index: 1000 !important;
+      background: #fdd835 !important; 
+      color: #000000 !important;
+    }
+    th, td {
+      text-align: left;
+      font-size: 0.90em;
+      height : 5px;
+      /* font-family: "Quicksand", "Trebuchet MS", Arial, Helvetica, sans-serif; */
+      
+    }
+
+    .old-car {
+      background-color: #1CA979 !important;
+      color: #ffffff !important;
+  }
+  
+  .very-old-car {
+      background-color: #f12a2a !important;
+      color: #ffffff !important;
+  }
+    
+  .wrapper-div {
+    display: flex;
+    align-items: center;
+    }
+
+
+    .example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+.highlight{
+    background: rgb(224, 216, 238); /* green */
+  }
+
+  td.mat-cell ,
+  th.mat-header-cell{
+      border-bottom-width: 0px;
+  }
+.input-div{
+    display: flex;
+    
+      }
+      .input-form-field{
+          width: 30%;
+          /* margin-left: 10px; */
+          padding: 1px 1px;
+          border-radius: 1px;
+          }
+          .input-form-field div.mat-form-field-underline {
+              display: none;
+          }
+          .input-form-field div.mat-form-field-infix{
+              border-top: 5px;
+          }
+          .input-form-field div.mat-form-field-wrapper{
+            padding-bottom: 5px;
+        }
+        .input-form-field div.mat-form-field-suffix button{
+            height: 32px;
+            width: 32px;
+        }
+
+       

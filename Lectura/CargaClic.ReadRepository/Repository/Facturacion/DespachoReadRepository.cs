@@ -38,7 +38,7 @@ namespace CargaClic.ReadRepository.Repository.Despacho
 
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "[Facturacion].[pa_listarpendientespreliquidacion]";
+                string sQuery = "[Facturacion].[pa_listarpendientesliquidacion_fase2_agrupado]";
                 conn.Open();
                 var result = await conn.QueryAsync<GetPendientesLiquidacion>(sQuery,
                                                                            parametros

@@ -9,3 +9,8 @@ export interface Area {
     id:number;
     nombre: string;
 }
+
+export interface Almacen {
+    id:number ;
+    descripcion: string;
+}

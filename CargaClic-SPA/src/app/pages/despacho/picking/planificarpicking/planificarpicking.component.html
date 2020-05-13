@@ -23,17 +23,43 @@
           <div class="card-body">
               <div class="row">
             
-        
-                      <div class="col-md-6">
-                        <label class="control-label" for="username">Planificados para:</label>
-                         <mat-form-field class="input-form-field  col-sm-8 ">
-                            <mat-select  [(value)]="model.intervalo" >
-                              <mat-option  *ngFor="let pow of intervalo"  [value]="pow.val">
-                                  {{pow.viewValue}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                      </div>
+                <div class="col-md-3">
+                  <h5>Almacén :</h5>
+                  <p-dropdown name="almacenes" [options]="almacenes" name="almacenes" [(ngModel)]="model.AlmacenId"  required
+                      scrollHeight="40vh" class="input-form-field"  required   [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+                      [hideTransitionOptions]="'0ms'"
+                      [showTransitionOptions]="'0ms'" 
+                      placeholder="seleccione un almacén"  
+                      filter="false">
+                          <ng-template let-item pTemplate="selectedItem">
+                              <span style="vertical-align:left;">{{item.label}}</span>
+                          </ng-template>
+                    </p-dropdown>
+               </div>
+               <div class="col-md-3">
+                <h5>Planificados  :</h5>
+                <p-dropdown name="almacenes" [options]="intervalo" name="intervalo" [(ngModel)]="model.intervalo"  required
+                    scrollHeight="40vh" class="input-form-field"  required   [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+                    [hideTransitionOptions]="'0ms'"
+                    [showTransitionOptions]="'0ms'" 
+                    placeholder="seleccione un intervalo"  
+                    filter="false">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:left;">{{item.label}}</span>
+                        </ng-template>
+                  </p-dropdown>
+              </div>
+
+                <!-- <div class="col-md-6">
+                  <label class="control-label" for="username">Planificados para:</label>
+                    <mat-form-field class="input-form-field  col-sm-8 ">
+                      <mat-select  [(value)]="model.intervalo" >
+                        <mat-option  *ngFor="let pow of intervalo"  [value]="pow.val">
+                            {{pow.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div> -->
                    
     
                   <div class="col-md-3">

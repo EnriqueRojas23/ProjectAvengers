@@ -16,5 +16,7 @@ namespace CargaClic.Domain.Facturacion
         public decimal? Total { get; set; }
         public int? AlmacenId { get; set; }
         public int EstadoId {get;set;}
+        public DateTime? FechaInicio {get;set;}
+        public DateTime? FechaFin{get;set;}
     }
 }

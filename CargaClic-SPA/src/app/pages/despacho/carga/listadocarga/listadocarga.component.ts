@@ -10,6 +10,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Carga } from 'src/app/_models/Despacho/carga';
 import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service';
 import { takeUntil } from 'rxjs/operators';
+import { SelectItem } from 'primeng/components/common/selectitem';
 
 @Component({
   selector: 'app-listadocarga',
@@ -20,21 +21,15 @@ export class ListadocargaComponent implements OnInit {
 
 
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  searchKey: string;
-  pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = [ 'select' , 'propietario',  'numCarga' ,'estado','fechaRegistro' ,'fechaRequerida','placa' ,'equipoTransporte',  'actionsColumn' ];
-  
-  listData: MatTableDataSource<Carga>;
+
   public loading = false;
   lines: Carga[] = [];
 
   ordenesaux: Carga[] = [];
   model: any  = {};
 
-
-  clientes: Dropdownlist[] = [];
+  selectedRow: Carga[] = [];
+  clientes: SelectItem[] = [];
   EstadoId : number;
 
   intervalo: Dropdownlist[] = [
@@ -49,11 +44,8 @@ export class ListadocargaComponent implements OnInit {
       {val: 26, viewValue: 'Confirmado'},
       {val: 27, viewValue: 'Despachado'},
   ];
-  public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
-  public ClientesCtrl: FormControl = new FormControl();
-  public ClientesFilterCtrl: FormControl = new FormControl();
-  protected _onDestroy = new Subject<void>();
 
+  cols: any[];   
 
   constructor(private ordensalidaService: OrdenSalidaService
     ,  private alertify: AlertifyService ,
@@ -62,102 +54,87 @@ export class ListadocargaComponent implements OnInit {
 
   ngOnInit() {
     
-    this.clienteService.getAllPropietarios("").subscribe(resp => { 
-      resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
-      });
-      this.filteredClientes.next(this.clientes.slice());
-      this.ClientesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterBanks();
-          });
-          this.loading = false;
-          this.model.intervalo = 3;
-          this.model.estadoIdfiltro = 21;
-    });
 
-    this.model.intervalo = 3;
-    this.model.estadoIdfiltro = 30;
-    this.model.PropietarioFiltroId = 1;
-    
-    
-    this.EstadoId =this.model.estadoIdfiltro;
-    this.model.PropietarioId = this.model.PropietarioFiltroId;
-
-    
-    this.model.PropietarioId = 1;
-    this.model.EstadoId = 25;
-    
-    this.ordensalidaService.getAllCargas(this.model).subscribe(list => {
-      
-    this.lines = list;
-      
-      
-    this.listData = new MatTableDataSource(this.lines);
-    this.listData.paginator = this.paginator;
-    this.listData.sort = this.sort;
-    
+    this.cols = 
+    [
+        // {header: 'ACCIONES', field: 'workNum' , width: '100px' },
+        {header: 'N° Trabajo', field: 'workNum'  ,  width: '180px' },
+        {header: 'PROPIETARIO', field: 'propietario'  , width: '280px'   },
+        // {header: 'Fecha Asignacion', field: 'fechaAsignacion'  ,  width: '100px'  },
+        // {header: 'Fecha Término', field: 'fechaTermino' , width: '100px'  },
+        {header: ' Placa', field: 'placa'  , width: '140px'  },
+        {header: 'Equipo Transporte', field: 'equipoTransporte'  , width: '130px'  },
+        {header: 'Estado', field: 'estado',width: '120px'    }, 
+        {header: 'Destino', field: 'destino',width: '120px'    }, 
+        // {header: 'Direccion', field: 'direccion',width: '420px'    }, 
         
-      this.listData.filterPredicate = (data,filter) => {
-        return this.displayedColumns.some(ele => {
-          
-          if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-             {
-               
-                return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-           
-             }
-          })
-         }
+        
+  
+      ];
+
+
+    this.clienteService.getAllPropietarios("").subscribe(resp => { 
+      this.clientes.push({ value: 0 , label: "Todos los propietarios"});
+      resp.forEach(element => {
+        this.clientes.push({ value: element.id , label: element.razonSocial});
       });
-    }
 
-  selection = new SelectionModel<Carga>(true, []);
+      
+
+          this.model.EstadoId = 25;
+          this.model.PropietarioId = 0;
+          this.ordensalidaService.getAllCargas_pendientes(this.model).subscribe(list => {
+            
+          this.lines = list;
+          console.log(this.lines);
+            
+            
+              
+      
+            });
+    });
+  }
+
+  
   checkSelects() {
-    return  this.selection.selected.length > 0 ?  false : true;
+    return  this.selectedRow.length > 0 ?  false : true;
   }
-  checkboxLabel(row?: Carga): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id+ 1}`;
-  }
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows =  this.lines.length;
-    return numSelected === numRows;
-  }
-  masterToggle() {
-    
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.listData.data.forEach(row => this.selection.select(row));
-  }
-  highlight(row){
-    this.selection.isSelected(row) ? this.selection.deselect(row) : this.selection.select(row)
-  }
-  asignarVehiculo(){
-         
-        this.model.UsuarioRegistroId = 1;
-        this.ordensalidaService.registrar_carga(this.model).subscribe(resp => {
-          this.buscar();
-          this.alertify.success("Se ha asignado el equipo de transporte.");
-       });
+  // checkboxLabel(row?: Carga): string {
+  //   if (!row) {
+  //     return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+  //   }
+  //   return `${this.selectedRow.isSelected(row) ? 'deselect' : 'select'} row ${row.id+ 1}`;
+  // }
+  // isAllSelected() {
+  //   const numSelected = this.selection.selected.length;
+  //   const numRows =  this.lines.length;
+  //   return numSelected === numRows;
+  // }
 
-  }
+  // asignarVehiculo(){
+         
+  //       this.model.UsuarioRegistroId = 1;
+  //       this.ordensalidaService.registrar_carga(this.model).subscribe(resp => {
+  //         this.buscar();
+  //         this.alertify.success("Se ha asignado el equipo de transporte.");
+  //      });
+
+  // }
   asignar() {
     let ids = "";
-    this.selection.selected.forEach(el => {
+    this.selectedRow.forEach(el => {
           ids = ids + ',' + el.id;
     });
     this.model.ids = ids.substring(1,ids.length + 1);
+
+    console.log(this.selectedRow);
+
     this.router.navigate(['/despacho/equipotransportesalida', this.model.ids]);
     
  }
  darsalida() {
   let ids = "";
-  this.selection.selected.forEach(el => {
+  this.selectedRow.forEach(el => {
         ids = ids + ',' + el.id;
       
     });
@@ -173,61 +150,23 @@ export class ListadocargaComponent implements OnInit {
 
 
  }
-  applyFilter() {
-    this.listData.filter = this.searchKey.trim().toLowerCase();
-  }
+
 
   buscar(){
-    this.model.intervalo = 3;
-    this.model.estadoIdfiltro = 30;
-    this.model.PropietarioFiltroId = 1;
-    
-    
-    this.EstadoId =this.model.estadoIdfiltro;
-    this.model.PropietarioId = this.model.PropietarioFiltroId;
 
     
-    this.model.PropietarioId = 1;
+    
     this.model.EstadoId = 25;
     
-    this.ordensalidaService.getAllCargas(this.model).subscribe(list => {
+    this.ordensalidaService.getAllCargas_pendientes(this.model).subscribe(list => {
       
     this.lines = list;
       
       
-    this.listData = new MatTableDataSource(this.lines);
-    this.listData.paginator = this.paginator;
-    this.listData.sort = this.sort;
-    
         
-      this.listData.filterPredicate = (data,filter) => {
-        return this.displayedColumns.some(ele => {
-          
-          if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-             {
-               
-                return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-           
-             }
-          })
-         }
+
       });
   }
 
-  protected filterBanks() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
-    
-  }
+
 }

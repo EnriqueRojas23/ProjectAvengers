@@ -12,7 +12,7 @@ export class AuthService {
 baseUrl = environment.baseUrl + '/api/auth/';
 jwtHelper = new JwtHelperService();
 decodedToken: any;
-
+menu: any[] ;
 constructor(private http: HttpClient) { }
 
 login(model: any) {
@@ -25,7 +25,10 @@ login(model: any) {
         this.decodedToken = this.jwtHelper.decodeToken(user.token);
 
         const stringMenu = JSON.stringify(user.menu);
-        localStorage.setItem('menu', stringMenu);
+        this.menu =   JSON.parse(JSON.stringify(user.menu));
+
+
+         localStorage.setItem('menu', stringMenu);
 
          localStorage.removeItem('Name');
          localStorage.removeItem('RememberMe');

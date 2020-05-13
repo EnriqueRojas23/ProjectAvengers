@@ -11,7 +11,9 @@ import { OrdenReciboService } from 'src/app/_services/Recepcion/ordenrecibo.serv
 import { OrdenReciboDetalle } from 'src/app/_models/Recepcion/ordenrecibo';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
-
+import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-editarordenrecibo',
@@ -27,16 +29,12 @@ import { takeUntil, take } from 'rxjs/operators';
     ]
 })
 export class EditarordenreciboComponent implements OnInit {
-
+  es: any;
   model: any = {};
-  clientes: Dropdownlist[] = [];
+  clientes: SelectItem[] = [];
   OrdenesDetalle: OrdenReciboDetalle[] = [];
-  
-  public ClientesCtrl: FormControl = new FormControl();
-  public ClientesFilterCtrl: FormControl = new FormControl();
-  public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
-  @ViewChild('singleSelect') singleSelect: MatSelect;
-  protected _onDestroy = new Subject<void>();
+  almacenes: SelectItem[] = [];
+
 
   
 
@@ -53,40 +51,54 @@ export class EditarordenreciboComponent implements OnInit {
   constructor(private ordenReciboService: OrdenReciboService , 
     private clienteService: ClienteService,
      private router: Router,
+     private generealService : GeneralService,
      private activatedRoute: ActivatedRoute
      , private alertify: AlertifyService ) { }
 
   ngOnInit() {
-  
+
+    this.es = {
+      firstDayOfWeek: 1,
+      dayNames: [ "domingo","lunes","martes","miércoles","jueves","viernes","sábado" ],
+      dayNamesShort: [ "dom","lun","mar","mié","jue","vie","sáb" ],
+      dayNamesMin: [ "D","L","M","X","J","V","S" ],
+      monthNames: [ "enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre" ],
+      monthNamesShort: [ "ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic" ],
+      today: 'Hoy',
+      clear: 'Borrar'
+  }
        this.model.Id = this.activatedRoute.snapshot.params["uid"];
 
       this.clienteService.getAllPropietarios('').subscribe(resp => { 
-        resp.forEach(element => {
-          this.clientes.push({ val: element.id , viewValue: element.razonSocial});
-        });
-        
-        this.filteredClientes.next(this.clientes.slice());
-        this.ClientesFilterCtrl.valueChanges
-        .pipe(takeUntil(this._onDestroy))
-        .subscribe(() => {
-              this.filterBanks();
+            resp.forEach(element => {
+              this.clientes.push({ value: element.id , label: element.razonSocial});
             });
-  
-        }, error => {
+          }, error => {
         }, () => { 
+
+          this.generealService.getAllAlmacenes().subscribe(resp=> {
+            resp.forEach(element => {
+              this.almacenes.push({ value: element.id ,  label : element.descripcion});
+            });
+      
+          }, error => {
+          }, () =>  { 
+
           this.ordenReciboService.obtenerOrden(  this.model.Id ).subscribe(resp=>
             { 
+                 console.log(resp);
                  
-                 this.ClientesCtrl.setValue(this.clientes.filter(x => x.val == resp.propietarioId)[0]);
-                 this.model.FechaEsperada = resp.fechaEsperada;
+                
+                 this.model.FechaEsperada = new Date(resp.fechaEsperada).toLocaleString();
                  this.model.HoraEsperada = resp.horaEsperada;
                  this.model.guiaremision = resp.guiaRemision;
                  this.model.PropietarioId = resp.propietarioId;
+                 this.model.AlmacenId = resp.almacenId;
                  
                  
             })
-          
-      });
+          });
+        });
 
      
 
@@ -94,39 +106,11 @@ export class EditarordenreciboComponent implements OnInit {
 
    }
 
-ngAfterViewInit() {
-    this.setInitialValue();
-}
- ngOnDestroy() {
-      this._onDestroy.next();
-      this._onDestroy.complete();
-  }
+
   
 
-  protected setInitialValue() {
-    this.filteredClientes
-      .pipe(take(1), takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.singleSelect.compareWith = (a: Dropdownlist, b: Dropdownlist) => a && b && a.val === b.val;
-      });
-  }
- 
-  protected filterBanks() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
-    
-  }
+
+
 
   registrar(form: NgForm) {
     if (form.invalid) {
@@ -134,14 +118,7 @@ ngAfterViewInit() {
     }
 
 
-    if(this.model.PropietarioCtrl  != undefined){
-      
-      this.model.Propietario =   this.clientes.filter(x => x.val == this.model.PropietarioCtrl.val)[0].viewValue;
-      this.model.PropietarioId = this.clientes.filter(x => x.val == this.model.PropietarioCtrl.val)[0].val;
-    }
-    else{
-      this.model.Propietario =  this.clientes.filter(x => x.val == this.model.PropietarioId )[0].viewValue;
-    }
+      this.model.Propietario =   this.clientes.filter(x => x.value == this.model.PropietarioId)[0].label;
 
 
   
@@ -155,7 +132,7 @@ ngAfterViewInit() {
     });
 
   }
-  
+
 
 
 }

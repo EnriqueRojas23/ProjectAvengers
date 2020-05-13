@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { OrdenRecibo, OrdenReciboDetalle } from 'src/app/_models/Recepcion/ordenrecibo';
-import { Ubicacion } from 'src/app/_models/Mantenimiento/ubicacion';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
-import { EquipoTransporte } from 'src/app/_models/Recepcion/equipotransporte';
+import { OrdenRecibo } from 'src/app/_models/Recepcion/ordenrecibo';
 import { environment } from 'src/environments/environment';
 import { OrdenSalida } from 'src/app/_models/Despacho/ordenrecibo';
 import { Carga } from 'src/app/_models/Despacho/Carga';
@@ -41,9 +38,14 @@ PlanificarPicking(model: any){
 
 
 getAllOrdenSalida(model: any) : Observable<OrdenSalida[]> {
+  //console.log(this.model);
+
   let params = "?PropietarioID=" + model.PropietarioId +
   "&EstadoId=" + model.estadoIdfiltro +
-  "&DaysAgo=" + model.intervalo;
+  "&fec_ini=" + model.fec_ini.toLocaleDateString() +
+  "&fec_fin=" + model.fec_fin.toLocaleDateString() +
+  "&AlmacenId=" + model.AlmacenId ;
+  
   return this.http.get<OrdenSalida[]>(this.baseUrl + "GetAllOrder" + params,httpOptions)
 };
 getAllPendienteCarga(model: any) : Observable<ShipmentLine[]> {
@@ -64,9 +66,12 @@ getAllPickingPendienteDetalle(Id) : Observable<ShipmentLine[]> {
 
 
 getAllOrdenSalidaPendientes(model: any) : Observable<OrdenSalida[]> {
+
   let params = "?PropietarioID=" + model.PropietarioId +
-  "&EstadoId=" + model.estadoIdfiltro +
-  "&DaysAgo=" + model.intervalo;
+  "&EstadoId=" + model.EstadoId + 
+  "&DaysAgo=" + model.intervalo +
+  "&AlmacenId=" + model.AlmacenId;
+
   return this.http.get<OrdenSalida[]>(this.baseUrl + "GetAllOrderPendiente" + params,httpOptions)
 };
 
@@ -76,10 +81,22 @@ getAllCargas(model: any) : Observable<Carga[]> {
   "&EstadoId=" + model.EstadoId ;
   return this.http.get<Carga[]>(this.baseUrl + "GetAllCargas" + params,httpOptions)
 };
+
+getAllCargas_pendientes(model: any) : Observable<Carga[]> {
+  let params = "?PropietarioID=" + model.PropietarioId +
+  "&EstadoId=" + model.EstadoId ;
+  return this.http.get<Carga[]>(this.baseUrl + "GetAllCargas_Pendientes_Salida" + params,httpOptions)
+};
 getAllWork(model: any) : Observable<Carga[]> {
   let params = "?PropietarioID=" + model.PropietarioId +
   "&EstadoId=" + model.EstadoId ;
   return this.http.get<Carga[]>(this.baseUrl + "GetAllWork" + params,httpOptions)
+};
+
+getAllWork_Asignado(model: any) : Observable<Carga[]> {
+  let params = "?PropietarioID=" + model.PropietarioId +
+  "&EstadoId=" + model.EstadoId ;
+  return this.http.get<Carga[]>(this.baseUrl + "GetAllWorkAssigned" + params,httpOptions)
 };
 
 getAllWorkDetail(id: number) : Observable<Carga[]> {

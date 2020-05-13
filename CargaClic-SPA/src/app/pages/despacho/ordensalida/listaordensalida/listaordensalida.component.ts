@@ -12,6 +12,8 @@ import { takeUntil } from 'rxjs/operators';
 import { OrdenSalidaService } from 'src/app/_services/Despacho/ordensalida.service';
 import { OrdenSalida } from 'src/app/_models/Despacho/ordenrecibo';
 import { EditButtonRendererComponent } from 'src/app/pages/modal/Edit-button-renderer/Edit-button-renderer.component';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
 
 
 
@@ -26,48 +28,44 @@ export class ListaordensalidaComponent implements OnInit {
   
   loaders: any[];
   
-  
+  cols: any[];   
   timers: any[];
   tasks: {};
 
-
+  selectedRow: OrdenSalida[] = [];
   title = 'app';
    gridApi;
    gridColumnApi;
    frameworkComponents;
    
-   
+   es: any;
 
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  searchKey: string;
-  pageSizeOptions:number[] = [5, 10, 25, 50, 100];
-  displayedColumns: string[] = [ 'numOrden' ,'propietario','nombreEstado','guiaRemision' ,'equipotransporte', 'placa','fechaRequerida','horaRequerida','fechaRegistro','actionsColumn' ];
-  
-  listData: MatTableDataSource<OrdenSalida>;
+   almacenes: SelectItem[] = [];
+
   public loading = false;
   ordenes: OrdenSalida[] = [];
   model: any  = {};
   
-  clientes: Dropdownlist[] = [];
+  clientes: SelectItem[] = [];
   EstadoId : number;
   context;
   taskId: string = 'bg-default'
- 
+  dateInicio: Date = new Date(Date.now()) ;
+  dateFin: Date = new Date(Date.now()) ;
 
-  intervalo: Dropdownlist[] = [
-    {val: 0, viewValue: 'Desde Siempre'},
-    {val: 1, viewValue: 'Hoy'},
-    {val: 3, viewValue: 'Hace tres días'},
-    {val: 7, viewValue: 'Hace una semana '},
-    {val: 31, viewValue: 'Hace un mes '},
+  intervalo: SelectItem[] = [
+    {value: 0, label: 'Desde Siempre'},
+    {value: 1, label: 'Hoy'},
+    {value: 3, label: 'Hace tres días'},
+    {value: 7, label: 'Hace una semana '},
+    {value: 31, label: 'Hace un mes '},
   ];
-  estados: Dropdownlist[] = [
-      {val: 21, viewValue: 'Creado'},
-      {val: 22, viewValue: 'Planificado'},
-      {val: 23, viewValue: 'Asignado'},
-      {val: 24, viewValue: 'Despachado'},
+  estados: SelectItem[] = [
+      {value: 21, label: 'Creado'},
+      {value: 22, label: 'Planificado'},
+      {value: 23, label: 'Asignado'},
+      {value: 24, label: 'Despachado'},
     
   ];
   public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
@@ -78,6 +76,7 @@ export class ListaordensalidaComponent implements OnInit {
   constructor(private ordensalidaService: OrdenSalidaService,
     private router: Router,
     private clienteService: ClienteService,
+    private generealService : GeneralService,
     private alertify: AlertifyService,
     
     ) 
@@ -96,20 +95,73 @@ export class ListaordensalidaComponent implements OnInit {
       };
   }
   ngOnInit() {
+
+ 
     
+    this.cols = 
+    [
+        {header: 'ACCIONES', field: 'numOrden' , width: '100px' },
+        {header: 'ORDEN', field: 'numOrden'  ,  width: '80px' },
+        {header: 'PROPIETARIO', field: 'propietario'  , width: '140px'   },
+        {header: 'ESTADO', field: 'nombreEstado'  ,  width: '100px'  },
+        {header: 'GR', field: 'guiaRemision' , width: '100px'  },
+        {header: 'EQ TRANSP', field: 'equipotransporte'  , width: '140px'  },
+        {header: 'F. REQUERIDA', field: 'fechaEsperada'  , width: '130px'  },
+        {header: 'F. REGISTRO', field: 'fechaRegistro',width: '120px'    }, 
+      ];
+      this.es = {
+        firstDayOfWeek: 1,
+        dayNames: [ "domingo","lunes","martes","miércoles","jueves","viernes","sábado" ],
+        dayNamesShort: [ "dom","lun","mar","mié","jue","vie","sáb" ],
+        dayNamesMin: [ "D","L","M","X","J","V","S" ],
+        monthNames: [ "enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre" ],
+        monthNamesShort: [ "ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic" ],
+        today: 'Hoy',
+        clear: 'Borrar'
+    }
+    
+
+    this.dateInicio.setDate((new Date()).getDate() - 5);
+    this.dateFin.setDate((new Date()).getDate() );
+
+    this.model.fec_ini =  this.dateInicio;
+
+    this.model.fec_fin =  this.dateFin ;
+
+
+  
+
     this.clienteService.getAllPropietarios("").subscribe(resp => { 
       resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+        this.clientes.push({ value: element.id , label: element.razonSocial.toUpperCase()});
       });
-      this.filteredClientes.next(this.clientes.slice());
-      this.ClientesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterBanks();
-          });
-          this.loading = false;
-          this.model.intervalo = 3;
-          this.model.estadoIdfiltro = 21;
+      this.generealService.getAllAlmacenes().subscribe(resp=> {
+        resp.forEach(element => {
+          this.almacenes.push({ value: element.id ,  label : element.descripcion});
+        });
+        if(localStorage.getItem('PropietarioId') == "undefined" || localStorage.getItem('PropietarioId') == null ) {
+          this.model.PropietarioId = 1;
+        }
+        else {
+          this.model.PropietarioId =  parseInt(localStorage.getItem('PropietarioId'));
+        }
+      
+        if(localStorage.getItem('Estado') == null || localStorage.getItem('Estado') == 'undefined') {
+           this.model.EstadoId = 131;
+        }
+        else {
+            this.model.EstadoId = parseInt(localStorage.getItem('Estado'));
+        }
+        if(localStorage.getItem('AlmacenId') == null || localStorage.getItem('AlmacenId') == 'undefined') {
+          this.model.AlmacenId = 1;
+        }
+        else {
+            this.model.AlmacenId = parseInt(localStorage.getItem('AlmacenId'));
+        }
+
+  
+      });
+ 
     });
   }
   onGridReady(params) {
@@ -133,70 +185,38 @@ export class ListaordensalidaComponent implements OnInit {
     const numRows =  this.ordenes.length;
     return numSelected === numRows;
   }
-  protected filterBanks() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
-    
-  }
+
   ver(id){
     this.router.navigate(['/picking/verordensalida',id]);
    }
    buscar(){
     
+    
+    this.model.fec_ini =  this.dateInicio;
+    this.model.fec_fin =  this.dateFin ;
 
+    localStorage.setItem('AlmacenId', this.model.AlmacenId);
+    localStorage.setItem('PropietarioId', this.model.PropietarioId);
+    localStorage.setItem('Intervalo', this.model.intervalo);
+    localStorage.setItem('Estado', this.model.EstadoId);
 
     this.ordensalidaService.getAllOrdenSalida(this.model).subscribe(list => {
-      
-      
-
       this.ordenes = list;
-      //this.rowData = list;
-      
       this.loading = false;
-      this.listData = new MatTableDataSource(this.ordenes);
-      this.listData.paginator = this.paginator;
-      this.listData.sort = this.sort;
-      
-      this.listData.filterPredicate = (data,filter) => {
-        return this.displayedColumns.some(ele => {
-          
-          if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-             {
-               
-                return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-           
-             }
-          })
-         }
       });
-      
    }
    methodFromParent(cell) {
     alert("Parent Component Method from " + cell + "!");
   }
+  edit(id){
+      console.log('Editando..');
+  }
   delete(id){
      
     this.ordensalidaService.deleteOrder(id).subscribe(resp => {
-
        this.ordensalidaService.getAllOrdenSalida(this.model).subscribe(list => {
-           
          this.ordenes = list;
          this.loading = false;
-         this.listData = new MatTableDataSource(this.ordenes);
-         this.listData.paginator = this.paginator;
-         this.listData.sort = this.sort;
-
    });
     }, error => {
       
@@ -207,21 +227,9 @@ export class ListaordensalidaComponent implements OnInit {
 
      }, () => { 
 
-       this.listData.filterPredicate = (data,filter) => {
-         return this.displayedColumns.some(ele => {
-           
-           if(ele != 'ubicacion' &&  ele != 'select' && ele != 'EquipoTransporte' && ele !='Almacen' && ele != 'Urgente' && ele != 'fechaEsperada' && ele != 'fechaRegistro')
-              {
-                
-                 return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-            
-              }
-           })
-          };
+
       });
    }
-  applyFilter() {
-    this.listData.filter = this.searchKey.trim().toLowerCase();
-  }
+
 
 }

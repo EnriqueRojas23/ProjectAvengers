@@ -15,50 +15,64 @@
    <div class="card card-border-color card-border-color-primary">
        <div class="card-body">
            <div class="row">
-         
-               <div class="col-md-4">
-                   <label class="control-label" for="username">Propietario:</label>
-                   <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                       <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
-                        <mat-option>
-                            <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
-                         </mat-option>
-                         <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
-                             {{pow.viewValue}}
-                         </mat-option>
-                       </mat-select>
-                     </mat-form-field>
-                 </div>
-                   <div class="col-md-4">
-                     <label class="control-label" for="username">Intervalo: </label>
-                      <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                         <mat-select  [(value)]="model.intervalo" >
-                           <mat-option  *ngFor="let pow of intervalo"  [value]="pow.val">
-                               {{pow.viewValue}}
-                           </mat-option>
-                         </mat-select>
-                       </mat-form-field>
-                   </div>
-                   <div class="col-md-4">
-                       <label class="control-label" for="username">Estado : </label>
-                       <mat-form-field class="input-form-field  col-sm-8 col-lg-6">
-                           <mat-select  [(value)]="model.estadoIdfiltro" >
-                             <mat-option  *ngFor="let pow of estados"  [value]="pow.val">
-                                 {{pow.viewValue}}
-                             </mat-option>
-                           </mat-select>
-                         </mat-form-field>
-                     </div>
- 
-               <div class="col-md-2 offset-md-10">
+            <div class="col-md-3">
+              <h5>Almacén :</h5>
+              <p-dropdown name="almacenes" [options]="almacenes" name="almacenes" [(ngModel)]="model.AlmacenId"  required
+                  scrollHeight="40vh" class="input-form-field"  required   [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+                  [hideTransitionOptions]="'0ms'"
+                  [showTransitionOptions]="'0ms'" 
+                  placeholder="seleccione un almacén"  
+                  filter="false">
+                      <ng-template let-item pTemplate="selectedItem">
+                          <span style="vertical-align:left;">{{item.label}}</span>
+                      </ng-template>
+                </p-dropdown>
+           </div>
+
+                <div class="col-md-2">
+                  <h5>Propietario :</h5>
+                  <p-dropdown  [options]="clientes"  [(ngModel)]="model.PropietarioId" 
+                  scrollHeight="40vh" class="input-form-field"    [style]="{'width':'80%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+                  [hideTransitionOptions]="'0ms'"
+                  [showTransitionOptions]="'0ms'" 
+                  placeholder="seleccione un cliente"  
+                  filter="true">
+                      <ng-template let-item pTemplate="selectedItem">
+                          <span style="vertical-align:left;">{{item.label}}</span>
+                      </ng-template>
+                    
+                    </p-dropdown>
+                  </div>
+                  <div class="col-md-2">
+                    <h5>Inicio:</h5>
+                    <p-calendar [(ngModel)]="dateInicio"  [locale]="es" dateFormat="dd/mm/yy"></p-calendar>
+                    </div>
+                    <div class="col-md-2">
+                    <h5>Fin:</h5>
+                    <p-calendar [(ngModel)]="dateFin"  [locale]="es" dateFormat="dd/mm/yy"></p-calendar>
+                    </div>
+                    <div class="col-md-2">
+                      <h5>Estado :</h5>
+                        <p-dropdown [options]="estados"  [(ngModel)]="model.EstadoId" 
+                        scrollHeight="40vh" class="input-form-field  col-sm-5"    [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="true" 
+                        [hideTransitionOptions]="'0ms'"
+                        [showTransitionOptions]="'0ms'" 
+                        placeholder="seleccione un estado"  
+                        filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle;">{{item.label}}</span>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+
                    
-                     <button class="btn btn-block btn-primary"  (click)="buscar()"  type="button">Buscar</button>
-                   
-               </div>
             
              </div>
+            <div class="row col-md-2 offset-md-8">
+                <button class="btn btn-block btn-primary"  (click)="buscar()"  type="button">Buscar</button>
+              </div>
        </div>
-   </div>
+   
 
  </div>
 <div class="col-md-12">
@@ -67,7 +81,7 @@
  <div class="card card-border-color card-border-color-primary">
    <div class="card-header card-header-divider">
        
-     <div  [hidden]="!checkSelects()" class="row">
+     <div  class="row">
            <b> Equipos de Transporte |  </b>  <span class="card-subtitle">   Listado de equipos de Transporte </span>
          </div>
      </div>
@@ -81,12 +95,7 @@
        <div  class="col-md-8">
        </div>
        <div  class="col-md-3" >
-           <div class="input-container">
-               <i class="fa fa-search"></i>
-               <mat-form-field class="search-form-field" >
-                 <input matInput placeholder="Filtrar..." autocomplete="off" >
-               </mat-form-field>
-               </div>
+          
          </div>
    </div>
 
@@ -94,109 +103,47 @@
    <div class="card-body">
        
        <div  class="mat-elevation-z8">
-           <mat-table #table [dataSource] = "listData" matSort >
-
-
-
-
-
-              <ng-container matColumnDef="equipoTransporte">
-               <mat-header-cell *matHeaderCellDef mat-sort-header>  Equipo Transporte</mat-header-cell>
-               <mat-cell  *matCellDef="let orden" > 
-                     <span class="label label-info pull-xs-center">{{orden.equipoTransporte}}</span>
-               </mat-cell>
-             </ng-container>
-       
-             <ng-container matColumnDef="puerta">
-              <mat-header-cell *matHeaderCellDef mat-sort-header >  Puerta </mat-header-cell>
-              <mat-cell *matCellDef="let user"> {{user.puerta}} </mat-cell>
-            </ng-container>
-
-
-
-            <ng-container matColumnDef="placa">
-              <mat-header-cell *matHeaderCellDef mat-sort-header >  Placa </mat-header-cell>
-              <mat-cell *matCellDef="let user"> {{user.placa}} </mat-cell>
-            </ng-container>
-         
-                 
-         
-                 <ng-container matColumnDef="marca">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Marca </mat-header-cell>
-                  <mat-cell *matCellDef="let user"> {{user.marca}} </mat-cell>
-                </ng-container>
-
-                
-                <ng-container matColumnDef="tipoVehiculo">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Tipo </mat-header-cell>
-                  <mat-cell *matCellDef="let user"> {{user.tipoVehiculo}} </mat-cell>
-                </ng-container>
-        
-
-                 <ng-container matColumnDef="estado">
-                   <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
-                   <mat-cell *matCellDef="let user"> 
-
-                  <div *ngIf="user.estado == 'Cerrado' then
-                         Cerrado "></div>
-                  <div *ngIf="user.estado == 'Asignado' then
-                  Asignado "></div>
-                  <div *ngIf="user.estado == 'En Descarga' then
-                  EnDescarga "></div>
-                  <div *ngIf="user.estado == 'Llegada' then
-                  Llegada "></div>
-
-                 <ng-template #Cerrado>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#757575'">{{user.estado}}     </div>     </ng-template>
-                 <ng-template #Asignado>   <div [style.color]="'#FFFFFF'" [style.background-color]="'#d00101'" >{{user.estado}}     </div>   </ng-template>  
-                 <ng-template #EnDescarga>   <div [style.color]="'#FFFFFF'" [style.background-color]="'#d00101'" >{{user.estado}}     </div>   </ng-template>  
-                 <ng-template #Llegada>   <div [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'" >{{user.estado}}     </div>   </ng-template>  
-
-                   </mat-cell>
-                 </ng-container>
-
-                 <ng-container matColumnDef="chofer">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header >  Chofer </mat-header-cell>
-                  <mat-cell *matCellDef="let user"> {{user.nombreCompleto}} </mat-cell>
-                </ng-container>
-         
-                            
-                <ng-container matColumnDef="dni">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header >  DNI </mat-header-cell>
-                  <mat-cell *matCellDef="let user"> {{user.dni}} </mat-cell>
-                </ng-container>
-        
-
-
-          
-                 <ng-container matColumnDef="actionsColumn">
-                     <mat-header-cell *matHeaderCellDef>
-                           
-                     </mat-header-cell>
-                     <mat-cell *matCellDef="let row">
-                      <button [disabled]="row.estado == 'Cerrado' || row.estado == 'Asignado'"  class="btn btn-space btn-outline-primary" ngbTooltip="Asignar Puerta" (click)="openDoor(row.id)" type="button"><i class="fas fa-door-closed"></i></button>
-                      <button [disabled]="row.estado == 'Cerrado' || row.estado == 'Llegada'" class="btn btn-space btn-outline-primary" ngbTooltip="Descargar" (click)="openEquipoTransporte(row.id)" type="button"><i class="fas fa-truck-loading"></i></button>
-                         <!-- <button class="btn btn-space btn-outline-primary" ngbTooltip="Dar Entrada a Camión"    matTooltipPosition="left" (click)="openDialog(row.id)" type="button"><i class="fas fa-check"></i></button> -->
-                         <!-- <button  class="btn btn-space btn-outline-primary" (click)="open(row)" type="button"><i class="fas fa-trash"></i></button> -->
-                         <!-- <button  class="btn btn-space btn-outline-primary" (click)="ver(row.ordenReciboId)" type="button"><i class="fas fa-search"></i></button> -->
-
-                         
-                     </mat-cell>
-                 </ng-container>
-        
-         
-           <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
-           <mat-row *matRowDef="let row; columns: displayedColumns;" 
-           
-           [ngClass]="{ 'highlight': selectedRowIndex == row.id}"
-           (click)="highlight(row)">
-
-           </mat-row>
-         
-         
-           </mat-table>
-
-
-          <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+           <p-table [style]="{width:'100%'}" 
+           [scrollable]="true" [columns]="cols" [value]="transportes"
+             #dt [paginator]="true"  
+           [rows]="40" [resizableColumns]="true"  [responsive]="true"  >
+ 
+             <ng-template pTemplate="colgroup" let-columns>
+               <colgroup>
+                   <col *ngFor="let col of columns"   [ngStyle]="{'width': col.width}" >
+               </colgroup>
+           </ng-template>
+             <ng-template pTemplate="header" let-columns>
+               <tr>
+                   <th  [ngStyle]="{'width': col.width}" *ngFor="let col of columns" pResizableColumn [pSortableColumn]="col.field">
+                       {{col.header}}
+                       <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                   </th>
+               </tr>
+           </ng-template>
+             <ng-template pTemplate="body" let-rowData let-columns="columns">
+               <tr  [pSelectableRow]="rowData">
+                   <td class="ui-resizable-column">  
+                     <div class="ui-inputgroup">
+                      <button [disabled]="rowData.estado == 'Cerrado' || rowData.estado == 'Asignado'"  class="btn btn-space btn-outline-primary" ngbTooltip="Asignar Puerta" (click)="openDoor(rowData.id, rowData.almacenId)" type="button"><i class="fas fa-door-closed"></i></button>
+                      <button [disabled]="rowData.estado == 'Cerrado' || rowData.estado == 'Llegada'" class="btn btn-space btn-outline-primary" ngbTooltip="Descargar" (click)="openEquipoTransporte(rowData.id)" type="button"><i class="fas fa-truck-loading"></i></button>
+                     </div>
+                 </td>
+                 <td class="ui-resizable-column"> {{rowData.almacen  }}</td>
+                   <td class="ui-resizable-column"> {{rowData.equipoTransporte  }}</td>
+                   <td class="ui-resizable-column"> {{rowData.puerta}} </td>
+                   
+                   <td class="ui-resizable-column"> {{rowData.placa  }} </td>
+                   <td class="ui-resizable-column"> {{rowData.marca  }}  </td>
+                   <td class="ui-resizable-column"> {{rowData.tipoVehiculo  }}  </td>
+                   
+                   <td  [ngClass]="rowData.estado == 'Llegada' ? 'old-car' 
+                   :  (rowData.estado == 'Asignado'?' very-old-car': null) "> {{rowData.estado}}</td>
+                   
+               </tr>
+               </ng-template>
+ 
+           </p-table>
 
          </div>
        

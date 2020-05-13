@@ -22,7 +22,7 @@
                   <div class="input-div">
                     <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cantidad">Cantidad</label>
                     <mat-form-field class="input-form-field col-12 col-sm-8 col-lg-6">  
-                      <input matInput autocomplete="off" minlength="1" maxlength="2" (keypress)="numberOnly($event)" required [(ngModel)]="data.UntQty"  #cantidad="ngModel" name="cantidad" placeholder="Cantidad" type="text">
+                      <input matInput autocomplete="off" minlength="1" maxlength="5" (keypress)="numberOnly($event)" required [(ngModel)]="data.UntQty"  #cantidad="ngModel" name="cantidad" placeholder="Cantidad" type="text">
                     </mat-form-field>
                     <div *ngIf="cantidad.invalid && (cantidad.dirty || cantidad.touched)"  class="alert alert-danger">
                       <div *ngIf="cantidad.errors.required">

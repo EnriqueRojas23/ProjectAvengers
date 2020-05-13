@@ -9,7 +9,7 @@ namespace CargaClic.Common
             Recibiendo = 6,
             PendienteAcomodo = 19,
             PendienteAlmacenamiento = 20,
-            Terminado = 12,
+            Almacenado = 12,
         }
         
         public enum EstadoOrdenSalida : int

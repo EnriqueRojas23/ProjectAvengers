@@ -280,11 +280,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\RIA\\RIA\\2018\\Proyecto Avengers\\app\\Common\\Common.csproj",
+      "projectUniqueName": "D:\\RIA\\RIA\\2018\\Proyecto Avengers\\app\\Common\\Common.csproj",
       "projectName": "Common",
-      "projectPath": "d:\\RIA\\RIA\\2018\\Proyecto Avengers\\app\\Common\\Common.csproj",
+      "projectPath": "D:\\RIA\\RIA\\2018\\Proyecto Avengers\\app\\Common\\Common.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "d:\\RIA\\RIA\\2018\\Proyecto Avengers\\app\\Common\\obj\\",
+      "outputPath": "D:\\RIA\\RIA\\2018\\Proyecto Avengers\\app\\Common\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -326,10 +326,16 @@
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

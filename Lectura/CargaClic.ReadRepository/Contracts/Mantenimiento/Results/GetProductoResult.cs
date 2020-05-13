@@ -10,6 +10,9 @@ namespace CargaClic.ReadRepository.Contracts.Mantenimiento.Results
         public string DescripcionLarga {get;set;}
         public decimal Peso {get;set;}
         public string UnidadMedida {get;set;}
+        public int ClienteId {get;set;}
+        public int FamiliaId {get;set;}
+        public int UnidadMedidaId {get;set;}
 
     }
 }

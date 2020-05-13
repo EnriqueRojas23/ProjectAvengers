@@ -25,7 +25,7 @@ namespace CargaClic.Handlers.Inventario
                  var parametros = new DynamicParameters();
                  parametros.Add("OrdenReciboId", dbType: DbType.Guid, direction: ParameterDirection.Input, value: parameters.Id);
                  var result = new ListarInventarioResult();
-                 result.Hits =  conn.Query<ListarInventarioDto>("Inventario.pa_listarinventario"
+                 result.Hits =  conn.Query<ListarInventarioDto>("Inventario.pa_listarinventario_mix"
                                                                         ,parametros
                                                                         ,commandType:CommandType.StoredProcedure);
                 return result;

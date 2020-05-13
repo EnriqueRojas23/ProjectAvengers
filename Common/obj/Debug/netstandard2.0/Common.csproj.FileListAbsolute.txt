@@ -11,7 +11,6 @@ D:\RIA\RIA\2018\Proyecto Avengers\app\Common\bin\Debug\netstandard2.0\Common.dep
 D:\RIA\RIA\2018\Proyecto Avengers\app\Common\bin\Debug\netstandard2.0\Common.dll
 D:\RIA\RIA\2018\Proyecto Avengers\app\Common\bin\Debug\netstandard2.0\Common.pdb
 D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.csprojAssemblyReference.cache
-D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.csproj.CoreCompileInputs.cache
 D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.AssemblyInfoInputs.cache
 D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.AssemblyInfo.cs
 D:\RIA\RIA\2018\Proyecto Avengers\app\Common\obj\Debug\netstandard2.0\Common.dll

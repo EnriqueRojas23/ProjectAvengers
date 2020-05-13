@@ -82,37 +82,86 @@ namespace CargaClic.Repository
                 var pckrk = await _context.Pckwrk.Where(x=>x.Id == command.Id).SingleOrDefaultAsync();
                 var wrk = await _context.Wrk.Where(x=>x.Id == pckrk.WrkId).SingleOrDefaultAsync();
                 var dominio = await _context.InventarioGeneral.Where(x=>x.Id == pckrk.InventarioId).Include(z=>z.InvLod).SingleOrDefaultAsync();
-               
+                
+                var ordensalida =  _context.OrdenSalida.Where(x=>x.Id == pckrk.OrdenSalidaId).SingleOrDefault();
+               // var ordensalidadetalle = _context.OrdenSalidaDetalle.Where(x=>x.OrdenSalidaId == ordensalida.Id).ToList();
+
+
+                 Shipment ship ;
+                 ShipmentLine shipline ;
+//                 InventarioGeneral inventario;
+                
+
                 try
                 {
                        
                          pckrk.Confirmado = true;
-                         dominio.InvLod.UbicacionId =   wrk.DestinoId.Value;
+                         //dominio.InvLod.UbicacionId =   wrk.DestinoId.Value;
                          dominio.InvLod.UbicacionProxId = null;
 
                          pckrk.DestinoId = null;
                          pckrk.UbicacionId =  wrk.DestinoId.Value;
+                         
                          
 
                         /// Lógica para cerrar pedido
                         var detalles = await _context.Pckwrk.Where(x=>x.WrkId == wrk.Id).ToListAsync();
                                     
                         if(detalles.Where(x=>x.Confirmado == true).ToList().Count > 0)
+                        {
                             wrk.FechaInicio = DateTime.Now;
+                            wrk.EstadoId  = (Int32)Constantes.EstadoWrk.Iniciado;
+                           // ship.EstadoId = (Int32)Constantes.EstadoCarga.Pendiente;
+                        }
+                        if(detalles.Where(x=>x.Confirmado == false).ToList().Count > 0)
+                        {
+                            wrk.FechaInicio = DateTime.Now;
+                            wrk.EstadoId  = (Int32)Constantes.EstadoWrk.Iniciado;
+                            //ship.EstadoId = (Int32)Constantes.EstadoCarga.Pendiente;
+                        }
+                        else {
 
                             foreach (var item in detalles)
                             {
-                                if(item.Confirmado == false){
-                                    wrk.EstadoId  = (Int32)Constantes.EstadoWrk.Iniciado;
-                                }
-                                else wrk.EstadoId = (Int32)Constantes.EstadoWrk.Terminado;
+                                shipline = _context.ShipmentLine.Where(x=>x.Id == item.ShipmentLineId ).FirstOrDefault();
+                                ship = _context.Shipment.Where(x=>x.Id == shipline.ShipmentId).SingleOrDefault();
+
+                                wrk.EstadoId = (Int32)Constantes.EstadoWrk.Terminado;
+                                ship.EstadoId = (Int32)Constantes.EstadoCarga.Confirmado;
                             }
+
+
+                        }
+                        
+
+
+                        
+
+                            // foreach (var item in detalles)
+                            // {
+                            //  //   inventario =  _context.InventarioGeneral.Where( x=> x.Id == item.InventarioId ).FirstOrDefault();
+
+                            
+
+
+                            //     if(item.Confirmado == false){
+                            //         wrk.EstadoId  = (Int32)Constantes.EstadoWrk.Iniciado;
+                            //         ship.EstadoId = (Int32)Constantes.EstadoCarga.Pendiente;
+                            //         break;
+                            //     }
+                            //     else 
+                            //     { 
+                                  
+                            //     }
+                            // }
+
 
                          await _context.SaveChangesAsync();
 
 
                          //Registrar el movimiento en el kardex
                         kardex = new KardexGeneral();
+                        
                         kardex.Almacenado = false;
                         kardex.EstadoId = dominio.EstadoId;
                         kardex.FechaExpire = dominio.FechaExpire;
@@ -122,6 +171,7 @@ namespace CargaClic.Repository
                         kardex.LineaId = dominio.LineaId;
                         kardex.LodId = dominio.LodId;
                         kardex.LotNum = dominio.LotNum;
+                        kardex.UntCas = dominio.UntCas;
                         kardex.Movimiento = "S";
                         kardex.OrdenReciboId = dominio.OrdenReciboId;
                         kardex.Peso = dominio.Peso;
@@ -131,6 +181,7 @@ namespace CargaClic.Repository
                         kardex.UntQty = pckrk.CantidadRetiro * -1 ; //dominio.UntQty * -1;
                         kardex.UsuarioIngreso = 1;
                         kardex.InventarioId = dominio.Id;
+                        kardex.FechaSalida = ordensalida.FechaRequerida;
                         
                         _context.KardexGeneral.Add(kardex);
 
@@ -294,8 +345,10 @@ namespace CargaClic.Repository
                                         {
                                                 result = (from a in _context.InventarioGeneral 
                                                 .Include(z=>z.InvLod)
+                                                .Include(x=>x.InvLod.ubicacion)
+                                                
                                                 where (a.ProductoId == item2.ProductoId  
-                                                 & a.Almacenado == true 
+                                                   &&  a.InvLod.ubicacion.AlmacenId == item.AlmacenId  //a.Almacenado == true 
                                                 && (a.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
                                                 ||  a.EstadoId == (Int16) Constantes.EstadoInventario.Merma)
                                                    )
@@ -307,9 +360,10 @@ namespace CargaClic.Repository
 
 
                                         result = (from a in _context.InventarioGeneral 
-                                            .Include(z=>z.InvLod)
-                                            where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
-                                                        a.Almacenado == true 
+                                            .Include(z=>z.InvLod )
+                                            .Include(x=>x.InvLod.ubicacion)
+                                            where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId 
+                                             &&  a.InvLod.ubicacion.AlmacenId == item.AlmacenId  //a.Almacenado == true 
                                                         )
                                                         select a)
                                             .OrderBy(x=>x.FechaExpire)
@@ -324,9 +378,11 @@ namespace CargaClic.Repository
                                         {
                                                 result = (from a in _context.InventarioGeneral 
                                                 .Include(z=>z.InvLod)
+                                                 .Include(x=>x.InvLod.ubicacion)
                                                 where (a.ProductoId == item2.ProductoId  
-                                                  & a.Almacenado == true 
+                                                 // & a.Almacenado == true 
                                                   & a.LotNum == item2.Lote
+                                                   &&  a.InvLod.ubicacion.AlmacenId == item.AlmacenId  //a.Almacenado == true 
                                                         && (a.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
                                                         ||  a.EstadoId == (Int16) Constantes.EstadoInventario.Merma)
                                                     )
@@ -335,11 +391,13 @@ namespace CargaClic.Repository
                                                     .OrderBy(x=>x.UntQty).ToList();
                                         }
                                         else {
-                                        result = (from a in _context.InventarioGeneral 
+                                                   result = (from a in _context.InventarioGeneral 
                                                     .Include(z=>z.InvLod)
-                                                    where (a.ProductoId == item2.ProductoId  && a.EstadoId == item2.EstadoId &
-                                                                a.Almacenado == true 
-                                                                &  a.LotNum == item2.Lote)
+                                                    .Include(x=>x.InvLod.ubicacion)
+                                                    where (a.ProductoId == item2.ProductoId  
+                                                           && a.EstadoId == item2.EstadoId 
+                                                            && a.LotNum == item2.Lote 
+                                                             &&  a.InvLod.ubicacion.AlmacenId == item.AlmacenId)  //a.Almacenado == true )
                                                                 select a)
                                                     .OrderBy(x=>x.FechaExpire)
                                                     .OrderBy(x=>x.UntQty).ToList();
@@ -379,7 +437,7 @@ namespace CargaClic.Repository
                                         pckwrk.LineaId = inventario.LineaId;
                                         pckwrk.FechaIngreso =  inventario.FechaRegistro;
                                         pckwrk.LotNum = inventario.LotNum;
-                                        inventario.Almacenado = false;
+                                        
                                         inventario.ShipmentLine = shipmentline.Id;
 
                                         ids.Add(inventario.Id);
@@ -387,16 +445,16 @@ namespace CargaClic.Repository
                                         if(recaudado_individual <= item2.Cantidad) {
                                             pckwrk.CantidadRetiro = inventario.UntQty;
                                             pckwrk.Completo = true;
-
+                                            inventario.Almacenado = false;
                                             await _context.Pckwrk.AddAsync(pckwrk);
                                             await _context.SaveChangesAsync();
                                         }
                                         else {
-                                            pckwrk.CantidadRetiro =item2.Cantidad -  (recaudado_individual - inventario.UntQty);
+                                            pckwrk.CantidadRetiro = item2.Cantidad -  (recaudado_individual - inventario.UntQty);
                                             if(pckwrk.CantidadRetiro == 0) 
                                                 break;
                                             pckwrk.Completo = false;
-                                 
+                                            inventario.Almacenado = true;
                                             await _context.Pckwrk.AddAsync(pckwrk);
                                             await _context.SaveChangesAsync();
 
@@ -425,7 +483,7 @@ namespace CargaClic.Repository
             
             ordensalida = new OrdenSalida();
             ordensalida.Activo = true;
-            ordensalida.AlmacenId = 1;
+            ordensalida.AlmacenId = ordenSalidaForRegister.AlmacenId;
             ordensalida.EquipoTransporteId = null;
             ordensalida.EstadoId = (Int32) Constantes.EstadoOrdenSalida.Creado;
             ordensalida.FechaRegistro = DateTime.Now;
@@ -466,6 +524,7 @@ namespace CargaClic.Repository
             int total = 0;
 
             var detalles =  _context.OrdenSalidaDetalle.Where(x=>x.OrdenSalidaId == command.OrdenSalidaId);
+            var cabecera = _context.OrdenSalida.Where(x=>x.Id == command.OrdenSalidaId).SingleOrDefault();
 
             if(detalles.Count() == 0)
                 linea = "0001";
@@ -474,39 +533,52 @@ namespace CargaClic.Repository
                  linea = (Convert.ToInt32(linea) + 1).ToString().PadLeft(4,'0');
             }
 
-            if(command.Lote == "")
+            if(command.Lote == "" || command.Lote == null)
             {
                 if(command.EstadoID == 10)
-                {
-                        inventario =  _context.InventarioGeneral.Where(
-                        x=>x.ProductoId ==  command.ProductoId
-                        && x.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
-                        ||  x.EstadoId == (Int16) Constantes.EstadoInventario.Merma
-                        ).ToList();
+                {       
+                         inventario = (from a in _context.InventarioGeneral 
+                                    .Include(z=>z.InvLod)
+                                    .Include(x=>x.InvLod.ubicacion)
+                                    where (a.ProductoId == command.ProductoId  
+                                    &&  a.InvLod.ubicacion.AlmacenId == cabecera.AlmacenId
+                                    && (a.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
+                                    ||  a.EstadoId == (Int16) Constantes.EstadoInventario.Merma))
+                                    select a).ToList();
+                     
                 }
                 else {
-                        inventario =  _context.InventarioGeneral.Where(
-                        x=>x.ProductoId ==  command.ProductoId
-                        && x.EstadoId == command.EstadoID
-                        ).ToList();
+                            inventario =  (from a in _context.InventarioGeneral 
+                                        .Include(z=>z.InvLod)
+                                        .Include(x=>x.InvLod.ubicacion)
+                                        where (a.ProductoId == command.ProductoId  
+                                        &&  a.InvLod.ubicacion.AlmacenId == cabecera.AlmacenId
+                                        &&  a.EstadoId ==  command.EstadoID)
+                                        select a).ToList();
                 }
             }
             else{
                 if(command.EstadoID == 10)
                 {
-                        inventario =  _context.InventarioGeneral.Where(
-                        x=>x.ProductoId ==  command.ProductoId
-                        && x.LotNum == command.Lote
-                        && x.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
-                        ||  x.EstadoId == (Int16) Constantes.EstadoInventario.Merma
-                        ).ToList();
+                         inventario =  (from a in _context.InventarioGeneral 
+                                         .Include(z=>z.InvLod)
+                                        .Include(x=>x.InvLod.ubicacion)
+                                    where (a.ProductoId == command.ProductoId  
+                                    &&  a.InvLod.ubicacion.AlmacenId == cabecera.AlmacenId
+                                    && a .LotNum == command.Lote
+                                    && (a.EstadoId == (Int16) Constantes.EstadoInventario.Disponible
+                                    ||  a.EstadoId == (Int16) Constantes.EstadoInventario.Merma))
+                                    select a).ToList()   ;                
                 }
                 else {
-                        inventario =  _context.InventarioGeneral.Where(
-                        x=>x.ProductoId ==  command.ProductoId
-                        && x.LotNum == command.Lote
-                        && x.EstadoId == command.EstadoID
-                        ).ToList();
+                         inventario =  (from a in _context.InventarioGeneral 
+                                        .Include(z=>z.InvLod)
+                                        .Include(x=>x.InvLod.ubicacion)
+                                        where (a.ProductoId == command.ProductoId  
+                                        &&  a.InvLod.ubicacion.AlmacenId == cabecera.AlmacenId
+                                        && a.LotNum == command.Lote
+                                        &&  a.EstadoId ==  command.EstadoID)
+                                        select a).ToList();
                 }
             }
 
@@ -521,7 +593,7 @@ namespace CargaClic.Repository
             
             total = 0;
             if(command.Lote != null){
-                var existen = inventario.Where(x=>x.LotNum == command.Lote).ToList();
+                var existen = inventario.Where(x=>x.LotNum.ToUpper() == command.Lote.ToUpper()).ToList();
                 existen.ForEach(x=> total = total + x.UntQty );
 
                 if(total < command.Cantidad){
@@ -685,10 +757,10 @@ namespace CargaClic.Repository
                         });
                        
 
-                        var kardex = await _context.KardexGeneral.Where(x=>x.ShipmentLine == item2.Id).ToListAsync();
-                        kardex.ForEach(x=> {
-                            x.FechaSalida = DateTime.Now;
-                        });
+                        // var kardex = await _context.KardexGeneral.Where(x=>x.ShipmentLine == item2.Id).ToListAsync();
+                        // kardex.ForEach(x=> {
+                        //     x.FechaSalida = DateTime.Now;
+                        // });
                     }
 
                     

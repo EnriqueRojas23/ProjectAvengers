@@ -20,22 +20,25 @@
           <div class="card-body">
               <div class="row">
             
-                  <div class="col-md-3">
-                      <label class="col-form-label text-sm-right" for="username">Propietario:</label>
-                      
-                      <mat-form-field class="input-form-field  col-sm-8 ">
-                          <mat-select [formControl]="ClientesCtrl" [(value)]="model.PropietarioId" >
-                           <mat-option>
-                               <ngx-mat-select-search [noEntriesFoundLabel]="'Sin elementos'" [placeholderLabel]="'Buscar'"  [formControl]="ClientesFilterCtrl"></ngx-mat-select-search>
-                            </mat-option>
-                            <mat-option  *ngFor="let pow of filteredClientes  | async"  [value]="pow.val">
-                                {{pow.viewValue}}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-
-                        
-                    </div>
+                           
+                <div class="col-md-3">
+                  <h5>Propietario :</h5>
+                  <p-dropdown  [options]="clientes"  [(ngModel)]="model.PropietarioId" 
+                  scrollHeight="40vh" class="input-form-field  col-sm-5"    [style]="{'width':'100%'}" [autoWidth]="false" [resetFilterOnHide]="false" 
+                  [hideTransitionOptions]="'0ms'"
+                  [showTransitionOptions]="'0ms'" 
+                  placeholder="seleccione un cliente"  
+                  filter="true">
+                      <ng-template let-item pTemplate="selectedItem">
+                          <span style="vertical-align:left;">{{item.label}}</span>
+                      </ng-template>
+                      <!-- <ng-template let-item pTemplate="item">
+                        <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                            <div style="font-size:14px;float:left;margin-top:4px">{{item.label}}</div>
+                        </div>
+                    </ng-template> -->
+                    </p-dropdown>
+                  </div>
                   <div class="col-md-3 offset-md-2">
                      <button class="btn btn-block btn-danger"  (click)="buscar()"  type="button">Buscar</button>
                   </div>
@@ -67,34 +70,19 @@
                   <button class="btn btn-block btn-primary" ngbTooltip="Asignar Trabajador"  (click)="asignarTrabajador()"  type="button">Asignar Trabajador </button>  
               </div>
   
-              <div  class="col-md-4 offset-md-2" >
+              <!-- <div  class="col-md-4 offset-md-2" >
                   <div class="input-container">
                       <i class="fa fa-search"></i>
                       <mat-form-field class="search-form-field" >
                         <input matInput [(ngModel)]="searchKey" placeholder="Filtrar..." autocomplete="off" (keyup)="applyFilter()">
                       </mat-form-field>
                       </div>
-                </div>
+                </div> -->
           </div>
           <div  class="example-container">
-              <mat-table #table [dataSource] = "listData" matSort >
+              <!-- <mat-table #table [dataSource] = "listData" matSort >
                
-                  <ng-container matColumnDef="select">
-                      <mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? masterToggle() : null"
-                                      [checked]="selection.hasValue() && isAllSelected()"
-                                      [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                      [aria-label]="checkboxLabel()">
-                        </mat-checkbox>
-                      </mat-header-cell>
-                      <mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()"
-                                      (change)="$event ? selection.toggle(row) : null"
-                                      [checked]="selection.isSelected(row)"
-                                      [aria-label]="checkboxLabel(row)">
-                        </mat-checkbox>
-                      </mat-cell>
-                  </ng-container>
+             
   
                  <ng-container matColumnDef="workNum" sticky>
                   <mat-header-cell *matHeaderCellDef mat-sort-header> N° Trabajo</mat-header-cell>
@@ -140,22 +128,7 @@
                         <mat-header-cell *matHeaderCellDef mat-sort-header >  # Productos </mat-header-cell>
                         <mat-cell *matCellDef="let user"> {{user.cantidadTotal}} </mat-cell>
                       </ng-container>
-      <!--
 
-                        <ng-container matColumnDef="equipotransporte">
-                            <mat-header-cell *matHeaderCellDef> Equipo de Transporte </mat-header-cell>
-                            <mat-cell *matCellDef="let user"> 
-                              <div *ngIf="user.equipotransporte then thenBlock else elseBlock"></div>
-                              <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'">{{user.equipotransporte}}     </div>     </ng-template>
-                              <ng-template #elseBlock>  
-                                 Sin equipo 
-                               </ng-template>  
-                            
-                              
-                            
-                            </mat-cell>
-                          </ng-container>
-         -->
                           
                   <ng-container matColumnDef="Estado">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Estado  </mat-header-cell>
@@ -173,11 +146,7 @@
                     <mat-cell *matCellDef="let user"> {{user.ubicacion}} </mat-cell>
                   </ng-container>
 
-  
-                    <!-- <ng-container matColumnDef="Cliente">
-                      <mat-header-cell *matHeaderCellDef mat-sort-header >  Cliente </mat-header-cell>
-                      <mat-cell *matCellDef="let user"> {{user.cliente}} </mat-cell>
-                    </ng-container> -->
+ 
 
                      <ng-container matColumnDef="Direccion">
                         <mat-header-cell *matHeaderCellDef mat-sort-header >  Direccion </mat-header-cell>
@@ -185,16 +154,7 @@
                       </ng-container>
                    
   
-  
-             
-                    <!-- <ng-container matColumnDef="actionsColumn">
-                        <mat-header-cell *matHeaderCellDef> Acciones  </mat-header-cell>
-                        <mat-cell *matCellDef="let row">
-                            <button   class="edit btn  btn-outline-primary" (click)="ver(row.ordenSalidaId)" type="button"><i class="fa fa-print"></i></button>
-                          </mat-cell>
-                    </ng-container>
-            -->
-            
+
               <mat-header-row *matHeaderRowDef="displayedColumns; " ></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;" 
               
@@ -205,9 +165,57 @@
             
             
               </mat-table>
+   -->
   
-  
-             <mat-paginator [pageSizeOptions]="[ 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+   <p-table [style]="{width:'100%'}"
+   [scrollable]="true" [columns]="cols" [value]="cargas"
+   [(selection)]="selectedRow"  #dt [paginator]="true"  
+   [rows]="40" [resizableColumns]="true" selectionMode="multiple" [responsive]="true"  >
+    >
+
+     <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns"   [ngStyle]="{'width': col.width}" >
+        </colgroup>
+     </ng-template>
+
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th  [ngStyle]="{'width': col.width}" *ngFor="let col of columns" pResizableColumn [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr  [pSelectableRow]="rowData">
+          <!-- <td class="ui-resizable-column">  
+            <div class="ui-inputgroup">
+              <button  class="ui-button-secondary" ngbTooltip="Editar Orden" (click)="edit(rowData.ordenSalidaId)" type="button"><i class="fa fa-edit"></i></button>
+              <button  class="ui-button-secondary" ngbTooltip="Eliminar Orden" [swal]="deleteSwal" (confirm)="delete(rowData.ordenSalidaId)"  [disabled]="rowData.nombreEstado != 'Planeado'"  type="button"><i class="fa fa-trash"></i></button>
+              <button  class="ui-button-secondary" (click)="ver(rowData.ordenSalidaId)" type="button"><i class="fa  fa-search"></i></button>
+            </div>
+        </td> -->
+          <td class="ui-resizable-column"> {{rowData.almacen  }}</td>
+          <td class="ui-resizable-column"> {{rowData.workNum  }}</td>
+          <td class="ui-resizable-column"> {{rowData.propietario}} </td>
+          <td class="ui-resizable-column"> {{rowData.ubicacion}} </td> 
+          <td class="ui-resizable-column"> {{rowData.fechaAsignacion | date: 'dd/MM/yyyy' }} </td>
+          <td class="ui-resizable-column"> {{rowData.fechaTermino  | date: 'dd/MM/yyyy' }} </td>
+          <td class="ui-resizable-column"> {{rowData.cantidadLPN  }} </td>
+          <td class="ui-resizable-column"> {{rowData.cantidadTotal  }} </td>
+          <td  [ngClass]="rowData.estado == 'Almacenado' ? 'old-car' :  (rowData.estado == 'Asignado'?'very-old-car': null) "> {{rowData.estado}}</td>
+          
+          
+          
+      </tr>
+      </ng-template>
+
+
+
+
+   </p-table>
   
             </div>
           

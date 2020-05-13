@@ -10,6 +10,8 @@ import { takeUntil } from 'rxjs/operators';
 import { OrdenSalidaService } from 'src/app/_services/Despacho/ordensalida.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { Router } from '@angular/router';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import { GeneralService } from 'src/app/_services/Mantenimiento/general.service';
 
 @Component({
   selector: 'app-nuevaordensalida',
@@ -27,34 +29,14 @@ import { Router } from '@angular/router';
 export class NuevaordensalidaComponent implements OnInit {
 
   model: any = {};
-  
-  clientes: Dropdownlist[] = [];
-  propietarios: Dropdownlist[] = [];
-  direcciones: Dropdownlist[] = [];
+  es: any;
+  clientes: SelectItem[] = [];
+  almacenes: SelectItem[] = [];
+  propietarios: SelectItem[] = [];
+  direcciones: SelectItem[] = [];
 
-  
+  dateInicio: Date = new Date(Date.now()) ;
 
-  public ClientesCtrl: FormControl = new FormControl();
-  public ClientesFilterCtrl: FormControl = new FormControl(); 
-  public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
-
-
-
-  public PropietariosCtrl: FormControl = new FormControl();
-  public PropietariosFilterCtrl: FormControl = new FormControl(); 
-  public filteredPropietarios: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
-
-  
-  public DireccionesCtrl: FormControl = new FormControl();
-  public DireccionesFilterCtrl: FormControl = new FormControl(); 
-  public filteredDirecciones: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
-
-
-
-  @ViewChild('singleSelect') singleSelect: MatSelect;
-  protected _onDestroy = new Subject<void>();
-
-  
 
   IdNuevaOrden = 0;
   
@@ -69,89 +51,93 @@ export class NuevaordensalidaComponent implements OnInit {
   constructor(private clienteService: ClienteService,
     private ordenSalidaService: OrdenSalidaService,
     private alertify: AlertifyService ,
+    private generealService : GeneralService,
     private router : Router
     ) { }
 
   ngOnInit() {
-    this.clienteService.getAllPropietarios("").subscribe(resp => { 
-      resp.forEach(element => {
-        this.propietarios.push({ val: element.id , viewValue: element.razonSocial});
-      });
-      this.filteredPropietarios.next(this.propietarios.slice());
-      this.PropietariosFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterPropietarios();
-          });
 
-      }, error => {
-      }, () => { 
+    this.es = {
+      firstDayOfWeek: 1,
+      dayNames: [ "domingo","lunes","martes","miércoles","jueves","viernes","sábado" ],
+      dayNamesShort: [ "dom","lun","mar","mié","jue","vie","sáb" ],
+      dayNamesMin: [ "D","L","M","X","J","V","S" ],
+      monthNames: [ "enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre" ],
+      monthNamesShort: [ "ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic" ],
+      today: 'Hoy',
+      clear: 'Borrar'
+  }
+
+     
+  this.generealService.getAllAlmacenes().subscribe(resp=> {
+    resp.forEach(element => {
+      this.almacenes.push({ value: element.id ,  label : element.descripcion});
     });
 
 
-  }
-  protected filterPropietarios() {
-    if (!this.propietarios) {
-      return;
-    }
-    let search = this.PropietariosFilterCtrl.value;
-    if (!search) {
-      this.filteredPropietarios.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredPropietarios.next(
-      this.propietarios.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
+
+
+    this.clienteService.getAllPropietarios("").subscribe(resp => { 
+      resp.forEach(element => {
+        this.propietarios.push({ value: element.id , label: element.razonSocial});
+      });
+
+      }, error => {
+      }, () => { 
+
+        if(localStorage.getItem('PropietarioId') == "undefined" || localStorage.getItem('PropietarioId') == null ) {
+          this.model.PropietarioId = 1;
+        }
+        else {
+          this.model.PropietarioId =  parseInt(localStorage.getItem('PropietarioId'));
+        }
+
+        if(localStorage.getItem('Estado') == null || localStorage.getItem('Estado') == 'undefined') {
+           this.model.EstadoId = 131;
+        }
+        else {
+            this.model.EstadoId = parseInt(localStorage.getItem('Estado'));
+        }
+        if(localStorage.getItem('AlmacenId') == null || localStorage.getItem('AlmacenId') == 'undefined') {
+          this.model.AlmacenId = 1;
+        }
+        else {
+            this.model.AlmacenId = parseInt(localStorage.getItem('AlmacenId'));
+        }
+        
+
+        this.clienteService.getAllClientesxPropietarios(this.model.PropietarioId).subscribe(resp => { 
+          resp.forEach(element => {
+            this.clientes.push({ value: element.id , label: element.razonSocial});
+          });
+    
+    
+          }, error => {
+          }, () => { 
+        });
+    });
+
+  });
+
+
   }
 
-  protected filterClientes() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
-  }
+
+
   
-  protected filterDirecciones() {
-    if (!this.direcciones) {
-      return;
-    }
-    let search = this.DireccionesFilterCtrl.value;
-    if (!search) {
-      this.filteredDirecciones.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredDirecciones.next(
-      this.direcciones.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
-  }
 
 
-  onChangeDepartamento(propietario) {
+
+  onChangePropietario(propietario) {
+    console.log(propietario);
+
     this.clientes = [];
 
-    this.clienteService.getAllClientesxPropietarios(propietario.value.val).subscribe(resp => { 
+    this.clienteService.getAllClientesxPropietarios(propietario.value).subscribe(resp => { 
       resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
+        this.clientes.push({ value: element.id , label: element.razonSocial});
       });
-      this.filteredClientes.next(this.clientes.slice());
-      this.ClientesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterClientes();
-          });
+
 
       }, error => {
       }, () => { 
@@ -161,16 +147,11 @@ export class NuevaordensalidaComponent implements OnInit {
   onChangeCliente(cliente){
     this.direcciones = [];
 
-    this.clienteService.getAllDirecciones(cliente.value.val).subscribe(resp => { 
+    this.clienteService.getAllDirecciones(cliente.value).subscribe(resp => { 
       resp.forEach(element => {
-        this.direcciones.push({ val: element.iddireccion , viewValue: element.direccion  + " [ " + element.departamento + " - " +  element.provincia + " - " + element.distrito +" ] "  });
+        this.direcciones.push({ value: element.iddireccion , label: element.direccion  + " [ " + element.departamento + " - " +  element.provincia + " - " + element.distrito +" ] "  });
       });
-      this.filteredDirecciones.next(this.direcciones.slice());
-      this.DireccionesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterClientes();
-          });
+
 
       }, error => {
       }, () => { 
@@ -179,10 +160,11 @@ export class NuevaordensalidaComponent implements OnInit {
   registrar(form: NgForm){
     
 
-    this.model.PropietarioId = this.model.PropietarioControl.val;
-    this.model.Propietario = this.model.PropietarioControl.viewValue;
-    this.model.ClienteId = this.model.ClienteControl.val;
-    this.model.IdDireccion = this.model.DireccionesControl.val;
+    // this.model.PropietarioId = this.model.PropietarioControl.val;
+      
+      this.model.Propietario = this.propietarios.filter(x => x.value == this.model.PropietarioId)[0].label;
+    // this.model.ClienteId = this.model.ClienteControl.val;
+    // this.model.IdDireccion = this.model.DireccionesControl.val;
 
 
     // this.model.PropietarioControl = '';

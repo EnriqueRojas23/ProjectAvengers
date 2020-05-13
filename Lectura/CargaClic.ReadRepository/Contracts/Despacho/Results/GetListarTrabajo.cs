@@ -18,6 +18,9 @@ namespace CargaClic.ReadRepository.Contracts.Despacho.Results
         public string Ubicacion {get;set;}
         public int CantidadTotal {get;set;}
         public int CantidadLPN {get;set;}
+        public int AlmacenId {get;set;}
+        public long OrdenSalidaId {get;set;}
+        public string Almacen {get;set;}
 
     }
 }

@@ -57,10 +57,6 @@ export class ConfirmarmovimientoComponent implements OnInit {
 
   ngOnInit() {
     this.id  = this.activatedRoute.snapshot.params["uid"];
-    console.log(this.id);
-//    this.model.EquipoTransporteId  = this.activatedRoute.snapshot.params["uid2"];
-    
-    
 
     this.ordenSalidaService.getAllWorkDetail(this.id).subscribe(resp => { 
       
@@ -107,7 +103,7 @@ export class ConfirmarmovimientoComponent implements OnInit {
   
         this.ordenSalidaService.getAllWorkDetail(this.id).subscribe(resp => { 
            
-          console.log(resp);
+          this.loading  = false;
            this.model = resp;
            this.listData = new MatTableDataSource(this.model);
            this.listData.paginator = this.paginator;

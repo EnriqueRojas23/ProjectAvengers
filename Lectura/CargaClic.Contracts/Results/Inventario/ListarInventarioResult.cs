@@ -29,5 +29,8 @@ namespace CargaClic.Contracts.Results.Inventario
             public int HuellaId	{get;set;}
             public string CodigoHuella{get;set;}
             public bool Almacenado {get;set;}
+            public string Almacen {get;set;}
+            public int AlmacenId {get;set;}
+            public int cantidad_productos {get; set;}
     }
 }

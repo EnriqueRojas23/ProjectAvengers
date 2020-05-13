@@ -41,6 +41,8 @@ export class EquipotransportesalidaComponent implements OnInit {
    ngOnInit() {
      
      this.id  = this.activatedRoute.snapshot.params["uid"];
+
+     console.log(this.id);
  
      this.general.getValorTabla(4).subscribe(resp=> 
        {
@@ -104,9 +106,16 @@ export class EquipotransportesalidaComponent implements OnInit {
      }
  
      this.equipoTransporteService.vincularEquipoTransporte(this.model).subscribe(resp => { 
+
+       console.log(resp);
        this.transporte = resp;
+
+
      }, error => {
+
         this.alertify.error(error);
+
+
      }, () => { 
     
          this.model.CargasId = this.id;

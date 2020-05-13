@@ -65,8 +65,8 @@
                                 <div *ngIf="orden.almacenado then thenBlock else elseBlock"></div>
                                 <ng-template #thenBlock>  <div  [style.color]="'#FFFFFF'" [style.background-color]="'#0c9811'"> Almacenado    </div>     </ng-template>
                                 <ng-template #elseBlock> 
-                                  <button ngbTooltip="Confirmar" class="btn btn-space btn-primary" (click)="Confirmar(orden.id)">Confirmar depósito</button>
-                                  <button ngbTooltip="Excepciones" class="btn btn-space btn-primary" (click)="excepcion(orden.id)">Excepciones</button>
+                                  <button ngbTooltip="Confirmar" class="btn btn-space btn-primary" (click)="Confirmar(orden.lodId)">Confirmar depósito</button>
+                                  <button ngbTooltip="Excepciones" class="btn btn-space btn-primary" (click)="excepcion(orden.lodId)">Excepciones</button>
                                 </ng-template>  
                             </mat-cell>
                               <mat-cell *matCellDef="let row">

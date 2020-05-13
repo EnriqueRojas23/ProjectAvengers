@@ -25,6 +25,8 @@ namespace CargaClic.Contracts.Results.Mantenimiento
             public string Dni	 {get;set;}
             public string Brevete {get;set;}
             public string Puerta {get;set;}
+            public string Almacen {get;set;}
+            public int AlmacenId {get;set;}
 
     }
 }

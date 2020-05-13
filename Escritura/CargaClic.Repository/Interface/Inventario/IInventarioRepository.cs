@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CargaClic.Domain.Inventario;
 using CargaClic.Domain.Mantenimiento;
@@ -10,7 +11,7 @@ namespace CargaClic.Repository.Interface
     public interface IInventarioRepository
     {
         Task<InventarioGeneral> RegistrarInventario(InventarioForRegister inventarioGeneral);
-        Task<long> AssignarUbicacion(InventarioForAssingment inventarioGeneral);
+        Task<long> AssignarUbicacion(IEnumerable<InventarioForAssingment> inventarioGeneral);
         Task<Guid> FinalizarRecibo(InventarioForFinishRecive inventarioGeneral);
         Task<long> Almacenamiento(InventarioForStorage inventarioGeneral);
         Task<long> RegistrarAjuste(AjusteForRegister ajusteForRegister);

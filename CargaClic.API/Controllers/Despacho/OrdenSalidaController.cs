@@ -70,21 +70,27 @@ namespace CargaClic.API.Controllers.Despacho
       }
 
       [HttpGet("GetAllOrder")]
-      public async Task<IActionResult> GetAllOrder(int PropietarioId, int EstadoId, int DaysAgo)
+      public async Task<IActionResult> GetAllOrder(int AlmacenId, int PropietarioId, int EstadoId,  string fec_fin, string fec_ini)
       { 
-          var resp  = await _repo_Read_Despacho.GetAllOrdenSalida( PropietarioId,  EstadoId,  DaysAgo);
+          var resp  = await _repo_Read_Despacho.GetAllOrdenSalida(AlmacenId, PropietarioId,  EstadoId,  fec_ini , fec_fin);
           return Ok (resp);
       }
       [HttpGet("GetAllOrderPendiente")]
-      public async Task<IActionResult> GetAllOrderPendiente(int PropietarioId, int EstadoId, int DaysAgo)
+      public async Task<IActionResult> GetAllOrderPendiente(int AlmacenId, int PropietarioId, int EstadoId, int DaysAgo)
       { 
-          var resp  = await _repo_Read_Despacho.GetAllOrdenSalidaPendiente( PropietarioId,  EstadoId,  DaysAgo);
+          var resp  = await _repo_Read_Despacho.GetAllOrdenSalidaPendiente(AlmacenId , PropietarioId,  EstadoId,  DaysAgo);
           return Ok (resp);
       }
       [HttpGet("GetAllCargas")]
       public async Task<IActionResult> GetAllCargas(int PropietarioId, int EstadoId)
       { 
           var resp  = await _repo_Read_Despacho.GetAllCargas( PropietarioId,  EstadoId);
+          return Ok (resp);
+      }
+      [HttpGet("GetAllCargas_Pendientes_Salida")]
+      public async Task<IActionResult> GetAllCargas_Pendientes_Salida(int PropietarioId, int EstadoId)
+      { 
+          var resp  = await _repo_Read_Despacho.GetAllCargas_Pendientes_Salida( PropietarioId,  EstadoId);
           return Ok (resp);
       }
       [HttpGet("GetOrder")]
@@ -97,6 +103,13 @@ namespace CargaClic.API.Controllers.Despacho
       public async  Task<IActionResult> GetAllWork(int PropietarioId, int EstadoId)
       { 
           var resp  = await _repo_Read_Despacho.ListarTrabajo(PropietarioId,EstadoId );
+          return Ok (resp);
+      }
+
+     [HttpGet("GetAllWorkAssigned")]
+      public async  Task<IActionResult> GetAllWorkAssigned(int PropietarioId, int EstadoId)
+      { 
+          var resp  = await _repo_Read_Despacho.ListarTrabajo_TrabajoAsignado(PropietarioId,EstadoId );
           return Ok (resp);
       }
      [HttpGet("GetAllWorkDetail")]

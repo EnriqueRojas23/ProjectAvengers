@@ -8,6 +8,7 @@ import { Dropdownlist } from 'src/app/_models/Constantes';
 import { FormControl } from '@angular/forms';
 import { ClienteService } from 'src/app/_services/Mantenimiento/cliente.service';
 import { takeUntil } from 'rxjs/operators';
+import { SelectItem } from 'primeng/components/common/selectitem';
 
 @Component({
   selector: 'app-listadoproducto',
@@ -15,6 +16,10 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./listadoproducto.component.css']
 })
 export class ListadoproductoComponent implements OnInit {
+
+  clientes: SelectItem[] = [];
+
+  
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   searchKey: string;
@@ -24,7 +29,7 @@ export class ListadoproductoComponent implements OnInit {
   listData: MatTableDataSource<Producto>;
   public loading = false;
   productos: Producto[];
-  clientes: Dropdownlist[] = [];
+  //clientes: Dropdownlist[] = [];
   model: any  ;
 
   public filteredClientes: ReplaySubject<Dropdownlist[]> = new ReplaySubject<Dropdownlist[]>(1);
@@ -37,67 +42,78 @@ export class ListadoproductoComponent implements OnInit {
    ,   private clienteService: ClienteService,) { }
 
   ngOnInit() {
-    this.loading = true;
+    
     this.model = {
     };
-    this.model.criterio = "";
-    this.model.clienteId = this.model.PropietarioId;
+    this.clienteService.getAllPropietarios("").subscribe(resp => { 
+
+      resp.forEach(x=> {
+        this.clientes.push({ label: x.razonSocial , value: x.id.toString() });
+     })
+
+     if( localStorage.getItem('searchPro1') != undefined){
+      this.model.PropietarioId = localStorage.getItem('searchPro1');
+      this.buscar();
+
+    }
+  });
+
+  
+
+ 
+
 
     
-    this.productoService.getAll(this.model.criterio, 1).subscribe(list=> {
-      this.productos = list ;
-      this.loading = false;
-      this.listData = new MatTableDataSource(this.productos);
-      this.listData.paginator = this.paginator;
-      this.listData.sort = this.sort;
+    // this.productoService.getAll(this.model.criterio, 1).subscribe(list=> {
+    //   this.productos = list ;
+     
+    //   this.loading = false;
+    //   this.listData = new MatTableDataSource(this.productos);
+    //   this.listData.paginator = this.paginator;
+    //   this.listData.sort = this.sort;
 
     
       
-    this.listData.filterPredicate = (data,filter) => {
-      return this.displayedColumns.some(ele => {
+    // this.listData.filterPredicate = (data,filter) => {
+    //   return this.displayedColumns.some(ele => {
         
-        if(ele != 'almacen' && ele !='cliente' && ele != 'familia' )
-           {
+    //     if(ele != 'almacen' && ele !='cliente' && ele != 'familia' )
+    //        {
             
-              return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
-           }
-        })
-       }
-    });
+    //           return ele != 'actionsColumn' && data[ele].toLowerCase().indexOf(filter) != -1;
+    //        }
+    //     })
+    //    }
+    // });
 
 
-    this.clienteService.getAllPropietarios("").subscribe(resp => { 
-      resp.forEach(element => {
-        this.clientes.push({ val: element.id , viewValue: element.razonSocial});
-      });
-      this.filteredClientes.next(this.clientes.slice());
-      this.ClientesFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-            this.filterBanks();
-          });
-          this.loading = false;
-          this.model.intervalo = 3;
-          this.model.estadoIdfiltro = 21;
-    });
+
 
   }
   verHuellas(id){
     this.router.navigate(['mantenimiento/verproducto', id]);
 
   }
+  edit(id){
+    this.router.navigate(['mantenimiento/editarproducto', id]);
+  }
   buscar(){
+
+    
+      window.localStorage.setItem(
+        'searchPro1',
+        this.model.PropietarioId
+     );
+
+
     this.loading = true;
 
     this.model.criterio = "";
     this.model.clienteId = this.model.PropietarioId;
 
-    console.log(this.model.PropietarioId);
     
-    if(this.model.clienteId == "undefined")
-    {
-       this.model.clienteId = 1;
-    }
+    
+   
 
     
     this.productoService.getAll(this.model.criterio, this.model.clienteId).subscribe(list=> {
@@ -121,21 +137,21 @@ export class ListadoproductoComponent implements OnInit {
        }
     });
   }
-  protected filterBanks() {
-    if (!this.clientes) {
-      return;
-    }
-    let search = this.ClientesFilterCtrl.value;
-    if (!search) {
-      this.filteredClientes.next(this.clientes.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    this.filteredClientes.next(
-      this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
-    );
+  // protected filterBanks() {
+  //   if (!this.clientes) {
+  //     return;
+  //   }
+  //   let search = this.ClientesFilterCtrl.value;
+  //   if (!search) {
+  //     this.filteredClientes.next(this.clientes.slice());
+  //     return;
+  //   } else {
+  //     search = search.toLowerCase();
+  //   }
+  //   this.filteredClientes.next(
+  //     this.clientes.filter(bank => bank.viewValue.toLowerCase().indexOf(search) > -1)
+  //   );
     
-  }
+  // }
 
 }

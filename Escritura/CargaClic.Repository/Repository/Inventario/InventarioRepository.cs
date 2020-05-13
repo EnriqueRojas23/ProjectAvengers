@@ -120,34 +120,19 @@ namespace CargaClic.Repository
 
         public async Task<long> Almacenamiento(InventarioForStorage command)
         {
+            var invlod  = await _context.InvLod.Where(x=>x.Id == command.Id).SingleOrDefaultAsync();
 
-            var dominio = await _context.InventarioGeneral.Where(x=>x.Id == command.Id).SingleOrDefaultAsync();
-            var invlod  = await _context.InvLod.Where(x=>x.Id == dominio.LodId).SingleOrDefaultAsync();
-            // dominio.UbicacionId = dominio.UbicacionIdProx;                    
-            // dominio.UbicacionIdProx = null;
-            dominio.Almacenado = true;
+            var dominios = await _context.InventarioGeneral.Where(x=>x.LodId == invlod.Id).ToListAsync();
+          
+           
 
-            var lineas =  _context.InventarioGeneral.Where(x=>x.OrdenReciboId == dominio.OrdenReciboId).ToList();
-            var cab = _context.OrdenesRecibo.Where(x=>x.Id == dominio.OrdenReciboId).Single();
+            var lineas =  _context.OrdenesReciboDetalle.Where(x=>x.OrdenReciboId == dominios[0].OrdenReciboId).ToList();
+            var cab = _context.OrdenesRecibo.Where(x=>x.Id == dominios[0].OrdenReciboId).Single();
             var Equipo = _context.EquipoTransporte.Where(x=>x.Id == cab.EquipoTransporteId).Single();
+            var pendientes = _context.OrdenesRecibo.Where(x=>x.EquipoTransporteId == Equipo.Id).ToList();
+            
 
-            foreach (var item in lineas)
-            {
-                if(item.Almacenado.HasValue){
-                    if(!item.Almacenado.Value){
-                        cab.EstadoId = (Int16) Constantes.EstadoOrdenIngreso.PendienteAlmacenamiento;  
-                        break;  
-                    }
-                    else {
-                       cab.EstadoId = (Int16) Constantes.EstadoOrdenIngreso.Terminado;  
-                       Equipo.EstadoId = (Int16) Constantes.EstadoEquipoTransporte.Cerrado;
-                    }
-                }
-                else {
-                       cab.EstadoId = (Int16) Constantes.EstadoOrdenIngreso.PendienteAlmacenamiento;
-                       break;  
-                }
-            }
+         
             KardexGeneral nuevo  ;
 
             using(var transaction = _context.Database.BeginTransaction())
@@ -155,11 +140,16 @@ namespace CargaClic.Repository
                
                 try
                 {
-                        invlod.UbicacionId =   invlod.UbicacionProxId.Value;
-                        invlod.UbicacionProxId = null;
+                    invlod.UbicacionId =   invlod.UbicacionProxId.Value;
+                    invlod.UbicacionProxId = null;
+                    
+                    foreach (var dominio in dominios)
+                    {
+                        
+                        dominio.Almacenado = true;
 
                         nuevo = new KardexGeneral();
-                        nuevo.Almacenado = false;
+                        nuevo.Almacenado = true;
                         nuevo.EstadoId = dominio.EstadoId;
                         nuevo.FechaExpire = dominio.FechaExpire;
                         nuevo.FechaManufactura = dominio.FechaManufactura;
@@ -168,6 +158,7 @@ namespace CargaClic.Repository
                         nuevo.LineaId = dominio.LineaId;
                         nuevo.LodId = dominio.LodId;
                         nuevo.LotNum = dominio.LotNum;
+                        nuevo.UntCas = dominio.UntCas;
                         nuevo.Movimiento = "E";
                         nuevo.OrdenReciboId = dominio.OrdenReciboId;
                         nuevo.Peso = dominio.Peso;
@@ -177,104 +168,103 @@ namespace CargaClic.Repository
                         nuevo.UntQty = dominio.UntQty;
                         nuevo.UsuarioIngreso = 1;
                         nuevo.InventarioId = dominio.Id;
-                        
+                        /// La fecha de registro es identica a la fecha esperada de la Orden de Recibo/////
+                        nuevo.FechaIngreso = cab.FechaEsperada;
+                        ////////////////////////////////////////////
                         _context.KardexGeneral.Add(nuevo);
-                         
+               
+                       }
                         await _context.SaveChangesAsync();
+                      //  lineas =  _context.InventarioGeneral.Where(x=>x.OrdenReciboId == dominios[0].OrdenReciboId).ToList();   
+                        foreach (var item in lineas)
+                        {
+                            if(!item.Completo){
+                                cab.EstadoId = (Int16) Constantes.EstadoOrdenIngreso.PendienteAcomodo;  
+                                Equipo.EstadoId = (Int16) Constantes.EstadoEquipoTransporte.EnDescarga;
+                            }
+                            else {
+                                cab.EstadoId = (Int16) Constantes.EstadoOrdenIngreso.Almacenado;  
+                                var no = pendientes.Where(x=>x.EstadoId != 12).ToList();
+                                if(no.Count == 0)
+                                {
+                                    Equipo.EstadoId = (Int16) Constantes.EstadoEquipoTransporte.Cerrado;
+                                }
+                            }
+                           
+                        }
+
+                       await _context.SaveChangesAsync();
                         transaction.Commit();
                 }
                 catch (Exception ex)
-                    {
-                        transaction.Rollback();  
-                        throw ex; 
-                    }
+                {
+                    transaction.Rollback();  
+                    throw ex; 
+                }
+                      
+                    
+
                 return command.Id;
             }
 
             
         }
 
-        public async Task<long> AssignarUbicacion(InventarioForAssingment command)
+        public async Task<long> AssignarUbicacion(IEnumerable<InventarioForAssingment> commands)
         {
             string query = "";
-            InventarioGeneral dominio = null;
             Ubicacion dominio_ubicacion = null;
-            //Ubicacion dominio_ubicacionanterior = null;
+            string ids = "";
+            int UbicacionId = 0;
+            
+        using(var transaction = _context.Database.BeginTransaction())
+        {
 
-            dominio_ubicacion = await _context.Ubicacion.SingleOrDefaultAsync(x=>x.Id == command.UbicacionId);
-      
-
-
-            if(command.Id.Split(',').Length > 0)
+            try
             {
-                 using(var transaction = _context.Database.BeginTransaction())
-                 {
-               
-                        //Ver nivel de ocupabilidad;
-                            query = string.Format("update inventario.invlod"
-                        + " set UbicacionProxId = '{0}' "
-                        + " where id in ({1}) Select * from inventario.invlod where id in ({1}) " ,
-                                    command.UbicacionId.ToString(), command.Id);
-        
-                try
+                var group =  commands.ToList().GroupBy(x=>x.UbicacionId);
+                foreach (var command in group)
                 {
-                                    
+                    ids = "";
+                    command.ToList().ForEach( x=> {
+                        ids = ids +  x.lodId.ToString() + ",";
+                        UbicacionId = x.UbicacionId;
+                    });
+
+                    ids  = ids.Substring(0,ids.Length - 1);
+                    dominio_ubicacion = await _context.Ubicacion.SingleOrDefaultAsync(x=>x.Id == UbicacionId);
+            
+                    //Ver nivel de ocupabilidad;
+                        query = string.Format("update inventario.invlod"
+                    + " set UbicacionProxId = {0} "
+                    + " where id in ({1}) Select * from inventario.invlod where id in ({1}) " ,
+                                UbicacionId.ToString(), ids);
+    
+                                                
                     var resp =   _context.InvLod
                                 .FromSql(query)
                                 .ToList();
 
-                    dominio_ubicacion.EstadoId = 17;     //Parcial
-                    await _context.SaveChangesAsync();
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();  
-                    throw ex; 
-                }
-                return command.UbicacionId;
+                                dominio_ubicacion.EstadoId = 17;     //Parcial
+                                await _context.SaveChangesAsync();
+                                
+                          
+                           
+                 }
+                 transaction.Commit();
             }
-            }
-            else
+            catch (Exception ex)
             {
-                dominio = await  _context.InventarioGeneral.SingleOrDefaultAsync(x => x.Id == Convert.ToInt64(command.Id));
-                // if(dominio.UbicacionIdProx != null)    
-                // {
-                //     dominio_ubicacionanterior =  await _context.Ubicacion.SingleOrDefaultAsync(x=>x.Id == dominio.UbicacionIdProx);
-                //     dominio_ubicacionanterior.EstadoId = 10;// Liberarlo
-                // }
-                using(var transaction = _context.Database.BeginTransaction())
-                {
-                    dominio_ubicacion.EstadoId = 11;     //Separarlo
-                   // dominio.UbicacionIdProx = command.UbicacionId;
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();  
-                    throw ex; 
-                }
-                return dominio.Id;
+                transaction.Rollback();  
+                throw ex; 
             }
-
-            }
-
+                   return UbicacionId;
             
-
-     
-           
-
-
-           
-           
-
-           
-               
+  
+            
+            }
+             //return dominio.Id;
         }
-
         public async Task<Guid> FinalizarRecibo(InventarioForFinishRecive command)
         {
             OrdenRecibo dominio = null;
@@ -283,12 +273,12 @@ namespace CargaClic.Repository
 
 
              var inventarios = _context.InventarioGeneral.Where(x=>x.OrdenReciboId == command.OrdenReciboId).ToList();
-             foreach (var item in inventarios)
-             {
+            //  foreach (var item in inventarios)
+            //  {
                                
-                //  if(item.UbicacionIdProx == null)
-                //     throw new ArgumentException("Err101");
-            } 
+            //     //  if(item.UbicacionIdProx == null)
+            //     //     throw new ArgumentException("Err101");
+            // } 
 
             using(var transaction = _context.Database.BeginTransaction())
             {
@@ -359,38 +349,7 @@ namespace CargaClic.Repository
 
 
 
-                    // foreach (var item in prm)
-                    // {
-                        
-                    //      var inventarios = _context.InventarioGeneral.Where(x=>x.LodId == Convert.ToInt64(item)).ToList();
-                    //      foreach (var objInventario in inventarios)
-                    //      {
-                    //             ajuste = new AjusteInventario();
-                    //             ajuste.EstadoId = (int) Constantes.EstadoInventario.Eliminado;
-                    //             ajuste.FechaExpire= objInventario.FechaExpire;
-                    //             ajuste.FechaHoraAjuste = DateTime.Now;
-                    //             ajuste.FechaIngreso = objInventario.FechaRegistro;
-                    //             ajuste.FechaManufactura = objInventario.FechaManufactura;
-                    //             ajuste.LotNum = invLod.LodNum ;
-                    //             ajuste.UntQty = objInventario.UntQty;
-                    //             ajuste.ProductoId = objInventario.ProductoId;
-                    //             ajuste.InventarioId = objInventario.Id; 
-                    //             ajuste.ClienteId = objInventario.ClienteId;
-                    //             ajuste.LineaId = objInventario.LineaId;
-                    //             ajuste.OrdenReciboId = objInventario.OrdenReciboId;
-                    //             ajuste.Almacenado = objInventario.Almacenado;
-                    //             ajuste.HuellaId = objInventario.HuellaId;
-                    //             ajuste.UsuarioRegistroId = 1;
-                    //             ajustes.Add(ajuste);
 
-                                
-                    //      }
-                    
-
-                        
-                         
-                        
-                    // }
                      //agregar a ajustes
                     await _context.AddRangeAsync(ajustes);
                     await _context.SaveChangesAsync();
@@ -476,13 +435,12 @@ namespace CargaClic.Repository
                 dominio.HuellaId = command.HuellaId;
                 dominio.LotNum = command.LotNum;
                 dominio.ProductoId = command.ProductoId;
-                // dominio.UbicacionId = command.UbicacionId;
-                // dominio.UbicacionIdUlt = command.UbicacionIdUlt;
                 dominio.UntCas = command.UntCas;
                 dominio.UntPak = command.UntPak;
                 dominio.UntQty = command.UntQty;
                 dominio.UsuarioIngreso = command.UsuarioIngreso;
                 dominio.ClienteId = command.ClienteId;
+                dominio.Almacenado = false;
 
 
             using(var transaction = _context.Database.BeginTransaction())
@@ -490,11 +448,6 @@ namespace CargaClic.Repository
 
                 try
                 {
-                    //var max = await _context.InventarioGeneral.MaxAsync(x=>x.LodNum);
-                    // if(max==null) max = "E00000001";
-                    // max  = 'E' + (Convert.ToInt64(max.Substring(1,8)) + 1).ToString().PadLeft(8,'0');
-                    // dominio.LodNum = max;
-                    
                     await _context.AddAsync<InventarioGeneral>(dominio);
                     await _context.SaveChangesAsync();
                     transaction.Commit();
